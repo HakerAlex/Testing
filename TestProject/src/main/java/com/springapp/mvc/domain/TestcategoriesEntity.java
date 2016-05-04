@@ -5,7 +5,7 @@ import java.util.Arrays;
 import java.util.Collection;
 
 @Entity
-@Table(name = "testcategories", schema = "testdb", catalog = "")
+@Table(name = "testcategories")
 public class TestcategoriesEntity {
     private String category;
     private int id;

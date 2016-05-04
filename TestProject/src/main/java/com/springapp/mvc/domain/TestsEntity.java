@@ -5,7 +5,7 @@ import java.sql.Date;
 import java.util.Collection;
 
 @Entity
-@Table(name = "tests", schema = "testdb", catalog = "")
+@Table(name = "tests")
 public class TestsEntity {
     private int id;
     private String testname;

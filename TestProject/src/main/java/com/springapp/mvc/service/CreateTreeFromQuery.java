@@ -17,9 +17,10 @@ public class CreateTreeFromQuery {
     private String getElementTree(CategoriesEntity ourElement)
     {
         String element="";
-        element=element.concat("{text: Код:"+ourElement.getId()+" ");
-        element=element.concat("Наименование:"+ourElement.getCategory());
-        element=element.concat(",icon: \"glyphicon glyphicon-folder-open\"");
+        element=element.concat("{text:  \" Код:"+ourElement.getId()+" ");
+        element=element.concat(ourElement.getCategory()+"\"");
+        element=element.concat(",icon: \"glyphicon glyphicon-folder-close\"");
+        element=element.concat(",selectedIcon: \"glyphicon glyphicon-folder-open\"");
         element=element.concat(",selectable: true");
         element=element.concat(",nodes: [");
         return element;
@@ -57,7 +58,9 @@ public class CreateTreeFromQuery {
         }
         ourTree=ourTree.concat("]");
         System.out.print(ourTree);
-        return ourTree;
+        String replace="nodes: \\[\\]";
+        String finish=ourTree.replaceAll(replace,"");  //replace for child
+        return finish;
     }
 
 }

@@ -14,15 +14,9 @@
     <%--<link href="${pageContext.request.contextPath}/resources/assets/css/app.min.css" rel="stylesheet">--%>
 
 
-    <link href="${pageContext.request.contextPath}/resources/assets/css/bootstrap-select.css" rel="stylesheet">
-    <link href="${pageContext.request.contextPath}/resources/assets/css/lity.css" rel="stylesheet">
-    <link href="${pageContext.request.contextPath}/resources/assets/css/dropify.css" rel="stylesheet">
-    <link href="${pageContext.request.contextPath}/resources/assets/css/custom.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/resources/assets/css/bootstrap-theme.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/resources/assets/css/bootstrap.css" rel="stylesheet">
-    <link href="${pageContext.request.contextPath}/resources/assets/css/table.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/resources/assets/css/bootstrap-treeview.min.css" rel="stylesheet">
-
 
     <!-- Fonts -->
     <link href='http://fonts.googleapis.com/css?family=Oswald:100,300,400,500,600,800%7COpen+Sans:300,400,500,600,700,800%7CMontserrat:400,700'
@@ -44,8 +38,19 @@
 
 
     <div class="container" style="border-color: transparent">
+
         <div class="col-xs-5">
-            <div id="tree" style="color: #0b0b0b; text-align: left;"></div>
+
+            <div class="form-group">
+                <div class="input-group">
+                    <span class="input-group-addon"><i class="ti-folder"></i></span>
+                    <input type="text" id="category" value="" class="form-control" name="name" placeholder="Категория" disabled>
+                </div>
+
+            </div>
+
+            <div id="treeview" class="treeview" style="color: darkblue; text-align: left;"></div>
+
         </div>
     </div>
 
@@ -58,66 +63,27 @@
 <%@ include file="../pages/template/templatefoot.jsp" %>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/jquery.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/bootstrap.min.js"></script>
-<%--<script type="text/javascript"--%>
-<%--src="${pageContext.request.contextPath}/resources/assets/js/dataTables.bootstrap.min.js"></script>--%>
-<%--<script type="text/javascript"--%>
-<%--src="${pageContext.request.contextPath}/resources/assets/js/datatables.min.js"></script>--%>
+
 
 <script type="text/javascript"
         src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-treeview.min.js"></script>
 
 <script type="text/javascript">
     function getTree() {
-        var tree ="${tree}"
-//        var tree = [
-//            {
-//                text: " Parent 1",
-//                icon: "glyphicon glyphicon-folder-open",
-//                nodes: [
-//                    {
-//                        text: " Child 1",
-//                        icon: "glyphicon glyphicon-folder-open",
-//                        nodes: [
-//                            {
-//                                text: "Grandchild 1",
-//                                selectable: true
-//                            },
-//                            {
-//                                text: "Grandchild 2"
-//                            }
-//                        ]
-//                    },
-//                    {
-//                        text: "Child 2"
-//                    }
-//                ]
-//            },
-//            {
-//                text: "Parent 2"
-//            },
-//            {
-//                text: "Parent 3"
-//            },
-//            {
-//                text: "Parent 4"
-//            },
-//            {
-//                text: "Parent 5"
-//            }
-//        ];
+        var tree =${tree}
         return tree;
     }
 
 
-    $('#tree').treeview({data: getTree()});
-    $('#tree').treeview('expandAll', { levels: 5, silent: true });
+    $('#treeview').treeview({data: getTree()});
+    $('#treeview').treeview('expandAll', { levels: 5, silent: true });
 
 
 </script>
 <script type="text/javascript">
     var parent;
-    $('#tree').on('nodeSelected', function(event, data) {
-        alert(data.text);
+    $('#treeview').on('nodeSelected', function(event, data) {
+        document.getElementById('category').value = data.text
     })
 </script>
 
