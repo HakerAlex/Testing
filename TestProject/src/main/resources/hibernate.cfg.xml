@@ -1,0 +1,20 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <mapping class="com.springapp.mvc.domain.RulesEntity"/>
+        <mapping class="com.springapp.mvc.domain.UsersEntity"/>
+        <mapping class="com.springapp.mvc.domain.AnswersEntity"/>
+        <mapping class="com.springapp.mvc.domain.AnswersUserEntity"/>
+        <mapping class="com.springapp.mvc.domain.CategoriesEntity"/>
+        <mapping class="com.springapp.mvc.domain.FormsEntity"/>
+        <mapping class="com.springapp.mvc.domain.QuestionsEntity"/>
+        <mapping class="com.springapp.mvc.domain.RulesEntity"/>
+        <mapping class="com.springapp.mvc.domain.TestQuestionsEntity"/>
+        <mapping class="com.springapp.mvc.domain.TestcategoriesEntity"/>
+        <mapping class="com.springapp.mvc.domain.TestsEntity"/>
+        <mapping class="com.springapp.mvc.domain.UsersEntity"/>
+    </session-factory>
+</hibernate-configuration>
