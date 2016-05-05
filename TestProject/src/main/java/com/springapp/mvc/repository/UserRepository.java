@@ -18,12 +18,12 @@ public class UserRepository {
     private SessionFactory session;
 
     public UsersEntity findUserByEmail(String email) {
-        return (UsersEntity) this.session.getCurrentSession().createSQLQuery("Select * from users WHERE  users.email=:name").addEntity(UsersEntity.class).setString("name", email).uniqueResult();
+        return (UsersEntity) session.getCurrentSession().createSQLQuery("Select * from users WHERE  users.email=:name").addEntity(UsersEntity.class).setString("name", email).uniqueResult();
     }
 
     public void createUser(UsersEntity user) throws Exception {
         try {
-            this.session.getCurrentSession().save(user);
+            session.getCurrentSession().save(user);
         } catch (HibernateException e) {
             throw new Exception("Невозможно создать пользователя " + user.getEmail(), e);
         }
@@ -32,7 +32,7 @@ public class UserRepository {
 
     public void updateUser(UsersEntity user) throws Exception {
         try {
-            this.session.getCurrentSession().update(user);
+            session.getCurrentSession().update(user);
         } catch (HibernateException e) {
             throw new Exception("Невозможно обновить пользователя " + user.getEmail(), e);
         }
@@ -40,15 +40,15 @@ public class UserRepository {
     }
 
     public List<UsersEntity> getAllUsers() {
-        return this.session.getCurrentSession().createSQLQuery("Select * from users LEFT JOIN rules on users.ID_rule = rules.ID").addEntity(UsersEntity.class).addEntity(RulesEntity.class).list();
+        return session.getCurrentSession().createSQLQuery("Select * from users LEFT JOIN rules on users.ID_rule = rules.ID").addEntity(UsersEntity.class).addEntity(RulesEntity.class).list();
     }
 
     public UsersEntity findUserByID(int id) {
-        return (UsersEntity) this.session.getCurrentSession().createSQLQuery("Select * from users WHERE users.id=:id").addEntity(UsersEntity.class).setInteger("id", id).uniqueResult();
+        return (UsersEntity) session.getCurrentSession().createSQLQuery("Select * from users WHERE users.id=:id").addEntity(UsersEntity.class).setInteger("id", id).uniqueResult();
     }
 
     public RulesEntity findRuleByUserID(int id) {
-        return (RulesEntity) this.session.getCurrentSession().createSQLQuery("Select rules.ID,rules.namerule from users left JOIN rules on users.ID_rule = rules.ID WHERE users.id=:id").addEntity(RulesEntity.class).setInteger("id", id).uniqueResult();
+        return (RulesEntity) session.getCurrentSession().createSQLQuery("Select rules.ID,rules.namerule from users left JOIN rules on users.ID_rule = rules.ID WHERE users.id=:id").addEntity(RulesEntity.class).setInteger("id", id).uniqueResult();
     }
 
 

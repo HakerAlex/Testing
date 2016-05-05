@@ -33,6 +33,11 @@
         <property name="password" value="${jdbc.password}"/>
     </bean>
 
+    <bean id="treeBean" class="com.springapp.mvc.service.CreateTreeFromQuery"/>
+    <bean id="firstPageRepository" class="com.springapp.mvc.repository.FirstPageRepository"/>
+    <bean id="userRepository" class="com.springapp.mvc.repository.UserRepository"/>
+
+
     <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
         <property name="configLocation" value="classpath:hibernate.cfg.xml"/>

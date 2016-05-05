@@ -16,50 +16,53 @@ public class CreateTreeFromQuery {
 
     private String getElementTree(CategoriesEntity ourElement)
     {
-        String element="";
-        element=element.concat("{text:  \" Код:"+ourElement.getId()+" ");
-        element=element.concat(ourElement.getCategory()+"\"");
-        element=element.concat(",icon: \"glyphicon glyphicon-folder-close\"");
-        element=element.concat(",selectedIcon: \"glyphicon glyphicon-folder-open\"");
-        element=element.concat(",selectable: true");
-        element=element.concat(",nodes: [");
-        return element;
+        StringBuilder element=new StringBuilder(200);
+        element=element.append("{text:  \" Код:");
+        element=element.append(ourElement.getId());
+        element=element.append(" ");
+        element=element.append(ourElement.getCategory());
+        element=element.append("\"");
+        element=element.append(",icon: \"glyphicon glyphicon-folder-close\"");
+        element=element.append(",selectedIcon: \"glyphicon glyphicon-folder-open\"");
+        element=element.append(",selectable: true");
+        element=element.append(",nodes: [");
+        return element.toString();
     }
 
 
     @Transactional(readOnly = true)
     public String createTree(){
-        List<CategoriesEntity> ourList1=this.categoryRepository.getCategoriesByParentID(0);
+        List<CategoriesEntity> ourList1=categoryRepository.getCategoriesByParentID(0);
 
-        String ourTree="[";
+        StringBuilder ourTree=new StringBuilder(200);
+        ourTree=ourTree.append("[");
 
        for (CategoriesEntity ourElement1:ourList1) {
-           ourTree=ourTree.concat(getElementTree(ourElement1));
-           List<CategoriesEntity> ourList2=this.categoryRepository.getCategoriesByParentID(ourElement1.getId());
+           ourTree=ourTree.append(getElementTree(ourElement1));
+           List<CategoriesEntity> ourList2=categoryRepository.getCategoriesByParentID(ourElement1.getId());
            for (CategoriesEntity ourElement2:ourList2) {
-               ourTree=ourTree.concat(getElementTree(ourElement2));
-               List<CategoriesEntity> ourList3=this.categoryRepository.getCategoriesByParentID(ourElement2.getId());
+               ourTree=ourTree.append(getElementTree(ourElement2));
+               List<CategoriesEntity> ourList3=categoryRepository.getCategoriesByParentID(ourElement2.getId());
                for (CategoriesEntity ourElement3:ourList3) {
-                   ourTree=ourTree.concat(getElementTree(ourElement3));
-                   List<CategoriesEntity> ourList4=this.categoryRepository.getCategoriesByParentID(ourElement3.getId());
+                   ourTree=ourTree.append(getElementTree(ourElement3));
+                   List<CategoriesEntity> ourList4=categoryRepository.getCategoriesByParentID(ourElement3.getId());
                    for (CategoriesEntity ourElement4:ourList4) {
-                       ourTree=ourTree.concat(getElementTree(ourElement4));
-                       List<CategoriesEntity> ourList5=this.categoryRepository.getCategoriesByParentID(ourElement4.getId());
+                       ourTree=ourTree.append(getElementTree(ourElement4));
+                       List<CategoriesEntity> ourList5=categoryRepository.getCategoriesByParentID(ourElement4.getId());
                        for (CategoriesEntity ourElement5:ourList5) {
-                           ourTree= ourTree.concat(getElementTree(ourElement5));
+                           ourTree= ourTree.append(getElementTree(ourElement5));
                        }
-                       ourTree=ourTree.concat("]},");
+                       ourTree=ourTree.append("]},");
                    }
-                   ourTree=ourTree.concat("]},");
+                   ourTree=ourTree.append("]},");
                }
-               ourTree=ourTree.concat("]},");
+               ourTree=ourTree.append("]},");
            }
-           ourTree=ourTree.concat("]},");
+           ourTree=ourTree.append("]},");
         }
-        ourTree=ourTree.concat("]");
-        System.out.print(ourTree);
+        ourTree=ourTree.append("]");
         String replace="nodes: \\[\\]";
-        String finish=ourTree.replaceAll(replace,"");  //replace for child
+        String finish=ourTree.toString().replaceAll(replace,"");  //replace for child
         return finish;
     }
 

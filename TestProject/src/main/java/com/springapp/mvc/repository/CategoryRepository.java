@@ -16,7 +16,7 @@ public class CategoryRepository {
     private SessionFactory session;
 
     public List<CategoriesEntity> getCategoriesByParentID(int id) {
-        return this.session.getCurrentSession().createSQLQuery("Select * from categories where parent=:id").addEntity(CategoriesEntity.class).setInteger("id", id).list();
+        return session.getCurrentSession().createSQLQuery("Select * from categories where parent=:id").addEntity(CategoriesEntity.class).setInteger("id", id).list();
     }
 
 

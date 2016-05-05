@@ -16,14 +16,9 @@ import org.springframework.web.bind.annotation.*;
 @Controller
 public class UserController {
 
-
+    @Autowired
     private UserRepository userRepository;
     private RegisterValidator registerValidator;
-
-    @Autowired
-    public UserController(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
 
     @RequestMapping(value = "/createuser", method = RequestMethod.POST)
     public String getUser(@ModelAttribute("new_user") RegisterForm userForm, Model model, BindingResult result) throws Exception {
@@ -51,7 +46,7 @@ public class UserController {
             return "register";
         }
 
-        if (this.userRepository.findUserByEmail(userForm.getEmail()) != null) {
+        if (userRepository.findUserByEmail(userForm.getEmail()) != null) {
             model.addAttribute("erroremail", "Пользователь с таким адресом уже существует");
             return "register";
         }
@@ -101,17 +96,17 @@ public class UserController {
     @PreAuthorize("hasRole('admin')")
     @RequestMapping(value = "/tableuser", method = RequestMethod.GET)
     public String getUsers(Model model) {
-        model.addAttribute("users", this.userRepository.getAllUsers());
+        model.addAttribute("users", userRepository.getAllUsers());
         return "tableuser";
     }
 
     @PreAuthorize("hasRole('admin')")
     @RequestMapping(value = "/edituser/{userid}", method = RequestMethod.GET)
     public String edituser(@PathVariable int userid, Model model) {
-        UsersEntity ourUser = this.userRepository.findUserByID(userid);
+        UsersEntity ourUser = userRepository.findUserByID(userid);
         if (ourUser != null) {
             model.addAttribute("user", ourUser);
-            model.addAttribute("rule", this.userRepository.findRuleByUserID(userid));
+            model.addAttribute("rule", userRepository.findRuleByUserID(userid));
             return "edituser";
         }
         return "forward:/";
@@ -121,21 +116,21 @@ public class UserController {
     @PreAuthorize("hasRole('admin')")
     @RequestMapping(value = "/updateuser", method = RequestMethod.POST)
     public String updateuser(@RequestParam("id") int id, @RequestParam("name") String name, @RequestParam("surname") String surname, @RequestParam("phone") String phone, @RequestParam("email") String email, @RequestParam("rule") String rule, @RequestParam("status") int status, @RequestParam("password") String password, Model model) {
-        UsersEntity ourUser = this.userRepository.findUserByID(id);
+        UsersEntity ourUser = userRepository.findUserByID(id);
         ourUser.setStatus((byte) status);
         ourUser.setPhone(phone);
         ourUser.setName(name);
         ourUser.setSurname(surname);
         ourUser.setEmail(email);
-        if (!ourUser.getPassword().equals(password)) ourUser.setPassword(DigestUtils.sha256Hex(password));
-        if (rule.equals("admin")) ourUser.setIdRule(2);
-        if (rule.equals("user")) ourUser.setIdRule(1);
+        if (!ourUser.getPassword().equals(password)) {ourUser.setPassword(DigestUtils.sha256Hex(password));}
+        if (rule.equals("admin")) {ourUser.setIdRule(2);}
+        if (rule.equals("user")) {ourUser.setIdRule(1);}
         try {
-            this.userRepository.updateUser(ourUser);
+            userRepository.updateUser(ourUser);
         } catch (Exception e) {
             e.printStackTrace();
         }
-        model.addAttribute("users", this.userRepository.getAllUsers());
+        model.addAttribute("users", userRepository.getAllUsers());
         return "tableuser";
     }
 

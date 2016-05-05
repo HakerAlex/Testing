@@ -15,25 +15,18 @@ import java.util.List;
 @Controller
 public class FirstpageController {
 
-    private FirstPageRepository firstPageRepository;
-
     @Autowired
-    public FirstpageController(FirstPageRepository firstPageRepository) {
-        this.firstPageRepository = firstPageRepository;
-    }
+    private FirstPageRepository firstPageRepository;
 
     @Autowired(required=false)
     private CreateTreeFromQuery treeBean;
 
-    public void setTreeBean(CreateTreeFromQuery treeBean) {
-        this.treeBean = treeBean;
-    }
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String getBasic(Model model) {
-        Object countTest = this.firstPageRepository.testQuantity();
-        List<TestcategoriesEntity> listCategories = this.firstPageRepository.listCategories();
-        model.addAttribute("count", countTest);
+        String countTest = firstPageRepository.testQuantity();
+        List<TestcategoriesEntity> listCategories = firstPageRepository.listCategories();
+        model.addAttribute("count", countTest.toString());
         model.addAttribute("allcategories", listCategories);
         return "index";
     }
@@ -45,7 +38,7 @@ public class FirstpageController {
 
     @RequestMapping(value = "/question", method = RequestMethod.GET)
     public String getQuestion(Model model) {
-        model.addAttribute("tree",this.treeBean.createTree());
+        model.addAttribute("tree",treeBean.createTree());
         return "tablequestions";
     }
 }
