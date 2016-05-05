@@ -17,7 +17,7 @@ public class CreateTreeFromQuery {
     private String getElementTree(CategoriesEntity ourElement)
     {
         StringBuilder element=new StringBuilder(200);
-        element=element.append("{text:  \" Код:");
+        element=element.append("{text:  \" Cod:");
         element=element.append(ourElement.getId());
         element=element.append(" ");
         element=element.append(ourElement.getCategory());

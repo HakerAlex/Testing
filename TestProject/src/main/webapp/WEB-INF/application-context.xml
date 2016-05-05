@@ -36,6 +36,8 @@
     <bean id="treeBean" class="com.springapp.mvc.service.CreateTreeFromQuery"/>
     <bean id="firstPageRepository" class="com.springapp.mvc.repository.FirstPageRepository"/>
     <bean id="userRepository" class="com.springapp.mvc.repository.UserRepository"/>
+    <bean id="categoryRepository" class="com.springapp.mvc.repository.CategoryRepository"/>
+
 
 
     <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">

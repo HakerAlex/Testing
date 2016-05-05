@@ -1,7 +1,6 @@
 package com.springapp.mvc.controller;
 
 import com.springapp.mvc.domain.TestcategoriesEntity;
-import com.springapp.mvc.repository.CategoryRepository;
 import com.springapp.mvc.repository.FirstPageRepository;
 import com.springapp.mvc.service.CreateTreeFromQuery;
 import org.springframework.beans.factory.annotation.Autowired;

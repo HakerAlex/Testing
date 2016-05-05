@@ -59,7 +59,7 @@ public class UserController {
         usersEntity.setPassword(DigestUtils.sha256Hex(userForm.getPassword()));
         usersEntity.setIdRule(1);
         usersEntity.setStatus((byte) 1);
-        this.userRepository.createUser(usersEntity);
+        userRepository.createUser(usersEntity);
 
         model.addAttribute("name", "");
         model.addAttribute("surname", "");
