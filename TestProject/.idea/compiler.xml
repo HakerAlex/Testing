@@ -23,10 +23,12 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
         <module name="risingsun" />
+        <module name="testing" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="risingsun" target="1.7" />
+      <module name="testing" target="1.7" />
     </bytecodeTargetLevel>
   </component>
 </project>

@@ -38,8 +38,6 @@
     <bean id="userRepository" class="com.springapp.mvc.repository.UserRepository"/>
     <bean id="categoryRepository" class="com.springapp.mvc.repository.CategoryRepository"/>
 
-
-
     <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
         <property name="dataSource" ref="dataSource"/>
         <property name="configLocation" value="classpath:hibernate.cfg.xml"/>

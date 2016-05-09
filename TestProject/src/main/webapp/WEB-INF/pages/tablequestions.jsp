@@ -3,21 +3,17 @@
 <%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
-<html lang="en">
+<html>
 <head>
-    <meta charset="utf-8">
+    <meta name="http-equiv" content="Content-type: text/html; charset=UTF-8">
 
     <title>Тестирование-Дерево вопросов</title>
-
-    <!-- Styles -->
-
-    <%--<link href="${pageContext.request.contextPath}/resources/assets/css/app.min.css" rel="stylesheet">--%>
 
 
     <link href="${pageContext.request.contextPath}/resources/assets/css/bootstrap-theme.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/resources/assets/css/bootstrap.css" rel="stylesheet">
-    <link href="${pageContext.request.contextPath}/resources/assets/css/bootstrap-gtreetable.css" rel="stylesheet">
-
+    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/bootstrap-treeview.css"/>
+    <link href="${pageContext.request.contextPath}/resources/assets/css/table.css" rel="stylesheet">
     <!-- Fonts -->
     <link href='http://fonts.googleapis.com/css?family=Oswald:100,300,400,500,600,800%7COpen+Sans:300,400,500,600,700,800%7CMontserrat:400,700'
           rel='stylesheet' type='text/css'>
@@ -38,161 +34,300 @@
 
 
     <div class="container" style="border-color: transparent">
-
-        <div class="col-xs-6">
+        <%----%>
+        <div class="col-xs-4">
             <div class="form-group">
-                <%--<form id="add_category" class="add_category" method="post"--%>
-                      <%--action="${pageContext.request.contextPath}/addcategory" commandName="addcategory">--%>
-
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="ti-folder"></i></span>
-                        <input type="text" value="" class="form-control" name="name" id="namecategory"
-                               placeholder="Категория">
-                    </div>
-                    <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 5px">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="ti-folder"></i></span>
-                        <input type="text" id="category" value="" class="form-control" name="name"
-                               placeholder="Родитель" disabled>
-                    </div>
-                    <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 5px">
-                    <button class="btn btn-primary btn-block" type="submit" id="addcategory">Добавить категорию</button>
-
-
-
-                <%--</form>--%>
-                <button class="btn btn-primary btn-block" type="submit" onclick="clearParent()">Очистить родителя</button>
-                <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 5px">
-                <button class="btn btn-primary btn-search" type="submit" onclick="expand()">Развернуть все</button>
-                <button class="btn btn-primary btn-search" type="submit" onclick="collapse()">Свернуть все</button>
-                <button class="btn btn-primary btn-search" type="button" id="updatetree">Обновить дерево</button>
+                <button class="btn btn-primary btn-search" type="submit" onclick="expand()">Развернуть</button>
+                <button class="btn btn-primary btn-search" type="submit" onclick="collapse()">Свернуть</button>
+            </div>
+            <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 5px">
+            <div class="form-group">
+                <a href="#myModal" data-toggle="modal"
+                   class="btn btn-primary btn-search">+</a>
+                <a href="#upModal" data-toggle="modal"
+                   class="btn btn-primary btn-search">Редак.</a>
+                <a href="#del" data-toggle="modal"
+                   class="btn btn-primary btn-danger">Удалить</a>
             </div>
 
-            <table class="table gtreetable" id="gtreetable"><thead><tr><th>Category</th></tr></thead></table>
+            <div id="treeview" style="color: dodgerblue; text-align:left "></div>
+        </div>
+
+
+        <div class="col-xs-8">
+
+            <%----%>
+            <form id="addquestion" class="addquestion" method="post"
+                  action="${pageContext.request.contextPath}/addquestion" commandName="addquestion">
+                <input type="hidden" value="" class="form-control" id="categoryforquestion" name="categoryforquestion">
+                <button class="btn btn-primary btn-search" type="submit">Добавить вопрос</button>
+            </form>
+                <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 15px">
+            <table id="question" class="table" data-provide="data-table" cellspacing="0" width="100%">
+
+                <thead>
+                <tr>
+                    <th>Код</th>
+                    <th>Вопрос</th>
+                    <th>Тип вопроса</th>
+                    <th>Редактировать</th>
+                    <th>Добавить ответ</th>
+                </tr>
+                </thead>
+
+            </table>
 
         </div>
+
     </div>
 
 </header>
 <!-- END Site header -->
 
+<main>
 
+
+    <!-- Modal -->
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Добавить категорию</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="ti-folder"></i></span>
+                            <input type="text" value="" class="form-control" name="name" id="namecategory"
+                                   placeholder="Категория">
+                        </div>
+                        <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 5px">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="ti-folder"></i></span>
+                            <input type="text" id="category" value="" class="form-control" name="name"
+                                   placeholder="Родитель" disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="clearParent()">Очистить родителя</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="addcategory">Добавить
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+    <div class="modal fade" id="upModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Обновить категорию</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="ti-folder"></i></span>
+                            <input type="text" value="" class="form-control" name="upcategory" id="upcategory"
+                                   placeholder="Новое значение">
+                        </div>
+                        <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 5px">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="ti-folder"></i></span>
+                            <input type="text" id="oldcategory" value="" class="form-control" name="parent"
+                                   placeholder="Старое значение" disabled>
+                        </div>
+                        <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 5px">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="ti-folder"></i></span>
+                            <input type="text" id="parent" value="" class="form-control" name="parent"
+                                   placeholder="Родитель" disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="clearParent()">Очистить родителя</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="updatecategory">Изменить
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+
+    <div class="modal fade" id="del" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Удалить категорию</h4>
+                    <h6 class="modal-title">Внимание! Можно удалить только если нет связанных элементов</h6>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="ti-folder"></i></span>
+                            <input type="text" id="delcategory" value="" class="form-control" name="delcategory"
+                                   placeholder="Значение" disabled>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="deletecategory">Удалить
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
+</main>
 <!-- END Main container -->
 <!-- Back to top button -->
-<%@ include file="../pages/template/templatefoot.jsp" %>
+<%--<%@ include file="../pages/template/templatefoot.jsp" %>--%>
+
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/jquery.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-gtreetable.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-gtreetable.ru.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/jquery-ui.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/jquery.browser.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/URI.js"></script>
+<script type="text/javascript"
+        src="${pageContext.request.contextPath}/resources/assets/js/datatables.min.js"></script>
+<script type="text/javascript"
+        src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-treeview.js"></script>
+
 
 <script type="text/javascript">
-    /*<![CDATA[*/
-    jQuery(function($) {
-        jQuery('#gtreetable').gtreetable({'source':function (id) {
-            return URI('${pageContext.request.contextPath}/nodeChildren').addSearch({'id':id});
-        },'onSave':function (oNode) {
-            return jQuery.ajax({
-                type: 'POST',
-                url: !oNode.isSaved() ? '${pageContext.request.contextPath}/nodeCreate' : URI('${pageContext.request.contextPath}/nodeUpdate').addSearch({'id':oNode.getId()}),
+    function getTree() {
+        return ${tree};
+    }
+    $('#treeview').treeview({data: getTree()});
+</script>
+
+<script type="text/javascript">
+    function expand() {
+        $('#treeview').treeview('expandAll', {levels: 100, silent: true});
+    }
+    function collapse() {
+        $('#treeview').treeview('collapseAll', {levels: 100, silent: true});
+    }
+
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#deletecategory").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "${pageContext.request.contextPath}/delcategory",
                 data: {
-                    parent: oNode.getParent(),
-                    name: oNode.getName(),
-                    position: oNode.getInsertPosition(),
-                    related: oNode.getRelatedNodeId()
-                },
-                dataType: 'json',
-                error: function(XMLHttpRequest) {
-                    alert(XMLHttpRequest.status+': '+XMLHttpRequest.responseText);
+                    namecategory: document.getElementById('delcategory').value
                 }
-            });
-        },'onDelete':function(oNode) {
-            return jQuery.ajax({
-                type: 'POST',
-                url: URI('${pageContext.request.contextPath}/nodeDelete').addSearch({'id':oNode.getId()}),
-                dataType: 'json',
-                error: function(XMLHttpRequest) {
-                    alert(XMLHttpRequest.status+': '+XMLHttpRequest.responseText);
+            }).done(function (msg) {
+                if (msg != "") {
+                    alert(msg)
                 }
+                ;
+                location.reload();
             });
-        },'onMove':function(oSource, oDestination, position) {
-            return jQuery.ajax({
-                type: 'POST',
-                url: URI('${pageContext.request.contextPath}/nodeMove').addSearch({'id':oSource.getId()}),
-                data: {
-                    related: oDestination.getId(),
-                    position: position
-                },
-                dataType: 'json',
-                error: function(XMLHttpRequest) {
-                    alert(XMLHttpRequest.status+': '+XMLHttpRequest.responseText);
-                }
-            });
-        },'draggable':true,'showExpandIconOnEmpty':true,'manyroots':true});
+        });
     });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#addcategory").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "${pageContext.request.contextPath}/addcategory",
+                data: {
+                    namecategory: document.getElementById('namecategory').value,
+                    parent: document.getElementById('category').value
+                }
+            }).done(function (tree) {
+                location.reload();
+            });
+        });
+    });
+</script>
 
 
-<%--<script type="text/javascript">--%>
-    <%--function getTree() {--%>
-            <%--return ${tree};--%>
-    <%--}--%>
-    <%--$('#treeview').treeview({data: getTree()});--%>
-<%--</script>--%>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#updatecategory").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "${pageContext.request.contextPath}/updatecategory",
+                data: {
+                    namecategory: document.getElementById('upcategory').value,
+                    oldcategory: document.getElementById('oldcategory').value,
+                    parent: document.getElementById('parent').value
+                }
+            }).done(function (tree) {
+                location.reload();
+            });
+        });
+    });
+</script>
 
-<%--<script type="text/javascript">--%>
-    <%--function expand() {--%>
-        <%--$('#treeview').treeview('expandAll', { levels: 5, silent: true });--%>
-    <%--}--%>
-    <%--function collapse() {--%>
-        <%--$('#treeview').treeview('collapseAll', { levels: 5, silent: true });--%>
-    <%--}--%>
-<%--</script>--%>
-
-<%--<script type="text/javascript">--%>
-    <%--$(document).ready(function() {--%>
-        <%--$("#updatetree").click(function(){--%>
-            <%--$.get("${pageContext.request.contextPath}/updatetree",function(ourtree){--%>
-                <%--$('#treeview').treeview({data: ourtree});--%>
-            <%--});--%>
-        <%--});--%>
-    <%--});--%>
-<%--</script>--%>
-
-
-<%--<script type="text/javascript">--%>
-    <%--$(document).ready(function() {--%>
-        <%--$("#addcategory").click(function(){--%>
-            <%--$.ajax({--%>
-            <%--type: "POST",--%>
-            <%--url: "${pageContext.request.contextPath}/addcategory",--%>
-            <%--data: { namecategory: document.getElementById('namecategory').value, parent: document.getElementById('category').value }--%>
-        <%--}).done(function(tree) {--%>
-                <%--$('#treeview').treeview({data: tree});--%>
-            <%--});--%>
-        <%--});--%>
-    <%--});--%>
-<%--</script>--%>
-
-<%--<script type="text/javascript">--%>
-    <%--function clearParent() {--%>
-        <%--document.getElementById('category').value = ""--%>
-        <%--}--%>
-<%--</script>--%>
+<script type="text/javascript">
+    function clearParent() {
+        document.getElementById('category').value = ""
+        document.getElementById('parent').value = ""
+    }
+</script>
 
 
-<%--<script type="text/javascript">--%>
-    <%--var parent;--%>
-    <%--$('#treeview').on('nodeSelected', function(event, data) {--%>
-        <%--document.getElementById('category').value = data.text--%>
-    <%--})--%>
-<%--</script>--%>
+<script type="text/javascript" charset="utf-8">
+    var parent;
+    $('#treeview').on('nodeSelected', function (event, data) {
+        document.getElementById('oldcategory').value = data.text;
+        document.getElementById('category').value = data.text;
+        document.getElementById('delcategory').value = data.text;
+        document.getElementById('parent').value = "";
+        document.getElementById('categoryforquestion').value = data.text;
+        $.ajax({
+            type: "POST",
+            url: "${pageContext.request.contextPath}/getparent",
+            data: {
+                category: data.text
+            }
+        }).done(function (element) {
+            document.getElementById('parent').value = element;
+
+        });
+
+
+        $.ajax({
+            type: "POST",
+            url: "${pageContext.request.contextPath}/getquestion",
+            data: {
+                category: data.text,
+                context: "${pageContext.request.contextPath}"
+            }
+        }).done(function (element) {
+            $("#question").html(element);
+            clearTable(1);
+
+        })
+
+    });
+</script>
+
 
 <script type="text/javascript">
 
     $(document).ready(function () {
+        clearTable(0)
+    });
 
+    function clearTable(flag) {
         var default_options = {
             "sScrollY": 400,
 
@@ -237,11 +372,13 @@
 
         };
 
-        $('#users').dataTable(default_options);
+        if (flag == 1) {
+            $('table[data-provide="data-table"]').dataTable().destroy();
+        }
+        $('#question').dataTable(default_options);
         $('table[data-provide="data-table"]').dataTable();
-    });
+    }
 </script>
-
 
 </body>
 </html>
