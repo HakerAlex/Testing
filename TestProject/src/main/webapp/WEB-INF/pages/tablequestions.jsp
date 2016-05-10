@@ -72,6 +72,7 @@
                     <th>Тип вопроса</th>
                     <th>Редактировать</th>
                     <th>Добавить ответ</th>
+                    <th>Удалить</th>
                 </tr>
                 </thead>
 
@@ -114,7 +115,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" onclick="clearParent()">Очистить родителя</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
                     <button type="button" class="btn btn-primary" data-dismiss="modal" id="addcategory">Добавить
                     </button>
                 </div>
@@ -154,7 +155,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" onclick="clearParent()">Очистить родителя</button>
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
                     <button type="button" class="btn btn-primary" data-dismiss="modal" id="updatecategory">Изменить
                     </button>
                 </div>
@@ -197,11 +198,12 @@
 
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/jquery.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/bootstrap.min.js"></script>
-<script type="text/javascript"
-        src="${pageContext.request.contextPath}/resources/assets/js/datatables.min.js"></script>
+<%--<script type="text/javascript"--%>
+        <%--src="${pageContext.request.contextPath}/resources/assets/js/datatables.min.js"></script>--%>
 <script type="text/javascript"
         src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-treeview.js"></script>
 
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-dialog.min.js"></script>
 
 <script type="text/javascript">
     function getTree() {
@@ -231,10 +233,13 @@
                 }
             }).done(function (msg) {
                 if (msg != "") {
-                    alert(msg)
+                    BootstrapDialog.show({
+                        title: 'Внимание',
+                        message: msg
+                    });
                 }
-                ;
-                location.reload();
+                else
+                {location.reload()};
             });
         });
     });
@@ -313,71 +318,10 @@
             }
         }).done(function (element) {
             $("#question").html(element);
-            clearTable(1);
 
         })
 
     });
-</script>
-
-
-<script type="text/javascript">
-
-    $(document).ready(function () {
-        clearTable(0)
-    });
-
-    function clearTable(flag) {
-        var default_options = {
-            "sScrollY": 400,
-
-            "sScrollX": "100%",
-
-            "sScrollXInner": "100%",
-
-            "bJQueryUI": true,
-
-            "sPaginationType": "simple_numbers",
-
-            "oLanguage": {
-
-                "sLengthMenu": "Отображено _MENU_ записей на страницу",
-
-                "sSearch": "Поиск:",
-
-                "sZeroRecords": "Ничего не найдено - извините",
-
-                "sInfo": "Показано с _START_ по _END_ из _TOTAL_ записей",
-
-                "sInfoEmpty": "Показано с 0 по 0 из 0 записей",
-
-                "sInfoFiltered": "(filtered from _MAX_ total records)",
-
-                "oPaginate": {
-
-                    "sFirst": "Первая",
-
-                    "sLast": "Посл.",
-
-                    "sNext": "След.",
-
-                    "sPrevious": "Пред."
-
-                }
-
-            },
-
-            "bProcessing": true
-
-
-        };
-
-        if (flag == 1) {
-            $('table[data-provide="data-table"]').dataTable().destroy();
-        }
-        $('#question').dataTable(default_options);
-        $('table[data-provide="data-table"]').dataTable();
-    }
 </script>
 
 </body>

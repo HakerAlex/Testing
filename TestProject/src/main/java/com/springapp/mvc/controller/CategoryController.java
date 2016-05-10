@@ -98,6 +98,9 @@ public class CategoryController {
     @RequestMapping(value = "/addquestion", method = RequestMethod.POST)
     public String addQuestion(@RequestParam("categoryforquestion") String category, Model model) {
         model.addAttribute("category",category);
+        model.addAttribute("code","");
+        model.addAttribute("questiontext","");
+        model.addAttribute("questiontype",1);
         return "addquestion";
     }
 
@@ -137,6 +140,7 @@ public class CategoryController {
         ourTable.append("<th>Тип вопроса</th> ");
         ourTable.append("<th>Редактировать</th> ");
         ourTable.append("<th>Добавить ответ</th> ");
+        ourTable.append("<th>Удалить</th> ");
         ourTable.append("</tr> ");
         ourTable.append("</thead> ");
 
@@ -183,9 +187,22 @@ public class CategoryController {
             ourTable.append("/addanswer/");
             ourTable.append(ourElement.getId());
             ourTable.append("\"");
-            ourTable.append(" class=\"label btn-info\"> <i class=\"fa fa-pencil\">Добавить ответ</i></a>");
+            ourTable.append(" class=\"label btn-primary\"> <i class=\"fa fa-leaf\">Добавить ответ</i></a>");
             ourTable.append(" </span>");
             ourTable.append(" </td>");
+
+
+            ourTable.append(" <td>");
+            ourTable.append(" <span class=\"tooltip-area\">");
+            ourTable.append(" <a href=\"");
+            ourTable.append(context);
+            ourTable.append("/delquestion/");
+            ourTable.append(ourElement.getId());
+            ourTable.append("\"");
+            ourTable.append(" class=\"label btn-danger\"> <i class=\"fa fa-trash\">Удалить</i></a>");
+            ourTable.append(" </span>");
+            ourTable.append(" </td>");
+
             ourTable.append(" </tr>");
 
         }

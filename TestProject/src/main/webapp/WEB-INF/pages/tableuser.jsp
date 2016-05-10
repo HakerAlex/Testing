@@ -13,11 +13,6 @@
 
     <%--<link href="${pageContext.request.contextPath}/resources/assets/css/app.min.css" rel="stylesheet">--%>
 
-
-    <link href="${pageContext.request.contextPath}/resources/assets/css/bootstrap-select.css" rel="stylesheet">
-    <link href="${pageContext.request.contextPath}/resources/assets/css/lity.css" rel="stylesheet">
-    <link href="${pageContext.request.contextPath}/resources/assets/css/dropify.css" rel="stylesheet">
-    <link href="${pageContext.request.contextPath}/resources/assets/css/custom.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/resources/assets/css/bootstrap-theme.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/resources/assets/css/bootstrap.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/resources/assets/css/table.css" rel="stylesheet">
@@ -90,11 +85,11 @@
 
 <!-- END Main container -->
 <!-- Back to top button -->
-<%@ include file="../pages/template/templatefoot.jsp" %>
-<%--<script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/jquery.min.js"></script>--%>
+<%--<%@ include file="../pages/template/templatefoot.jsp" %>--%>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/jquery.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/bootstrap.min.js"></script>
-<%--<script type="text/javascript"--%>
-<%--src="${pageContext.request.contextPath}/resources/assets/js/dataTables.bootstrap.min.js"></script>--%>
+<script type="text/javascript"
+src="${pageContext.request.contextPath}/resources/assets/js/dataTables.bootstrap.min.js"></script>
 <script type="text/javascript"
         src="${pageContext.request.contextPath}/resources/assets/js/datatables.min.js"></script>
 
