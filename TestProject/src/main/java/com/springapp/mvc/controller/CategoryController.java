@@ -3,13 +3,18 @@ package com.springapp.mvc.controller;
 import com.springapp.mvc.domain.CategoriesEntity;
 import com.springapp.mvc.domain.QuestionsEntity;
 import com.springapp.mvc.repository.CategoryRepository;
+import com.springapp.mvc.repository.QuestionRepository;
 import com.springapp.mvc.service.CreateTreeFromQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Controller
@@ -18,16 +23,17 @@ public class CategoryController {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private QuestionRepository questionRepository;
+
     @Autowired(required = false)
     private CreateTreeFromQuery treeBean;
 
-
-    String returnCode(String parent) {
+    private String returnCode(String parent) {
         String ID = parent.substring(5);
         int pos = ID.indexOf(" ");
         return ID.substring(0, pos);
     }
-
 
     @PreAuthorize("hasRole('admin')")
     @RequestMapping(value = "/updatetree", method = RequestMethod.GET)
@@ -36,26 +42,24 @@ public class CategoryController {
         return treeBean.createTree();
     }
 
-
     @PreAuthorize("hasRole('admin')")
     @RequestMapping(value = "/delcategory", method = RequestMethod.POST, produces = {"text/plain; charset=UTF-8"})
     @ResponseBody
     public String delCategory(@RequestParam("namecategory") String namecategory) throws Exception {
 
-        int ourID=new Integer(returnCode(namecategory));
-        List<CategoriesEntity> list =categoryRepository.getCategoriesByParentID(ourID);
+        int ourID = new Integer(returnCode(namecategory));
+        List<CategoriesEntity> list = categoryRepository.getCategoriesByParentID(ourID);
         if (!list.isEmpty()) {
             return "Не могу удалить есть подчиненные элементы";
         }
-        List<QuestionsEntity> listQ =categoryRepository.getAllQuestionByCategoryID(ourID);
+        List<QuestionsEntity> listQ = categoryRepository.getAllQuestionByCategoryID(ourID);
         if (!listQ.isEmpty()) {
             return "Не могу удалить есть связанные вопросы";
         }
-        categoryRepository.deleteCategory( categoryRepository.getCategoriesByID(ourID));
+        categoryRepository.deleteCategory(categoryRepository.getCategoriesByID(ourID));
 
         return "";
     }
-
 
     @PreAuthorize("hasRole('admin')")
     @RequestMapping(value = "/getparent", method = RequestMethod.POST, produces = {"text/plain; charset=UTF-8"})
@@ -78,7 +82,7 @@ public class CategoryController {
         CategoriesEntity newCategory = new CategoriesEntity();
         newCategory.setCategory(namecategory);
 
-        if (parent != "") {
+        if (!parent.equals("")) {
             newCategory.setParent(new Integer(returnCode(parent)));
         } else {
             newCategory.setParent(0);
@@ -92,15 +96,13 @@ public class CategoryController {
         return "";
     }
 
-
-
     @PreAuthorize("hasRole('admin')")
     @RequestMapping(value = "/addquestion", method = RequestMethod.POST)
     public String addQuestion(@RequestParam("categoryforquestion") String category, Model model) {
-        model.addAttribute("category",category);
-        model.addAttribute("code","");
-        model.addAttribute("questiontext","");
-        model.addAttribute("questiontype",1);
+        model.addAttribute("category", category);
+        model.addAttribute("code", "");
+        model.addAttribute("questiontext", "");
+        model.addAttribute("questiontype", 1);
         return "addquestion";
     }
 
@@ -111,7 +113,7 @@ public class CategoryController {
         CategoriesEntity ourCategory = categoryRepository.getCategoriesByID(new Integer(returnCode(oldcategory)));
         ourCategory.setCategory(category);
 
-        if (parent != "") {
+        if (!parent.equals("")) {
             ourCategory.setParent(new Integer(returnCode(parent)));
         } else {
             ourCategory.setParent(0);
@@ -125,11 +127,7 @@ public class CategoryController {
         return "";
     }
 
-
-    @PreAuthorize("hasRole('admin')")
-    @RequestMapping(value = "/getquestion", method = RequestMethod.POST, produces = {"text/html; charset=UTF-8"})
-    @ResponseBody
-    public String getQuestions(@RequestParam("category") String category,@RequestParam("context") String context) {
+    private String getInputQuestion(String category, String context) {
         List<QuestionsEntity> ourQuestion = categoryRepository.getAllQuestionByCategoryID(new Integer(returnCode(category)));
         StringBuilder ourTable = new StringBuilder(200);
 
@@ -195,10 +193,9 @@ public class CategoryController {
             ourTable.append(" <td>");
             ourTable.append(" <span class=\"tooltip-area\">");
             ourTable.append(" <a href=\"");
-            ourTable.append(context);
-            ourTable.append("/delquestion/");
+            ourTable.append("javascript:fundelquestion(");
             ourTable.append(ourElement.getId());
-            ourTable.append("\"");
+            ourTable.append(")\"");
             ourTable.append(" class=\"label btn-danger\"> <i class=\"fa fa-trash\">Удалить</i></a>");
             ourTable.append(" </span>");
             ourTable.append(" </td>");
@@ -209,6 +206,31 @@ public class CategoryController {
         ourTable.append(" </tbody>");
 
         return ourTable.toString();
+
+    }
+
+    @PreAuthorize("hasRole('admin')")
+    @RequestMapping(value = "/getquestion", method = RequestMethod.POST, produces = {"text/html; charset=UTF-8"})
+    @ResponseBody
+    public String getQuestions(@RequestParam("category") String category, @RequestParam("context") String context) {
+        return getInputQuestion(category, context);
+    }
+
+    @PreAuthorize("hasRole('admin')")
+    @RequestMapping(value = "/delquestion", method = RequestMethod.POST, produces = {"text/html; charset=UTF-8"})
+    @ResponseBody
+    public String delQuestions(@RequestParam("id") int question, @RequestParam("context") String context, @RequestParam("category") String category) {
+        BigDecimal getChildElement = questionRepository.getChildRecordCount(question);
+        if (getChildElement.intValue() == 0) {
+            QuestionsEntity ques = questionRepository.getQuestionByID(question);
+            try {
+                questionRepository.deleteQuestion(ques);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return getInputQuestion(category, context);
+        }
+        return "error";
     }
 
 

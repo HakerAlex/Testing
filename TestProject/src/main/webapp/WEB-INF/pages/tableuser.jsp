@@ -89,7 +89,7 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/jquery.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/bootstrap.min.js"></script>
 <script type="text/javascript"
-src="${pageContext.request.contextPath}/resources/assets/js/dataTables.bootstrap.min.js"></script>
+        src="${pageContext.request.contextPath}/resources/assets/js/dataTables.bootstrap.min.js"></script>
 <script type="text/javascript"
         src="${pageContext.request.contextPath}/resources/assets/js/datatables.min.js"></script>
 

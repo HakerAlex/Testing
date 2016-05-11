@@ -39,7 +39,7 @@
 
     <div class="container">
         <div class="col-xs-6">
-             <h3 class="text-center" style="color: white">Вопрос</h3>
+            <h3 class="text-center" style="color: white">Вопрос</h3>
             <div class="input-group">
                 <span class="input-group-addon"><i class="ti-folder"></i></span>
                 <input type="text" value="${category}" class="form-control" id="category" name="category" disabled>
@@ -47,13 +47,14 @@
             <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 5px">
             <div class="input-group">
                 <span class="input-group-addon"><i class="ti-key"></i></span>
-                <input type="text" value="${code}" class="form-control" id="code" name="code" placeholder="Код вопроса" disabled>
+                <input type="text" value="${code}" class="form-control" id="code" name="code" placeholder="Код вопроса"
+                       disabled>
             </div>
             <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 5px">
 
             <div class="form-group">
-                    <button type="button" class="btn btn-primary btn-warning" id="writequestion">Записать вопрос</button>
-                    <button type="button" class="btn btn-primary btn-search" id="addanswer">Добавить ответ</button>
+                <button type="button" class="btn btn-primary btn-warning" id="writequestion">Записать вопрос</button>
+                <button type="button" class="btn btn-primary btn-search" id="addanswer">Добавить ответ</button>
             </div>
 
             <div class="btn-group" data-toggle="buttons">
@@ -75,7 +76,7 @@
                         <input type="radio" name="typequestion" id="option1" value="1"> Один
                     </label>
                     <label class="btn btn-warning active">
-                        <input type="radio" name="typequestion" id="option2" value="2"  checked=""> Несколько
+                        <input type="radio" name="typequestion" id="option2" value="2" checked=""> Несколько
                     </label>
                     <label class="btn btn-primary">
                         <input type="radio" name="typequestion" id="option3" value="3"> Поле ввода
@@ -90,7 +91,7 @@
                         <input type="radio" name="typequestion" id="option2" value="2"> Несколько
                     </label>
                     <label class="btn btn-primary active">
-                        <input type="radio" name="typequestion" id="option3" value="3"  checked=""> Поле ввода
+                        <input type="radio" name="typequestion" id="option3" value="3" checked=""> Поле ввода
                     </label>
                 </c:if>
 
@@ -99,7 +100,8 @@
             <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 5px">
             <div class="input-group">
                 <%--<div class="form-group">--%>
-                <textarea cols="80" id="editorCk" name="question" rows="30" style="height: 90%">${questiontext}</textarea>
+                <textarea cols="80" id="editorCk" name="question" rows="30"
+                          style="height: 90%">${questiontext}</textarea>
                 <%--</div>--%>
             </div>
         </div>
@@ -130,7 +132,8 @@
 <%--<script src="${pageContext.request.contextPath}/resources/assets/js/jquery.min.js"></script>--%>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/jquery.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-dialog.min.js"></script>
+<script type="text/javascript"
+        src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-dialog.min.js"></script>
 <script type="text/javascript"
         src="${pageContext.request.contextPath}/resources/assets/js/ckeditor/ckeditor.js"></script>
 <script type="text/javascript">
@@ -158,15 +161,25 @@
                     code: document.getElementById('code').value,
                     typeq: $("input[name='typequestion']:checked").val()
                 },
-                success:{
+                dataType: "text",
+                success: {
                     function (codeQ) {
-                        document.getElementById('code').value=codeQ;
+                        document.getElementById('code').value = codeQ;
+                    },
+                    error: {
+                        function (codeQ) {
+                            BootstrapDialog.alert('Ошибка! Добавления/обновления');
+                        }
                     }
+
                 }
             }).done(function (codeQ) {
-                 document.getElementById('code').value=codeQ;
-                BootstrapDialog.alert('Добавлен/обновлен вопрос в базу');
+                document.getElementById('code').value = codeQ;
+                BootstrapDialog.show({
+                    title: 'Внимание',
+                    message: 'Добавлен/обновлен вопрос в базу'
                 });
+            });
         });
     });
 </script>

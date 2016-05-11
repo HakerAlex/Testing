@@ -1,6 +1,5 @@
 package com.springapp.mvc.repository;
 
-import com.springapp.mvc.domain.CategoriesEntity;
 import com.springapp.mvc.domain.QuestionsEntity;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
@@ -8,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.math.BigDecimal;
 
 @Repository
 @Transactional
@@ -29,7 +28,7 @@ public class QuestionRepository {
         try {
             session.getCurrentSession().save(questionsEntity);
         } catch (HibernateException e) {
-            throw new Exception("Невозможно создать вопрос ",e);
+            throw new Exception("Невозможно создать вопрос ", e);
         }
 
     }
@@ -38,13 +37,30 @@ public class QuestionRepository {
         try {
             session.getCurrentSession().update(questionsEntity);
         } catch (HibernateException e) {
-            throw new Exception("Невозможно обновить вопрос ",e);
+            throw new Exception("Невозможно обновить вопрос ", e);
         }
 
     }
 
+    public BigDecimal getChildRecordCount(int questionid) {
+        return (BigDecimal) session.getCurrentSession().createSQLQuery("SELECT SUM(reccount) as reccount from\n" +
+                "  (SELECT count(ID_question) as reccount from answers where ID_question=:id\n" +
+                "UNION ALL\n" +
+                "   SELECT count(ID_question) from answers_user WHERE ID_question=:id\n" +
+                "UNION All\n" +
+                "   SELECT count(ID_question) from test_questions WHERE ID_question=:id) as ob").setInteger("id", questionid).uniqueResult();
+    }
+
+    public void deleteQuestion(QuestionsEntity questionsEntity) throws Exception {
+        try {
+            session.getCurrentSession().delete(questionsEntity);
+        } catch (HibernateException e) {
+            throw new Exception("Невозможно удалить вопрос ", e);
+        }
+
+    }
+
+
 }
-
-
 
 

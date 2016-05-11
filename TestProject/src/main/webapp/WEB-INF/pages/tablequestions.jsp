@@ -62,7 +62,7 @@
                 <input type="hidden" value="" class="form-control" id="categoryforquestion" name="categoryforquestion">
                 <button class="btn btn-primary btn-search" type="submit">Добавить вопрос</button>
             </form>
-                <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 15px">
+            <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 15px">
             <table id="question" class="table" data-provide="data-table" cellspacing="0" width="100%">
 
                 <thead>
@@ -191,6 +191,35 @@
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
+
+    <div class="modal fade" id="delquestion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Удалить вопрос</h4>
+                    <h6 class="modal-title">Внимание! Можно удалить только если нет связанных элементов</h6>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="ti-folder"></i></span>
+                            <input type="text" id="delQ" value="" class="form-control" name="delQ"
+                                   placeholder="Значение" disabled>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="deleteourquestion">Удалить
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
 </main>
 <!-- END Main container -->
 <!-- Back to top button -->
@@ -199,11 +228,12 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/jquery.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/bootstrap.min.js"></script>
 <%--<script type="text/javascript"--%>
-        <%--src="${pageContext.request.contextPath}/resources/assets/js/datatables.min.js"></script>--%>
+<%--src="${pageContext.request.contextPath}/resources/assets/js/datatables.min.js"></script>--%>
 <script type="text/javascript"
         src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-treeview.js"></script>
 
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-dialog.min.js"></script>
+<script type="text/javascript"
+        src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-dialog.min.js"></script>
 
 <script type="text/javascript">
     function getTree() {
@@ -238,8 +268,10 @@
                         message: msg
                     });
                 }
-                else
-                {location.reload()};
+                else {
+                    location.reload()
+                }
+                ;
             });
         });
     });
@@ -322,6 +354,45 @@
         })
 
     });
+</script>
+
+<script type="text/javascript" charset="utf-8">
+    function fundelquestion(idquestion) {
+        $.ajax({
+            type: "POST",
+            url: "${pageContext.request.contextPath}/delquestion",
+            data: {
+                id: idquestion,
+                context: "${pageContext.request.contextPath}",
+                category: document.getElementById('category').value
+            },
+            dataType: "text",
+            success: {
+                function () {
+                },
+                error: {
+                    function () {
+                    }
+                }
+            }
+        }).done(function (element) {
+
+            if (element == 'error') {
+                BootstrapDialog.show({
+                    title: 'Внимание',
+                    message: 'Нельзя удалить вопрос есть связанные элементы!!'
+                });
+            }
+            else {
+                BootstrapDialog.show({
+                    title: 'Внимание',
+                    message: 'Вопрос удален!!'
+                });
+                $("#question").html(element);
+            }
+        });
+    }
+    ;
 </script>
 
 </body>

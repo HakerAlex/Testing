@@ -67,7 +67,7 @@ public class TestQuestionsEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "ID_test", referencedColumnName = "ID",  insertable = false, updatable = false)
+    @JoinColumn(name = "ID_test", referencedColumnName = "ID", insertable = false, updatable = false)
     public TestsEntity getTestsEntity() {
         return testsEntity;
     }

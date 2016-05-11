@@ -34,11 +34,11 @@ public class CategoryRepository {
         return session.getCurrentSession().createSQLQuery("Select * from categories").addEntity(CategoriesEntity.class).list();
     }
 
-       public void createCategory(CategoriesEntity category) throws Exception {
+    public void createCategory(CategoriesEntity category) throws Exception {
         try {
             session.getCurrentSession().save(category);
         } catch (HibernateException e) {
-            throw new Exception("Невозможно создать категорию " + category.getCategory(),e);
+            throw new Exception("Невозможно создать категорию " + category.getCategory(), e);
         }
 
     }
@@ -47,7 +47,7 @@ public class CategoryRepository {
         try {
             session.getCurrentSession().delete(category);
         } catch (HibernateException e) {
-            throw new Exception("Невозможно удалить категорию " + category.getCategory(),e);
+            throw new Exception("Невозможно удалить категорию " + category.getCategory(), e);
         }
 
     }
@@ -56,11 +56,10 @@ public class CategoryRepository {
         try {
             session.getCurrentSession().update(category);
         } catch (HibernateException e) {
-            throw new Exception("Невозможно обновить категорию " + category.getCategory(),e);
+            throw new Exception("Невозможно обновить категорию " + category.getCategory(), e);
         }
 
     }
-
 
 
 }

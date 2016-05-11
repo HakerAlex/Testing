@@ -122,9 +122,15 @@ public class UserController {
         ourUser.setName(name);
         ourUser.setSurname(surname);
         ourUser.setEmail(email);
-        if (!ourUser.getPassword().equals(password)) {ourUser.setPassword(DigestUtils.sha256Hex(password));}
-        if (rule.equals("admin")) {ourUser.setIdRule(2);}
-        if (rule.equals("user")) {ourUser.setIdRule(1);}
+        if (!ourUser.getPassword().equals(password)) {
+            ourUser.setPassword(DigestUtils.sha256Hex(password));
+        }
+        if (rule.equals("admin")) {
+            ourUser.setIdRule(2);
+        }
+        if (rule.equals("user")) {
+            ourUser.setIdRule(1);
+        }
         try {
             userRepository.updateUser(ourUser);
         } catch (Exception e) {

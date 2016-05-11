@@ -33,7 +33,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
             boolean flag;
 
-            flag =(user.getStatus() == 1)?true:false;
+            flag = (user.getStatus() == 1) ? true : false;
 
             boolean enabled = flag;
             boolean accountNonExpired = flag;

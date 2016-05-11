@@ -2,7 +2,6 @@ package com.springapp.mvc.service;
 
 import com.springapp.mvc.domain.CategoriesEntity;
 import com.springapp.mvc.repository.CategoryRepository;
-import javafx.beans.binding.StringBinding;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +15,7 @@ public class CreateTreeFromQuery {
     private CategoryRepository categoryRepository;
 
 
-    private StringBuilder getElementTree(CategoriesEntity ourElement,StringBuilder element) {
+    private StringBuilder getElementTree(CategoriesEntity ourElement, StringBuilder element) {
         element.append("{text:  \" Код:");
         element.append(ourElement.getId());
         element.append(" ");
@@ -30,11 +29,11 @@ public class CreateTreeFromQuery {
     }
 
     @Transactional(readOnly = true)
-    private StringBuilder recursionTrees(CategoriesEntity ourElement,StringBuilder ourTree){
+    private StringBuilder recursionTrees(CategoriesEntity ourElement, StringBuilder ourTree) {
         List<CategoriesEntity> ourList = categoryRepository.getCategoriesByParentID(ourElement.getId());
         for (CategoriesEntity ourElement1 : ourList) {
-            recursionTrees(ourElement1,getElementTree(ourElement1,ourTree)).append("]},");
-         }
+            recursionTrees(ourElement1, getElementTree(ourElement1, ourTree)).append("]},");
+        }
         return ourTree;
     }
 
@@ -46,7 +45,7 @@ public class CreateTreeFromQuery {
         ourTree.append("[");
 
         for (CategoriesEntity ourElement1 : ourList1) {
-           recursionTrees(ourElement1, getElementTree(ourElement1,ourTree)).append("]},");
+            recursionTrees(ourElement1, getElementTree(ourElement1, ourTree)).append("]},");
         }
         ourTree.append("]");
         String replace = "nodes: \\[\\]";

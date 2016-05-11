@@ -31,16 +31,16 @@
             </li>
             <sec:authorize access="isAuthenticated()">
                 <sec:authorize access="hasRole('admin')">
-                <li>
-                    <a href="#">Администирование</a>
-                    <ul>
+                    <li>
+                        <a href="#">Администирование</a>
+                        <ul>
 
                             <li><a href="${pageContext.request.contextPath}/question">Вопросы</a></li>
                             <li><a href="${pageContext.request.contextPath}/tests">Тесты</a></li>
                             <li><a href="${pageContext.request.contextPath}/tableuser">Пользователи</a></li>
 
-                    </ul>
-                </li>
+                        </ul>
+                    </li>
                 </sec:authorize>
             </sec:authorize>
             <li>

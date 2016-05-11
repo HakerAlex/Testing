@@ -1,7 +1,6 @@
 package com.springapp.mvc.controller;
 
 import com.springapp.mvc.domain.QuestionsEntity;
-import com.springapp.mvc.repository.CategoryRepository;
 import com.springapp.mvc.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,10 +13,6 @@ public class QuestionController {
 
     @Autowired
     private QuestionRepository questionRepository;
-
-    @Autowired
-    private CategoryRepository categoryRepository;
-
 
     String returnCode(String parent) {
         String ID = parent.substring(5);
@@ -60,7 +55,7 @@ public class QuestionController {
             e.printStackTrace();
         }
 
-        QuestionsEntity newOurQuestion=questionRepository.getQuestionByText(ourQuestion.getQuestion());
+        QuestionsEntity newOurQuestion = questionRepository.getQuestionByText(ourQuestion.getQuestion());
 
         StringBuilder ourAnswer = new StringBuilder(10);
         ourAnswer.append(newOurQuestion.getId());
@@ -72,12 +67,19 @@ public class QuestionController {
     public String addQuestion(@PathVariable int id, Model model) {
         QuestionsEntity ourQuestion = questionRepository.getQuestionByID(id);
 
-        model.addAttribute("category",ourQuestion.getCategory());
-        model.addAttribute("code",ourQuestion.getId());
-        model.addAttribute("questiontext",ourQuestion.getQuestion());
-        model.addAttribute("questiontype",ourQuestion.getTypeQuestion());
+        StringBuilder ourCategory = new StringBuilder(20);
+        ourCategory.append(" Код:");
+        ourCategory.append(ourQuestion.getCategoryById().getId());
+        ourCategory.append(" ");
+        ourCategory.append(ourQuestion.getCategoryById().getCategory());
+
+        model.addAttribute("category", ourCategory.toString());
+        model.addAttribute("code", ourQuestion.getId());
+        model.addAttribute("questiontext", ourQuestion.getQuestion());
+        model.addAttribute("questiontype", ourQuestion.getTypeQuestion());
 
         return "addquestion";
     }
+
 
 }

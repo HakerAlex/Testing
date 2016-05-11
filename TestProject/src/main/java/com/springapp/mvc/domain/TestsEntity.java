@@ -34,7 +34,7 @@ public class TestsEntity {
     }
 
     @Basic
-    @Column(name = "testname",  length = -1)
+    @Column(name = "testname", length = -1)
     public String getTestname() {
         return testname;
     }
@@ -54,7 +54,7 @@ public class TestsEntity {
     }
 
     @Basic
-    @Column(name = "date_finish" )
+    @Column(name = "date_finish")
     public Date getDateFinish() {
         return dateFinish;
     }
@@ -137,7 +137,7 @@ public class TestsEntity {
 
 
     @ManyToOne
-    @JoinColumn(name = "ID_category", referencedColumnName = "ID",  insertable = false, updatable = false)
+    @JoinColumn(name = "ID_category", referencedColumnName = "ID", insertable = false, updatable = false)
     public CategoriesEntity getCategoryById() {
         return categoriesById;
     }
@@ -147,7 +147,7 @@ public class TestsEntity {
     }
 
     @ManyToOne
-    @JoinColumn(name = "ID_users", referencedColumnName = "ID",  insertable = false, updatable = false)
+    @JoinColumn(name = "ID_users", referencedColumnName = "ID", insertable = false, updatable = false)
     public UsersEntity getUsersById() {
         return usersById;
     }

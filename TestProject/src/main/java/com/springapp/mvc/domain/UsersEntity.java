@@ -42,7 +42,7 @@ public class UsersEntity {
     }
 
     @Basic
-    @Column(name = "password",  length = 1500)
+    @Column(name = "password", length = 1500)
     public String getPassword() {
         return password;
     }
@@ -72,7 +72,7 @@ public class UsersEntity {
     }
 
     @Basic
-    @Column(name = "phone",  length = 100)
+    @Column(name = "phone", length = 100)
     public String getPhone() {
         return phone;
     }
