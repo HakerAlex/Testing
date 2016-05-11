@@ -124,7 +124,49 @@
 
 </header>
 <!-- END Site header -->
+<main>
 
+    <div class="modal fade" id="myModalRadioChecked" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Ответ</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+
+                        <div class="input-group">
+
+                <textarea cols="80" id="editorAn" name="answer" rows="30"
+                          style="height: 90%"></textarea>
+
+                        </div>
+
+                    </div>
+                </div>
+                <div class="container">
+                    <div class="btn-group" data-toggle="buttons">
+                        <label class="btn btn-success">
+                            <input type="radio" name="typeanswer" id="option1" value="1"> Правильный
+                        </label>
+                        <label class="btn btn-warning active">
+                            <input type="radio" name="typeanswer" id="option2" value="2" checked=""> Неправильный
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="addanswer">Записать
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</main>
 
 <!-- END Main container -->
 <!-- Back to top button -->
@@ -132,10 +174,13 @@
 <%--<script src="${pageContext.request.contextPath}/resources/assets/js/jquery.min.js"></script>--%>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/jquery.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/bootstrap.min.js"></script>
-<script type="text/javascript"
-        src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-dialog.min.js"></script>
+
 <script type="text/javascript"
         src="${pageContext.request.contextPath}/resources/assets/js/ckeditor/ckeditor.js"></script>
+
+<script type="text/javascript"
+        src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js"></script>
+
 <script type="text/javascript">
     // Call CkEditor
     CKEDITOR.replace('editorCk', {
@@ -145,6 +190,56 @@
         height: 200,
         startupFocus: false,
         uiColor: '#FFFFFF'
+    });
+
+    CKEDITOR.replace('editorAn', {
+        removePlugins: 'sourcearea',
+        entities: false,
+        language: 'ru',
+        width: 565,
+        startupFocus: true,
+        uiColor: '#FFFFFF'
+    });
+
+
+
+//    CKEDITOR.on("editorAn", function () {
+//        var element = CKEDITOR.document.getById('myModalRadioChecked');
+//        element.on('click', function () {
+//            var domEvent = ev.data;
+//            // Add a CSS class to the event target.
+//            domEvent.getTarget();
+//        });
+//    });
+</script>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#addanswer").click(function () {
+
+            if (document.getElementById('code').value == '') {
+                $.confirm({
+                            title: 'Информация',
+                            titleIcon: 'glyphicon glyphicon-info-sign',
+                            template: 'info',
+                            templateOk: 'info',
+                            message: 'Необходимо записать вопрос, перед добавлением ответов',
+                            labelOk: 'ОК',
+                            buttonCancel: false,
+                            onOk: function () {
+                            }
+                        }
+                )
+
+
+            }
+            else {
+                if ($("input[name='typequestion']:checked").val() < 3) {
+                    $("#myModalRadioChecked").modal('show')
+                }
+            }
+        })
     });
 </script>
 
@@ -168,17 +263,38 @@
                     },
                     error: {
                         function (codeQ) {
-                            BootstrapDialog.alert('Ошибка! Добавления/обновления');
+                            $.confirm({
+                                title: 'Внимание',
+                                titleIcon: 'glyphicon glyphicon-warning-sign',
+                                template: 'warning',
+                                templateOk: 'warning',
+                                message: 'Ошибка! Добавления/обновления',
+                                labelOk: 'ОК',
+                                buttonCancel: false,
+                                onOk: function () {
+                                }
+                            });
+
                         }
                     }
 
                 }
             }).done(function (codeQ) {
                 document.getElementById('code').value = codeQ;
-                BootstrapDialog.show({
-                    title: 'Внимание',
-                    message: 'Добавлен/обновлен вопрос в базу'
+
+                $.confirm({
+                    title: 'Информация',
+                    titleIcon: 'glyphicon glyphicon-info-sign',
+                    template: 'info',
+                    templateOk: 'info',
+                    message: 'Добавлен/обновлен вопрос в базу',
+                    labelOk: 'ОК',
+                    buttonCancel: false,
+                    onOk: function () {
+                    }
                 });
+
+
             });
         });
     });

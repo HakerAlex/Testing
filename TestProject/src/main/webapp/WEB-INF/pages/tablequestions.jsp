@@ -56,12 +56,12 @@
 
         <div class="col-xs-8">
 
-            <%----%>
             <form id="addquestion" class="addquestion" method="post"
                   action="${pageContext.request.contextPath}/addquestion" commandName="addquestion">
                 <input type="hidden" value="" class="form-control" id="categoryforquestion" name="categoryforquestion">
                 <button class="btn btn-primary btn-search" type="submit">Добавить вопрос</button>
             </form>
+
             <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 15px">
             <table id="question" class="table" data-provide="data-table" cellspacing="0" width="100%">
 
@@ -183,42 +183,14 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="deletecategory">Удалить
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" id="deletecategory">Удалить
                     </button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
-
-    <div class="modal fade" id="delquestion" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-         aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Удалить вопрос</h4>
-                    <h6 class="modal-title">Внимание! Можно удалить только если нет связанных элементов</h6>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="ti-folder"></i></span>
-                            <input type="text" id="delQ" value="" class="form-control" name="delQ"
-                                   placeholder="Значение" disabled>
-                        </div>
-
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Отмена</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="deleteourquestion">Удалить
-                    </button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
 
 </main>
 <!-- END Main container -->
@@ -227,13 +199,10 @@
 
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/jquery.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/bootstrap.min.js"></script>
-<%--<script type="text/javascript"--%>
-<%--src="${pageContext.request.contextPath}/resources/assets/js/datatables.min.js"></script>--%>
+<script type="text/javascript"
+src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js"></script>
 <script type="text/javascript"
         src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-treeview.js"></script>
-
-<script type="text/javascript"
-        src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-dialog.min.js"></script>
 
 <script type="text/javascript">
     function getTree() {
@@ -263,13 +232,35 @@
                 }
             }).done(function (msg) {
                 if (msg != "") {
-                    BootstrapDialog.show({
+
+                    $.confirm({
                         title: 'Внимание',
-                        message: msg
+                        titleIcon: 'glyphicon glyphicon-warning-sign',
+                        template: 'warning',
+                        templateOk: 'warning',
+                        message: msg,
+                        labelOk: 'ОК',
+                        buttonCancel: false,
+                        onOk: function() {
+                             }
                     });
+
                 }
                 else {
-                    location.reload()
+
+                    $.confirm({
+                        title: 'Информация',
+                        titleIcon: 'glyphicon glyphicon-info-sign',
+                        template: 'info',
+                        templateOk: 'info',
+                        message: 'Категория удалена.',
+                        labelOk: 'ОК',
+                        buttonCancel: false,
+                        onOk: function() {
+                            location.reload();
+                        }
+                    });
+
                 }
                 ;
             });
@@ -288,7 +279,18 @@
                     parent: document.getElementById('category').value
                 }
             }).done(function (tree) {
-                location.reload();
+                $.confirm({
+                    title: 'Информация',
+                    titleIcon: 'glyphicon glyphicon-info-sign',
+                    template: 'info',
+                    templateOk: 'info',
+                    message: 'Категория добавлена.',
+                    labelOk: 'ОК',
+                    buttonCancel: false,
+                    onOk: function() {
+                        location.reload();
+                    }
+                });
             });
         });
     });
@@ -307,7 +309,19 @@
                     parent: document.getElementById('parent').value
                 }
             }).done(function (tree) {
-                location.reload();
+
+                $.confirm({
+                    title: 'Информация',
+                    titleIcon: 'glyphicon glyphicon-info-sign',
+                    template: 'info',
+                    templateOk: 'info',
+                    message: 'Категория обновлена.',
+                    labelOk: 'ОК',
+                    buttonCancel: false,
+                    onOk: function() {
+                        location.reload();
+                    }
+                });
             });
         });
     });
@@ -358,37 +372,63 @@
 
 <script type="text/javascript" charset="utf-8">
     function fundelquestion(idquestion) {
-        $.ajax({
-            type: "POST",
-            url: "${pageContext.request.contextPath}/delquestion",
-            data: {
-                id: idquestion,
-                context: "${pageContext.request.contextPath}",
-                category: document.getElementById('category').value
-            },
-            dataType: "text",
-            success: {
-                function () {
-                },
-                error: {
-                    function () {
+        $.confirm({
+            template: 'primary',
+            templateOk: 'primary',
+            message: 'Вы уверены что хотите удалить вопрос?',
+            onOk: function() {
+                $.ajax({
+                    type: "POST",
+                    url: "${pageContext.request.contextPath}/delquestion",
+                    data: {
+                        id: idquestion,
+                        context: "${pageContext.request.contextPath}",
+                        category: document.getElementById('category').value
+                    },
+                    dataType: "text",
+                    success: {
+                        function () {
+                        },
+                        error: {
+                            function () {
+                            }
+                        }
                     }
-                }
-            }
-        }).done(function (element) {
+                }).done(function (element) {
 
-            if (element == 'error') {
-                BootstrapDialog.show({
-                    title: 'Внимание',
-                    message: 'Нельзя удалить вопрос есть связанные элементы!!'
+                    if (element == 'error') {
+
+                        $.confirm({
+                            title: 'Внимание',
+                            titleIcon: 'glyphicon glyphicon-warning-sign',
+                            template: 'warning',
+                            templateOk: 'warning',
+                            message: 'Нельзя удалить вопрос есть связанные элементы!',
+                            labelOk: 'ОК',
+                            buttonCancel: false,
+                            onOk: function() {
+                            }
+                        });
+
+                    }
+                    else {
+                        $.confirm({
+                            title: 'Информация',
+                            titleIcon: 'glyphicon glyphicon-info-sign',
+                            template: 'info',
+                            templateOk: 'info',
+                            message: 'Вопрос удален.',
+                            labelOk: 'ОК',
+                            buttonCancel: false,
+                            onOk: function() {
+                                $("#question").html(element);
+                            }
+                        });
+
+                    }
                 });
-            }
-            else {
-                BootstrapDialog.show({
-                    title: 'Внимание',
-                    message: 'Вопрос удален!!'
-                });
-                $("#question").html(element);
+            },
+            onCancel: function() {
             }
         });
     }
