@@ -1,5 +1,6 @@
 package com.springapp.mvc.repository;
 
+import com.springapp.mvc.domain.AnswersEntity;
 import com.springapp.mvc.domain.QuestionsEntity;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Repository
 @Transactional
@@ -24,11 +26,37 @@ public class QuestionRepository {
         return (QuestionsEntity) session.getCurrentSession().createSQLQuery("Select * from questions where question=:question").addEntity(QuestionsEntity.class).setString("question", question).uniqueResult();
     }
 
+    public List<AnswersEntity> getAnswersByQuestion(int question) {
+        return session.getCurrentSession().createSQLQuery("Select * from answers where question=:question").addEntity(AnswersEntity.class).setInteger("question", question).list();
+    }
+
+    public AnswersEntity getAnswersByID(int answerid) {
+        return (AnswersEntity) session.getCurrentSession().createSQLQuery("Select * from answers where id=:answerid").addEntity(AnswersEntity.class).setInteger("answerid", answerid).uniqueResult();
+    }
+
     public void createQuestion(QuestionsEntity questionsEntity) throws Exception {
         try {
             session.getCurrentSession().save(questionsEntity);
         } catch (HibernateException e) {
             throw new Exception("Невозможно создать вопрос ", e);
+        }
+
+    }
+
+    public void createAnswer(AnswersEntity answersEntity) throws Exception {
+        try {
+            session.getCurrentSession().save(answersEntity);
+        } catch (HibernateException e) {
+            throw new Exception("Невозможно создать ответ ", e);
+        }
+
+    }
+
+    public void updateAnswer(AnswersEntity answersEntity) throws Exception {
+        try {
+            session.getCurrentSession().update(answersEntity);
+        } catch (HibernateException e) {
+            throw new Exception("Невозможно обновить ответ ", e);
         }
 
     }

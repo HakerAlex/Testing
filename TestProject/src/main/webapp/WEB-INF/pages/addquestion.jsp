@@ -11,9 +11,6 @@
 
     <!-- Styles -->
 
-    <%--<link href="${pageContext.request.contextPath}/resources/assets/css/app.min.css" rel="stylesheet">--%>
-    <%--<link href="${pageContext.request.contextPath}/resources/assets/css/lity.css" rel="stylesheet">--%>
-    <%--<link href="${pageContext.request.contextPath}/resources/assets/css/dropify.css" rel="stylesheet">--%>
     <link href="${pageContext.request.contextPath}/resources/assets/css/bootstrap-theme.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/resources/assets/css/bootstrap.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/resources/assets/css/table.css" rel="stylesheet">
@@ -113,6 +110,7 @@
                 <tr>
                     <th>Код</th>
                     <th>Ответ</th>
+                    <th>Флаг ответа</th>
                     <th>Редактировать</th>
                     <th>Удалить</th>
                 </tr>
@@ -125,6 +123,9 @@
 </header>
 <!-- END Site header -->
 <main>
+    <%--ouranswerID--%>
+    <input type="hidden" class="form-control" id="answerid" name="answerid">
+
 
     <div class="modal fade" id="myModalRadioChecked" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
          aria-hidden="true">
@@ -135,6 +136,7 @@
                     <h4 class="modal-title">Ответ</h4>
                 </div>
                 <div class="modal-body">
+
                     <div class="form-group">
 
                         <div class="input-group">
@@ -149,16 +151,45 @@
                 <div class="container">
                     <div class="btn-group" data-toggle="buttons">
                         <label class="btn btn-success">
-                            <input type="radio" name="typeanswer" id="option1" value="1"> Правильный
+                            <input type="radio" name="typeanswer" id="flaganswer" value="1"> Правильный
                         </label>
                         <label class="btn btn-warning active">
-                            <input type="radio" name="typeanswer" id="option2" value="2" checked=""> Неправильный
+                            <input type="radio" name="typeanswer" id="flaganswer" value="2" checked=""> Неправильный
                         </label>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="addanswer">Записать
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="writeanswer">Записать
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="myModalText" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Ответ</h4>
+                </div>
+
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="input-group">
+                                <span class="input-group-addon"><i class="ti-agenda"></i></span>
+                                <input type="text" class="form-control" id="answertext" name="answertext" placeholder="Текст ответа">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="writeanswer">Записать
                     </button>
                 </div>
             </div>
@@ -232,22 +263,163 @@
                             }
                         }
                 )
-
-
             }
             else {
                 if ($("input[name='typequestion']:checked").val() < 3) {
-                    $("#myModalRadioChecked").modal('show')
+                    $("#myModalRadioChecked").modal('show');
+                }
+                else{
+                    $("#myModalText").modal('show');
                 }
             }
         })
     });
 </script>
 
+<script type="text/javascript">
+    function strip(html) {
+        var tmp = document.createElement("DIV");
+        tmp.innerHTML = html;
+        return tmp.textContent || tmp.innerText;
+    }
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#writeanswer").click(function () {
+            if ($("input[name='typeanswer']:checked").val()==3) {
+
+                if (document.getElementById('answertext').value==''){
+                    $.ajax({
+                        type: "POST",
+                        url: "${pageContext.request.contextPath}/writeanswer",
+                        data: {
+                            answer: document.getElementById('answertext').value,
+                            codequestion: document.getElementById('code').value,
+                            flag: 1,
+                            typeq: $("input[name='typequestion']:checked").val(),
+                            answerid: document.getElementById('answerid').value
+                        },
+                        dataType: "text",
+                        success: {
+                            function (codeQ) {},
+                            error: {
+                                function (codeQ) {
+                                    $.confirm({
+                                        title: 'Внимание',
+                                        titleIcon: 'glyphicon glyphicon-warning-sign',
+                                        template: 'warning',
+                                        templateOk: 'warning',
+                                        message: 'Ошибка! Добавления/обновления ответа',
+                                        labelOk: 'ОК',
+                                        buttonCancel: false,
+                                        onOk: function () {
+                                        }
+                                    });
+
+                                }
+                            }
+                        }
+                    }).done(function (codeQ) {
+//                    document.getElementById('code').value = codeQ; //обновить таблицу ответов
+                        $.confirm({
+                            title: 'Информация',
+                            titleIcon: 'glyphicon glyphicon-info-sign',
+                            template: 'info',
+                            templateOk: 'info',
+                            message: 'Добавлен/обновлен ответ в базу',
+                            labelOk: 'ОК',
+                            buttonCancel: false,
+                            onOk: function () {
+                            }
+                        });
+                    });
+                }
+                else {
+                    $.confirm({
+                        title: 'Информация',
+                        titleIcon: 'glyphicon glyphicon-info-sign',
+                        template: 'info',
+                        templateOk: 'info',
+                        message: 'Нельзя добавлять пустой ответ',
+                        labelOk: 'ОК',
+                        buttonCancel: false,
+                        onOk: function () {
+                        }
+                    });
+                }
+            }
+            else {
+                if (strip(CKEDITOR.instances.editorAn.getData()).trim()!=''){
+
+                    $.ajax({
+                        type: "POST",
+                        url: "${pageContext.request.contextPath}/writeanswer",
+                        data: {
+                            answer: CKEDITOR.instances.editorAn.getData(),
+                            codequestion: document.getElementById('code').value,
+                            flag: $("input[name='typeanswer']:checked").val(),
+                            typeq: $("input[name='typequestion']:checked").val(),
+                            answerid: document.getElementById('answerid').value
+                        },
+                        dataType: "text",
+                        success: {
+                            function (codeQ) {},
+                            error: {
+                                function (codeQ) {
+                                    $.confirm({
+                                        title: 'Внимание',
+                                        titleIcon: 'glyphicon glyphicon-warning-sign',
+                                        template: 'warning',
+                                        templateOk: 'warning',
+                                        message: 'Ошибка! Добавления/обновления ответа',
+                                        labelOk: 'ОК',
+                                        buttonCancel: false,
+                                        onOk: function () {
+                                        }
+                                    });
+
+                                }
+                            }
+                        }
+                    }).done(function (codeQ) {
+//                    document.getElementById('code').value = codeQ; //обновить таблицу ответов
+                        $.confirm({
+                            title: 'Информация',
+                            titleIcon: 'glyphicon glyphicon-info-sign',
+                            template: 'info',
+                            templateOk: 'info',
+                            message: 'Добавлен/обновлен ответ в базу',
+                            labelOk: 'ОК',
+                            buttonCancel: false,
+                            onOk: function () {
+                            }
+                        });
+                    });
+                }
+                else    $.confirm({
+                    title: 'Информация',
+                    titleIcon: 'glyphicon glyphicon-info-sign',
+                    template: 'info',
+                    templateOk: 'info',
+                    message: 'Нельзя добавлять пустой ответ',
+                    labelOk: 'ОК',
+                    buttonCancel: false,
+                    onOk: function () {
+                    }
+                });
+            }
+        });
+    });
+</script>
 
 <script type="text/javascript">
     $(document).ready(function () {
         $("#writequestion").click(function () {
+
+
+            if (strip(CKEDITOR.instances.editorCk.getData()).trim()!=''){
+
             $.ajax({
                 type: "POST",
                 url: "${pageContext.request.contextPath}/writequestion",
@@ -296,6 +468,18 @@
                 });
 
 
+            });
+        }
+            else    $.confirm({
+                title: 'Информация',
+                titleIcon: 'glyphicon glyphicon-info-sign',
+                template: 'info',
+                templateOk: 'info',
+                message: 'Нельзя добавлять пустой вопрос',
+                labelOk: 'ОК',
+                buttonCancel: false,
+                onOk: function () {
+                }
             });
         });
     });

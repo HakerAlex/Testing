@@ -38,6 +38,15 @@ public class RegisterValidator implements Validator {
             errors.rejectValue("password", "password", "Пароли не совпадают");
         }
 
+        if (signupForm.getName().length() < 3) {
+            errors.rejectValue("name", "name", "Имя слишком короткое");
+        }
+
+        if (signupForm.getSurname().length() < 3) {
+            errors.rejectValue("surname", "surname", "Фамилия слишком короткая");
+        }
+
+
         if (signupForm.getPassword().length() < 6) {
             errors.rejectValue("password", "password", "Пароль меньше 6 символов");
         }

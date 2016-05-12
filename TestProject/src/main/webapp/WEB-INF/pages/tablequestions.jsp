@@ -59,7 +59,8 @@
             <form id="addquestion" class="addquestion" method="post"
                   action="${pageContext.request.contextPath}/addquestion" commandName="addquestion">
                 <input type="hidden" value="" class="form-control" id="categoryforquestion" name="categoryforquestion">
-                <button class="btn btn-primary btn-search" type="submit">Добавить вопрос</button>
+                <button type="button" class="btn btn-primary btn-search" id="addnewquestion">Добавить вопрос</button>
+                <%--<button class="btn btn-primary btn-search" type="submit">Добавить вопрос</button>--%>
             </form>
 
             <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 15px">
@@ -71,7 +72,6 @@
                     <th>Вопрос</th>
                     <th>Тип вопроса</th>
                     <th>Редактировать</th>
-                    <th>Добавить ответ</th>
                     <th>Удалить</th>
                 </tr>
                 </thead>
@@ -139,10 +139,9 @@
                             <input type="text" value="" class="form-control" name="upcategory" id="upcategory"
                                    placeholder="Новое значение">
                         </div>
-                        <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 5px">
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="ti-folder"></i></span>
-                            <input type="text" id="oldcategory" value="" class="form-control" name="parent"
+
+                            <input type="hidden" id="oldcategory" value="" class="form-control" name="parent"
                                    placeholder="Старое значение" disabled>
                         </div>
                         <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 5px">
@@ -221,6 +220,34 @@ src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js
 
 </script>
 
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#addnewquestion").click(function () {
+
+            if (document.getElementById('categoryforquestion').value=='') {
+
+                $.confirm({
+                    title: 'Внимание',
+                    titleIcon: 'glyphicon glyphicon-warning-sign',
+                    template: 'warning',
+                    templateOk: 'warning',
+                    message: "Выберите категорию для добавления вопроса.",
+                    labelOk: 'ОК',
+                    buttonCancel: false,
+                    onOk: function() {
+                    }
+                });
+
+            }else {
+                $('#addquestion').submit();
+            }
+          }
+        )}
+    );
+</script>
+
+
 <script type="text/javascript">
     $(document).ready(function () {
         $("#deletecategory").click(function () {
@@ -270,7 +297,9 @@ src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js
 
 <script type="text/javascript">
     $(document).ready(function () {
+
         $("#addcategory").click(function () {
+            if (document.getElementById('namecategory').value!=''){
             $.ajax({
                 type: "POST",
                 url: "${pageContext.request.contextPath}/addcategory",
@@ -292,7 +321,21 @@ src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js
                     }
                 });
             });
-        });
+        }
+        else{
+            $.confirm({
+                title: 'Внимание',
+                titleIcon: 'glyphicon glyphicon-warning-sign',
+                template: 'warning',
+                templateOk: 'warning',
+                message: 'Нельзя создавать пустую категорию.',
+                labelOk: 'ОК',
+                buttonCancel: false,
+                onOk: function() {
+                }
+            });
+        }
+    })
     });
 </script>
 
@@ -300,31 +343,49 @@ src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js
 <script type="text/javascript">
     $(document).ready(function () {
         $("#updatecategory").click(function () {
-            $.ajax({
-                type: "POST",
-                url: "${pageContext.request.contextPath}/updatecategory",
-                data: {
-                    namecategory: document.getElementById('upcategory').value,
-                    oldcategory: document.getElementById('oldcategory').value,
-                    parent: document.getElementById('parent').value
-                }
-            }).done(function (tree) {
 
+            if (document.getElementById('upcategory').value!=''){
+                $.ajax({
+                    type: "POST",
+                    url: "${pageContext.request.contextPath}/updatecategory",
+                    data: {
+                        namecategory: document.getElementById('upcategory').value,
+                        oldcategory: document.getElementById('oldcategory').value,
+                        parent: document.getElementById('parent').value
+                    }
+                }).done(function (tree) {
+
+                    $.confirm({
+                        title: 'Информация',
+                        titleIcon: 'glyphicon glyphicon-info-sign',
+                        template: 'info',
+                        templateOk: 'info',
+                        message: 'Категория обновлена.',
+                        labelOk: 'ОК',
+                        buttonCancel: false,
+                        onOk: function() {
+                            location.reload();
+                        }
+                    });
+                });
+            }
+            else {
                 $.confirm({
-                    title: 'Информация',
-                    titleIcon: 'glyphicon glyphicon-info-sign',
-                    template: 'info',
-                    templateOk: 'info',
-                    message: 'Категория обновлена.',
+                    title: 'Внимание',
+                    titleIcon: 'glyphicon glyphicon-warning-sign',
+                    template: 'warning',
+                    templateOk: 'warning',
+                    message: 'Нельзя исправлять на пустую категорию.',
                     labelOk: 'ОК',
                     buttonCancel: false,
                     onOk: function() {
-                        location.reload();
                     }
                 });
-            });
-        });
-    });
+            }
+        }
+    )
+    }
+    );
 </script>
 
 <script type="text/javascript">
@@ -338,6 +399,12 @@ src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js
 <script type="text/javascript" charset="utf-8">
     var parent;
     $('#treeview').on('nodeSelected', function (event, data) {
+
+        var cat=data.text.trim();
+        var n = cat.search(" ");
+        var s=cat.substring(n+1,cat.length);
+
+        document.getElementById('upcategory').value =s;
         document.getElementById('oldcategory').value = data.text;
         document.getElementById('category').value = data.text;
         document.getElementById('delcategory').value = data.text;
