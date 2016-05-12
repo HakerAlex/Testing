@@ -105,16 +105,8 @@
 
         <div class="col-xs-6">
             <h3 class="text-center" style="color: white">Список ответов</h3>
-            <table id="question" class="table" data-provide="data-table" cellspacing="0" width="100%">
-                <thead>
-                <tr>
-                    <th>Код</th>
-                    <th>Ответ</th>
-                    <th>Флаг ответа</th>
-                    <th>Редактировать</th>
-                    <th>Удалить</th>
-                </tr>
-                </thead>
+            <table id="answers" class="table" data-provide="data-table" cellspacing="0" width="100%">
+                ${table}
             </table>
 
         </div>
@@ -181,15 +173,16 @@
                 <div class="modal-body">
                     <div class="form-group">
                         <div class="input-group">
-                                <span class="input-group-addon"><i class="ti-agenda"></i></span>
-                                <input type="text" class="form-control" id="answertext" name="answertext" placeholder="Текст ответа">
+                            <span class="input-group-addon"><i class="ti-agenda"></i></span>
+                            <input type="text" class="form-control" id="answertext" name="answertext"
+                                   placeholder="Текст ответа">
                         </div>
                     </div>
                 </div>
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="writeanswer">Записать
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="writean">Записать
                     </button>
                 </div>
             </div>
@@ -250,7 +243,7 @@
     $(document).ready(function () {
         $("#addanswer").click(function () {
 
-            if (document.getElementById('code').value == '') {
+            if (document.getElementById('code').value.trim() == '') {
                 $.confirm({
                             title: 'Информация',
                             titleIcon: 'glyphicon glyphicon-info-sign',
@@ -268,7 +261,7 @@
                 if ($("input[name='typequestion']:checked").val() < 3) {
                     $("#myModalRadioChecked").modal('show');
                 }
-                else{
+                else {
                     $("#myModalText").modal('show');
                 }
             }
@@ -286,10 +279,9 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $("#writeanswer").click(function () {
-            if ($("input[name='typeanswer']:checked").val()==3) {
-
-                if (document.getElementById('answertext').value==''){
+        $("#writean").click(function () {
+            if ($("input[name='typequestion']:checked").val() == 3) {
+                if (document.getElementById('answertext').value.trim()!= '') {
                     $.ajax({
                         type: "POST",
                         url: "${pageContext.request.contextPath}/writeanswer",
@@ -298,11 +290,13 @@
                             codequestion: document.getElementById('code').value,
                             flag: 1,
                             typeq: $("input[name='typequestion']:checked").val(),
-                            answerid: document.getElementById('answerid').value
+                            answerid: document.getElementById('answerid').value,
+                            context: "${pageContext.request.contextPath}"
                         },
                         dataType: "text",
                         success: {
-                            function (codeQ) {},
+                            function (codeQ) {
+                            },
                             error: {
                                 function (codeQ) {
                                     $.confirm({
@@ -321,18 +315,32 @@
                             }
                         }
                     }).done(function (codeQ) {
-//                    document.getElementById('code').value = codeQ; //обновить таблицу ответов
-                        $.confirm({
-                            title: 'Информация',
-                            titleIcon: 'glyphicon glyphicon-info-sign',
-                            template: 'info',
-                            templateOk: 'info',
-                            message: 'Добавлен/обновлен ответ в базу',
-                            labelOk: 'ОК',
-                            buttonCancel: false,
-                            onOk: function () {
-                            }
-                        });
+                        if (codeQ == "Не может быть несколько ответов при таком типе вопроса") {
+                            $.confirm({
+                                title: 'Внимание',
+                                titleIcon: 'glyphicon glyphicon-warning-sign',
+                                template: 'warning',
+                                templateOk: 'warning',
+                                message: codeQ,
+                                labelOk: 'ОК',
+                                buttonCancel: false,
+                                onOk: function () {
+                                }
+                            });
+                        } else {
+                            $("#answers").html(codeQ);
+                            $.confirm({
+                                title: 'Информация',
+                                titleIcon: 'glyphicon glyphicon-info-sign',
+                                template: 'info',
+                                templateOk: 'info',
+                                message: 'Добавлен/обновлен ответ в базу',
+                                labelOk: 'ОК',
+                                buttonCancel: false,
+                                onOk: function () {
+                                }
+                            });
+                        }
                     });
                 }
                 else {
@@ -349,8 +357,15 @@
                     });
                 }
             }
-            else {
-                if (strip(CKEDITOR.instances.editorAn.getData()).trim()!=''){
+        })
+    });
+</script>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#writeanswer").click(function () {
+            if ($("input[name='typequestion']:checked").val() < 3) {
+                if (strip(CKEDITOR.instances.editorAn.getData()).trim() != '') {
 
                     $.ajax({
                         type: "POST",
@@ -360,11 +375,13 @@
                             codequestion: document.getElementById('code').value,
                             flag: $("input[name='typeanswer']:checked").val(),
                             typeq: $("input[name='typequestion']:checked").val(),
-                            answerid: document.getElementById('answerid').value
+                            answerid: document.getElementById('answerid').value,
+                            context: "${pageContext.request.contextPath}"
                         },
                         dataType: "text",
                         success: {
-                            function (codeQ) {},
+                            function (codeQ) {
+                            },
                             error: {
                                 function (codeQ) {
                                     $.confirm({
@@ -383,7 +400,7 @@
                             }
                         }
                     }).done(function (codeQ) {
-//                    document.getElementById('code').value = codeQ; //обновить таблицу ответов
+                        $("#answers").html(codeQ);
                         $.confirm({
                             title: 'Информация',
                             titleIcon: 'glyphicon glyphicon-info-sign',
@@ -418,58 +435,58 @@
         $("#writequestion").click(function () {
 
 
-            if (strip(CKEDITOR.instances.editorCk.getData()).trim()!=''){
+            if (strip(CKEDITOR.instances.editorCk.getData()).trim() != '') {
 
-            $.ajax({
-                type: "POST",
-                url: "${pageContext.request.contextPath}/writequestion",
-                data: {
-                    category: document.getElementById('category').value,
-                    question: CKEDITOR.instances.editorCk.getData(),
-                    code: document.getElementById('code').value,
-                    typeq: $("input[name='typequestion']:checked").val()
-                },
-                dataType: "text",
-                success: {
-                    function (codeQ) {
-                        document.getElementById('code').value = codeQ;
+                $.ajax({
+                    type: "POST",
+                    url: "${pageContext.request.contextPath}/writequestion",
+                    data: {
+                        category: document.getElementById('category').value,
+                        question: CKEDITOR.instances.editorCk.getData(),
+                        code: document.getElementById('code').value,
+                        typeq: $("input[name='typequestion']:checked").val()
                     },
-                    error: {
+                    dataType: "text",
+                    success: {
                         function (codeQ) {
-                            $.confirm({
-                                title: 'Внимание',
-                                titleIcon: 'glyphicon glyphicon-warning-sign',
-                                template: 'warning',
-                                templateOk: 'warning',
-                                message: 'Ошибка! Добавления/обновления',
-                                labelOk: 'ОК',
-                                buttonCancel: false,
-                                onOk: function () {
-                                }
-                            });
+                            document.getElementById('code').value = codeQ;
+                        },
+                        error: {
+                            function (codeQ) {
+                                $.confirm({
+                                    title: 'Внимание',
+                                    titleIcon: 'glyphicon glyphicon-warning-sign',
+                                    template: 'warning',
+                                    templateOk: 'warning',
+                                    message: 'Ошибка! Добавления/обновления',
+                                    labelOk: 'ОК',
+                                    buttonCancel: false,
+                                    onOk: function () {
+                                    }
+                                });
 
+                            }
                         }
-                    }
 
-                }
-            }).done(function (codeQ) {
-                document.getElementById('code').value = codeQ;
-
-                $.confirm({
-                    title: 'Информация',
-                    titleIcon: 'glyphicon glyphicon-info-sign',
-                    template: 'info',
-                    templateOk: 'info',
-                    message: 'Добавлен/обновлен вопрос в базу',
-                    labelOk: 'ОК',
-                    buttonCancel: false,
-                    onOk: function () {
                     }
+                }).done(function (codeQ) {
+                    document.getElementById('code').value = codeQ;
+
+                    $.confirm({
+                        title: 'Информация',
+                        titleIcon: 'glyphicon glyphicon-info-sign',
+                        template: 'info',
+                        templateOk: 'info',
+                        message: 'Добавлен/обновлен вопрос в базу',
+                        labelOk: 'ОК',
+                        buttonCancel: false,
+                        onOk: function () {
+                        }
+                    });
+
+
                 });
-
-
-            });
-        }
+            }
             else    $.confirm({
                 title: 'Информация',
                 titleIcon: 'glyphicon glyphicon-info-sign',

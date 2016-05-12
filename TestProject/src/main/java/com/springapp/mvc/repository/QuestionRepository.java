@@ -26,8 +26,12 @@ public class QuestionRepository {
         return (QuestionsEntity) session.getCurrentSession().createSQLQuery("Select * from questions where question=:question").addEntity(QuestionsEntity.class).setString("question", question).uniqueResult();
     }
 
+    public AnswersEntity getAnswerByText(String answer) {
+        return (AnswersEntity) session.getCurrentSession().createSQLQuery("Select * from answers where answer=:answer").addEntity(AnswersEntity.class).setString("answer", answer).uniqueResult();
+    }
+
     public List<AnswersEntity> getAnswersByQuestion(int question) {
-        return session.getCurrentSession().createSQLQuery("Select * from answers where question=:question").addEntity(AnswersEntity.class).setInteger("question", question).list();
+        return session.getCurrentSession().createSQLQuery("Select * from answers where ID_question=:question").addEntity(AnswersEntity.class).setInteger("question", question).list();
     }
 
     public AnswersEntity getAnswersByID(int answerid) {

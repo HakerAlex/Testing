@@ -172,6 +172,8 @@ public class CategoryController {
             ourTable.append(context);
             ourTable.append("/editquestion/");
             ourTable.append(ourElement.getId());
+            ourTable.append("/con/t");
+            ourTable.append(context);
             ourTable.append("\"");
 
             ourTable.append(" class=\"label btn-info\"> <i class=\"fa fa-pencil\">Редактировать</i> </a>");
