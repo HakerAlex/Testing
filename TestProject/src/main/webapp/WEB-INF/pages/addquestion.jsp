@@ -146,7 +146,7 @@
                             <input type="radio" name="typeanswer" id="flaganswer" value="1"> Правильный
                         </label>
                         <label class="btn btn-warning active">
-                            <input type="radio" name="typeanswer" id="flaganswer" value="2" checked=""> Неправильный
+                            <input type="radio" name="typeanswer" id="flaganswer" value="0" checked=""> Неправильный
                         </label>
                     </div>
                 </div>
@@ -281,7 +281,7 @@
     $(document).ready(function () {
         $("#writean").click(function () {
             if ($("input[name='typequestion']:checked").val() == 3) {
-                if (document.getElementById('answertext').value.trim()!= '') {
+                if (document.getElementById('answertext').value.trim() != '') {
                     $.ajax({
                         type: "POST",
                         url: "${pageContext.request.contextPath}/writeanswer",
@@ -315,7 +315,7 @@
                             }
                         }
                     }).done(function (codeQ) {
-                        if (codeQ == "Не может быть несколько ответов при таком типе вопроса") {
+                        if (codeQ == "Не может быть несколько ответов при таком типе вопроса" || codeQ == "Ошибка! Проверьте тип вопроса и кол-во ответов" || codeQ == "Ошибка! Проверьте тип вопроса и кол-во правильных ответов") {
                             $.confirm({
                                 title: 'Внимание',
                                 titleIcon: 'glyphicon glyphicon-warning-sign',
@@ -400,18 +400,32 @@
                             }
                         }
                     }).done(function (codeQ) {
-                        $("#answers").html(codeQ);
-                        $.confirm({
-                            title: 'Информация',
-                            titleIcon: 'glyphicon glyphicon-info-sign',
-                            template: 'info',
-                            templateOk: 'info',
-                            message: 'Добавлен/обновлен ответ в базу',
-                            labelOk: 'ОК',
-                            buttonCancel: false,
-                            onOk: function () {
-                            }
-                        });
+                        if (codeQ == "Не может быть несколько ответов при таком типе вопроса" || codeQ == "Ошибка! Проверьте тип вопроса и кол-во ответов" || codeQ == "Ошибка! Проверьте тип вопроса и кол-во правильных ответов") {
+                            $.confirm({
+                                title: 'Внимание',
+                                titleIcon: 'glyphicon glyphicon-warning-sign',
+                                template: 'warning',
+                                templateOk: 'warning',
+                                message: codeQ,
+                                labelOk: 'ОК',
+                                buttonCancel: false,
+                                onOk: function () {
+                                }
+                            });
+                        } else {
+                            $("#answers").html(codeQ);
+                            $.confirm({
+                                title: 'Информация',
+                                titleIcon: 'glyphicon glyphicon-info-sign',
+                                template: 'info',
+                                templateOk: 'info',
+                                message: 'Добавлен/обновлен ответ в базу',
+                                labelOk: 'ОК',
+                                buttonCancel: false,
+                                onOk: function () {
+                                }
+                            });
+                        }
                     });
                 }
                 else    $.confirm({
@@ -470,21 +484,54 @@
 
                     }
                 }).done(function (codeQ) {
-                    document.getElementById('code').value = codeQ;
 
-                    $.confirm({
-                        title: 'Информация',
-                        titleIcon: 'glyphicon glyphicon-info-sign',
-                        template: 'info',
-                        templateOk: 'info',
-                        message: 'Добавлен/обновлен вопрос в базу',
-                        labelOk: 'ОК',
-                        buttonCancel: false,
-                        onOk: function () {
-                        }
-                    });
+                    if (codeQ == "Не может быть несколько ответов при таком типе вопроса" || codeQ == "Ошибка! Проверьте тип вопроса и кол-во ответов" || codeQ == "Ошибка! Проверьте тип вопроса и кол-во правильных ответов") {
+                        $.confirm({
+                            title: 'Внимание',
+                            titleIcon: 'glyphicon glyphicon-warning-sign',
+                            template: 'warning',
+                            templateOk: 'warning',
+                            message: codeQ,
+                            labelOk: 'ОК',
+                            buttonCancel: false,
+                            onOk: function () {
+                            }
+                        });
+                    }else {
+                        document.getElementById('code').value = codeQ;
+                        $.confirm({
+                            title: 'Информация',
+                            titleIcon: 'glyphicon glyphicon-info-sign',
+                            template: 'info',
+                            templateOk: 'info',
+                            message: 'Добавлен/обновлен вопрос в базу',
+                            labelOk: 'ОК',
+                            buttonCancel: false,
+                            onOk: function () {
+                                $.ajax({
+                                    type: "POST",
+                                    url: "${pageContext.request.contextPath}/createtree",
+                                    data: {
+                                        code: document.getElementById('code').value,
+                                        context: "${pageContext.request.contextPath}"
+                                    },
+                                    dataType: "text",
+                                    success: {
+                                        function () {
+                                                                                   },
+                                        error: {
+                                            function () {
+                                                                                           }
+                                        }
 
+                                    }
+                                }).done(function (codeQ) {
+                                    $("#answers").html(codeQ);
+                                })
+                            }
+                        });
 
+                    }
                 });
             }
             else    $.confirm({
@@ -502,6 +549,70 @@
     });
 </script>
 
+<script type="text/javascript" charset="utf-8">
+    function fundelanswer(idanswer, idquestion) {
+        $.confirm({
+            template: 'primary',
+            templateOk: 'primary',
+            message: 'Вы уверены что хотите удалить ответ?',
+            onOk: function () {
+                $.ajax({
+                    type: "POST",
+                    url: "${pageContext.request.contextPath}/delanswer",
+                    data: {
+                        idquestion: idquestion,
+                        context: "${pageContext.request.contextPath}",
+                        idanswer: idanswer
+                    },
+                    dataType: "text",
+                    success: {
+                        function () {
+                        },
+                        error: {
+                            function () {
+                            }
+                        }
+                    }
+                }).done(function (element) {
+
+                    if (element == 'error') {
+
+                        $.confirm({
+                            title: 'Внимание',
+                            titleIcon: 'glyphicon glyphicon-warning-sign',
+                            template: 'warning',
+                            templateOk: 'warning',
+                            message: 'Нельзя удалить ответ есть пройденные тесты с этим вопросом!',
+                            labelOk: 'ОК',
+                            buttonCancel: false,
+                            onOk: function () {
+                            }
+                        });
+
+                    }
+                    else {
+                        $.confirm({
+                            title: 'Информация',
+                            titleIcon: 'glyphicon glyphicon-info-sign',
+                            template: 'info',
+                            templateOk: 'info',
+                            message: 'Ответ удален.',
+                            labelOk: 'ОК',
+                            buttonCancel: false,
+                            onOk: function () {
+                                $("#answers").html(element);
+                            }
+                        });
+
+                    }
+                });
+            },
+            onCancel: function () {
+            }
+        });
+    }
+    ;
+</script>
 </body>
 </html>
 

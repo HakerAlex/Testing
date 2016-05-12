@@ -1,6 +1,7 @@
 package com.springapp.mvc.controller;
 
 import com.springapp.mvc.domain.AnswersEntity;
+import com.springapp.mvc.domain.AnswersUserEntity;
 import com.springapp.mvc.domain.QuestionsEntity;
 import com.springapp.mvc.repository.QuestionRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +25,9 @@ public class QuestionController {
     }
 
     @PreAuthorize("hasRole('admin')")
-    @RequestMapping(value = "/writequestion", method = RequestMethod.POST)
+    @RequestMapping(value = "/writequestion", method = RequestMethod.POST, produces = {"text/html; charset=UTF-8"})
     @ResponseBody
-    public String writeQuestion(@RequestParam("category") String category, @RequestParam("question") String question, @RequestParam("code") String code, @RequestParam("typeq") String typeq) {
+    public String writeQuestion(@RequestParam("category") String category, @RequestParam("question") String question, @RequestParam("code") String code, @RequestParam("typeq") int typeq) {
 
         int categoryID;
         if (!category.equals("")) {
@@ -43,13 +44,35 @@ public class QuestionController {
             ourQuestion = new QuestionsEntity();
         }
 
-        ourQuestion.setTypeQuestion(new Integer(typeq));
+        ourQuestion.setTypeQuestion(typeq);
 
         ourQuestion.setQuestion(question);
         ourQuestion.setCategory(categoryID);
 
         try {
             if (!code.equals("")) {
+
+                List<AnswersEntity> listAnswers=questionRepository.getAnswersByQuestion(ourQuestion.getId());
+
+                if (listAnswers.size()>1 && typeq==3) {
+                    return "Ошибка! Проверьте тип вопроса и кол-во ответов";
+                }else if (listAnswers.size()==1 && typeq==3){
+                    AnswersEntity ourElement=listAnswers.get(0);
+                    ourElement.setCorrect((byte)1);
+                    questionRepository.updateAnswer(ourElement);
+
+                }else if(listAnswers.size()>1 && typeq==1) {
+                    int countAnswers = 0;
+                    for (AnswersEntity ourElement : listAnswers) {
+                        if (ourElement.getCorrect() == 1) {
+                            countAnswers++;
+                        }
+                    }
+                    if (countAnswers>1) {
+                        return "Ошибка! Проверьте тип вопроса и кол-во правильных ответов";
+                    }
+                }
+
                 questionRepository.updateQuestion(ourQuestion);
             } else {
                 questionRepository.createQuestion(ourQuestion);
@@ -63,6 +86,13 @@ public class QuestionController {
         StringBuilder ourAnswer = new StringBuilder(10);
         ourAnswer.append(newOurQuestion.getId());
         return ourAnswer.toString();
+    }
+
+    @PreAuthorize("hasRole('admin')")
+    @RequestMapping(value = "/createtree", method = RequestMethod.POST, produces = {"text/html; charset=UTF-8"})
+    @ResponseBody
+    public String getTree(@RequestParam("code") int code, @RequestParam("context") String context){
+        return createTable(code,context);
     }
 
 
@@ -116,6 +146,8 @@ public class QuestionController {
             ourTable.append(" <a href=\"");
             ourTable.append("javascript:fundelanswer(");
             ourTable.append(ourElement.getId());
+            ourTable.append(",");
+            ourTable.append(ourElement.getIdQuestion());
             ourTable.append(")\"");
             ourTable.append(" class=\"label btn-danger\"> <i class=\"fa fa-trash\">Удалить</i></a>");
             ourTable.append(" </span>");
@@ -150,9 +182,9 @@ public class QuestionController {
 
         StringBuilder error=new StringBuilder(100);
 
-        if (typeq==3 && myAnswers.size()>1){
+        if (typeq==3 && myAnswers.size()>0){
             error.append("Не может быть несколько ответов при таком типе вопроса");
-            System.out.print(error);
+//            System.out.print(error);
             return error.toString();
         }
 
@@ -162,7 +194,7 @@ public class QuestionController {
         } else {
             ourAnswer = new AnswersEntity(); //empty entities
         }
-            ourAnswer.setCorrect((byte) 1);
+            ourAnswer.setCorrect((byte) flag);
             ourAnswer.setAnswer(answer);
             ourAnswer.setIdQuestion(codequestion);
         if (ourAnswer.getId() == 0)//answer not found
@@ -189,7 +221,24 @@ public class QuestionController {
 
 
     @PreAuthorize("hasRole('admin')")
-    @RequestMapping(value = "/editquestion/{id}/con/{context}", method = RequestMethod.GET)
+    @RequestMapping(value = "/delanswer", method = RequestMethod.POST, produces = {"text/html; charset=UTF-8"})
+    @ResponseBody
+    public String delanswer(@RequestParam("context") String context, @RequestParam("idanswer") int idanswer, @RequestParam("idquestion") int idquestion) throws Exception {
+
+        List<AnswersUserEntity> ourAnswers=questionRepository.getAnswerUserByQuestionID(idquestion);
+
+        if (ourAnswers.size()>0){
+            return "error";
+        }
+
+        AnswersEntity answer=questionRepository.getAnswersByID(idanswer);
+        questionRepository.deleteAnswer(answer);
+        return createTable(idquestion,context);
+    }
+
+
+    @PreAuthorize("hasRole('admin')")
+    @RequestMapping(value = "/editquestion/{id}/{context}", method = RequestMethod.GET)
     public String addQuestion(@PathVariable int id, @PathVariable String context, Model model) {
         QuestionsEntity ourQuestion = questionRepository.getQuestionByID(id);
         context=context.substring(1);

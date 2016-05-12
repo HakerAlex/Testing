@@ -1,6 +1,7 @@
 package com.springapp.mvc.repository;
 
 import com.springapp.mvc.domain.AnswersEntity;
+import com.springapp.mvc.domain.AnswersUserEntity;
 import com.springapp.mvc.domain.QuestionsEntity;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
@@ -29,6 +30,12 @@ public class QuestionRepository {
     public AnswersEntity getAnswerByText(String answer) {
         return (AnswersEntity) session.getCurrentSession().createSQLQuery("Select * from answers where answer=:answer").addEntity(AnswersEntity.class).setString("answer", answer).uniqueResult();
     }
+
+    public List<AnswersUserEntity> getAnswerUserByQuestionID(int idquestion) {
+        return session.getCurrentSession().createSQLQuery("Select * from answers_user where ID_question=:idquestion").addEntity(AnswersUserEntity.class).setInteger("idquestion", idquestion).list();
+    }
+
+
 
     public List<AnswersEntity> getAnswersByQuestion(int question) {
         return session.getCurrentSession().createSQLQuery("Select * from answers where ID_question=:question").addEntity(AnswersEntity.class).setInteger("question", question).list();
@@ -61,6 +68,16 @@ public class QuestionRepository {
             session.getCurrentSession().update(answersEntity);
         } catch (HibernateException e) {
             throw new Exception("Невозможно обновить ответ ", e);
+        }
+
+    }
+
+
+    public void deleteAnswer(AnswersEntity answersEntity) throws Exception {
+        try {
+            session.getCurrentSession().delete(answersEntity);
+        } catch (HibernateException e) {
+            throw new Exception("Невозможно удалить ответ ", e);
         }
 
     }
