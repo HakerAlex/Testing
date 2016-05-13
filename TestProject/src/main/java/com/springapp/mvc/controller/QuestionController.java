@@ -24,6 +24,12 @@ public class QuestionController {
         return ID.substring(0, pos);
     }
 
+    public String stripTags(String xmlStr){
+        xmlStr = xmlStr.replaceAll("<(.)+?>", "");
+        xmlStr = xmlStr.replaceAll("<(\n)+?>", "");
+        return xmlStr;
+    }
+
     @PreAuthorize("hasRole('admin')")
     @RequestMapping(value = "/writequestion", method = RequestMethod.POST, produces = {"text/html; charset=UTF-8"})
     @ResponseBody
@@ -59,6 +65,7 @@ public class QuestionController {
                 }else if (listAnswers.size()==1 && typeq==3){
                     AnswersEntity ourElement=listAnswers.get(0);
                     ourElement.setCorrect((byte)1);
+                    ourElement.setAnswer(stripTags(ourElement.getAnswer()));
                     questionRepository.updateAnswer(ourElement);
 
                 }else if(listAnswers.size()>1 && typeq==1) {
@@ -94,7 +101,6 @@ public class QuestionController {
     public String getTree(@RequestParam("code") int code, @RequestParam("context") String context){
         return createTable(code,context);
     }
-
 
     private String createTable(int idquestion, String context){
         List<AnswersEntity> ourQuestion = questionRepository.getAnswersByQuestion(idquestion);
@@ -132,10 +138,9 @@ public class QuestionController {
 
             ourTable.append(" <span class=\"tooltip-area\">");
             ourTable.append(" <a href=\"");
-            ourTable.append(context);
-            ourTable.append("/editqanswer/");
+            ourTable.append("javascript:funeditanswer(");
             ourTable.append(ourElement.getId());
-            ourTable.append("\"");
+            ourTable.append(")\"");
 
             ourTable.append(" class=\"label btn-info\"> <i class=\"fa fa-pencil\">Редактировать</i> </a>");
             ourTable.append(" </span>");
@@ -161,7 +166,6 @@ public class QuestionController {
         return ourTable.toString();
     }
 
-
     @PreAuthorize("hasRole('admin')")
     @RequestMapping(value = "/writeanswer", method = RequestMethod.POST, produces = {"text/html; charset=UTF-8"})
     @ResponseBody
@@ -184,7 +188,6 @@ public class QuestionController {
 
         if (typeq==3 && myAnswers.size()>0){
             error.append("Не может быть несколько ответов при таком типе вопроса");
-//            System.out.print(error);
             return error.toString();
         }
 
@@ -219,7 +222,6 @@ public class QuestionController {
         return createTable(codequestion,context);
     }
 
-
     @PreAuthorize("hasRole('admin')")
     @RequestMapping(value = "/delanswer", method = RequestMethod.POST, produces = {"text/html; charset=UTF-8"})
     @ResponseBody
@@ -236,12 +238,29 @@ public class QuestionController {
         return createTable(idquestion,context);
     }
 
+    @PreAuthorize("hasRole('admin')")
+    @RequestMapping(value = "/editquestion/{id}", method = RequestMethod.GET)
+    public String addQuestion(@PathVariable int id, Model model) {
+        QuestionsEntity ourQuestion = questionRepository.getQuestionByID(id);
 
+        StringBuilder ourCategory = new StringBuilder(20);
+        ourCategory.append(" Код:");
+        ourCategory.append(ourQuestion.getCategoryById().getId());
+        ourCategory.append(" ");
+        ourCategory.append(ourQuestion.getCategoryById().getCategory());
+
+        model.addAttribute("category", ourCategory.toString());
+        model.addAttribute("code", ourQuestion.getId());
+        model.addAttribute("questiontext", ourQuestion.getQuestion());
+        model.addAttribute("questiontype", ourQuestion.getTypeQuestion());
+        model.addAttribute("table",createTable(id,""));
+
+        return "addquestion";
+    }
     @PreAuthorize("hasRole('admin')")
     @RequestMapping(value = "/editquestion/{id}/{context}", method = RequestMethod.GET)
     public String addQuestion(@PathVariable int id, @PathVariable String context, Model model) {
         QuestionsEntity ourQuestion = questionRepository.getQuestionByID(id);
-        context=context.substring(1);
 
         StringBuilder ourCategory = new StringBuilder(20);
         ourCategory.append(" Код:");
@@ -256,6 +275,16 @@ public class QuestionController {
         model.addAttribute("table",createTable(id,context));
 
         return "addquestion";
+    }
+
+
+    @PreAuthorize("hasRole('admin')")
+    @RequestMapping(value = "/editanswer", method = RequestMethod.POST, produces = {"text/plain; charset=UTF-8"})
+    @ResponseBody
+    public String editAnswer(@RequestParam("idanswer") int idanswer) throws Exception {
+        AnswersEntity answer=questionRepository.getAnswersByID(idanswer);
+
+        return answer.getAnswer();
     }
 
 

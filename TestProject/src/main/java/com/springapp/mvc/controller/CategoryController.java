@@ -172,7 +172,6 @@ public class CategoryController {
             ourTable.append(context);
             ourTable.append("/editquestion/");
             ourTable.append(ourElement.getId());
-            ourTable.append("/t");
             ourTable.append(context);
             ourTable.append("\"");
 

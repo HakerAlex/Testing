@@ -258,6 +258,10 @@
                 )
             }
             else {
+                document.getElementById('answerid').value='';
+                document.getElementById('answertext').value='';
+                CKEDITOR.instances.editorAn.setData('');
+
                 if ($("input[name='typequestion']:checked").val() < 3) {
                     $("#myModalRadioChecked").modal('show');
                 }
@@ -613,6 +617,44 @@
     }
     ;
 </script>
+
+
+<script type="text/javascript" charset="utf-8">
+    function funeditanswer(idanswer) {
+        document.getElementById('answerid').value=idanswer;
+        $.ajax({
+            type: "POST",
+            url: "${pageContext.request.contextPath}/editanswer",
+            data: {
+                idanswer: idanswer
+            },
+            dataType: "text",
+            success: {
+                function () {
+                },
+                error: {
+                    function () {
+                    }
+                }
+            }
+        }).done(function (element) {
+
+            if ($("input[name='typequestion']:checked").val() < 3) {
+
+                CKEDITOR.instances.editorAn.setData(element);
+
+                $("#myModalRadioChecked").modal('show');
+            }
+            else {
+                document.getElementById('answertext').value=element;
+                $("#myModalText").modal('show');
+            }
+
+        })
+    }
+    ;
+</script>
+
 </body>
 </html>
 
