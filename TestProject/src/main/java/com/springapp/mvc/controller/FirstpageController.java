@@ -3,6 +3,7 @@ package com.springapp.mvc.controller;
 import com.springapp.mvc.domain.TestcategoriesEntity;
 import com.springapp.mvc.repository.FirstPageRepository;
 import com.springapp.mvc.service.CreateTreeFromQuery;
+import com.springapp.mvc.service.CreateTreeFromQueryTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -21,6 +22,8 @@ public class FirstpageController {
     @Autowired(required = false)
     private CreateTreeFromQuery treeBean;
 
+    @Autowired(required = false)
+    private CreateTreeFromQueryTest treeTestBean;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
     public String getBasic(Model model) {
@@ -41,5 +44,13 @@ public class FirstpageController {
     public String getQuestion(Model model) {
         model.addAttribute("tree", treeBean.createTree());
         return "tablequestions";
+    }
+
+
+    @PreAuthorize("hasRole('admin')")
+    @RequestMapping(value = "/tests", method = RequestMethod.GET)
+    public String getTests(Model model) {
+        model.addAttribute("tree", treeTestBean.createTree());
+        return "tests";
     }
 }

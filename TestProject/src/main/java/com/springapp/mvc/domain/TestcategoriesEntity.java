@@ -13,6 +13,20 @@ public class TestcategoriesEntity {
     private byte[] picture;
     private String description;
 
+
+    @Basic
+    @Column(name = "parent")
+    public int getParent() {
+        return parent;
+    }
+
+    public void setParent(int parent) {
+        this.parent = parent;
+    }
+
+    private int parent;
+
+
     private Collection<TestsEntity> testsEntityCollection;
 
     @Basic

@@ -186,9 +186,11 @@ public class QuestionController {
 
         StringBuilder error=new StringBuilder(100);
 
-        if (typeq==3 && myAnswers.size()>0){
-            error.append("Не может быть несколько ответов при таком типе вопроса");
-            return error.toString();
+        if (typeq == 3 && myAnswers.size() > 0) {
+            if (myAnswers.get(0).getId() != new Integer(answerid) || myAnswers.size()>1) {
+                error.append("Не может быть несколько ответов при таком типе вопроса");
+                return error.toString();
+            }
         }
 
         AnswersEntity ourAnswer;

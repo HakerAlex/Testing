@@ -34,6 +34,7 @@
     </bean>
 
     <bean id="treeBean" class="com.springapp.mvc.service.CreateTreeFromQuery"/>
+    <bean id="treeTestBean" class="com.springapp.mvc.service.CreateTreeFromQueryTest"/>
     <bean id="firstPageRepository" class="com.springapp.mvc.repository.FirstPageRepository"/>
     <bean id="userRepository" class="com.springapp.mvc.repository.UserRepository"/>
     <bean id="categoryRepository" class="com.springapp.mvc.repository.CategoryRepository"/>
