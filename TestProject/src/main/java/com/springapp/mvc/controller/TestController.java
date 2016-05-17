@@ -30,4 +30,29 @@ public class TestController {
     }
 
 
+    @PreAuthorize("hasRole('admin')")
+    @RequestMapping(value = "/addcategorytest", method = RequestMethod.POST)
+    @ResponseBody
+    public String addCategoryTest(@RequestParam("namecategory") String namecategory, @RequestParam("parent") String parent, @RequestParam("description") String description,@RequestParam("picture") String picture)
+    {
+        TestcategoriesEntity newCategory = new TestcategoriesEntity();
+        newCategory.setCategory(namecategory);
+
+        if (!parent.equals("")) {
+            newCategory.setParent(new Integer(returnCode(parent)));
+        } else {
+            newCategory.setParent(0);
+        }
+
+        newCategory.setDescription(description);
+        newCategory.setPicture(picture);
+
+        try {
+            testcategoryRepository.createCategory(newCategory);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "";
+    }
+
 }

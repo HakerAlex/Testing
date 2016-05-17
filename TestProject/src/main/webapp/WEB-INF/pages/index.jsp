@@ -81,8 +81,7 @@
                 <div class="category-grid">
                     <a href="${pageContext.request.contextPath}/${categ.id}">
                             <%--<i class="fa fa-laptop"></i>--%>
-                        <i><img src="${pageContext.request.contextPath}/resources/assets/img/avatar-2.jpg" alt="avatar"
-                                class="img-circle"></i>
+                        <i><img src="${categ.picture}" class="img-circle"></i>
                         <h6>${categ.category}</h6>
                         <p>${categ.description}</p>
                     </a>

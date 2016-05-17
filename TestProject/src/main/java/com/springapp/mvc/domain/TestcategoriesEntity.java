@@ -9,8 +9,7 @@ import java.util.Collection;
 public class TestcategoriesEntity {
     private String category;
     private int id;
-    private String pathtopicture;
-    private byte[] picture;
+    private String picture;
     private String description;
 
 
@@ -50,22 +49,12 @@ public class TestcategoriesEntity {
     }
 
     @Basic
-    @Column(name = "pathtopicture", length = -1)
-    public String getPathtopicture() {
-        return pathtopicture;
-    }
-
-    public void setPathtopicture(String pathtopicture) {
-        this.pathtopicture = pathtopicture;
-    }
-
-    @Basic
-    @Column(name = "picture")
-    public byte[] getPicture() {
+    @Column(name = "picture", length = -1)
+    public String getPicture() {
         return picture;
     }
 
-    public void setPicture(byte[] picture) {
+    public void setPicture(String picture) {
         this.picture = picture;
     }
 
@@ -88,10 +77,7 @@ public class TestcategoriesEntity {
 
         if (id != that.id) return false;
         if (category != null ? !category.equals(that.category) : that.category != null) return false;
-        if (pathtopicture != null ? !pathtopicture.equals(that.pathtopicture) : that.pathtopicture != null)
-            return false;
-        if (!Arrays.equals(picture, that.picture)) return false;
-
+        if (picture != null ? !picture.equals(that.picture) : that.picture != null) return false;
         return true;
     }
 
@@ -99,8 +85,7 @@ public class TestcategoriesEntity {
     public int hashCode() {
         int result = category != null ? category.hashCode() : 0;
         result = 31 * result + id;
-        result = 31 * result + (pathtopicture != null ? pathtopicture.hashCode() : 0);
-        result = 31 * result + Arrays.hashCode(picture);
+        result = 31 * result + (picture != null ? picture.hashCode() : 0);
         return result;
     }
 

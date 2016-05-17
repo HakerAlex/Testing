@@ -60,7 +60,7 @@
                   action="${pageContext.request.contextPath}/addtest" commandName="addtest">
                 <input type="hidden" value="" class="form-control" id="categoryforquestion" name="categoryforquestion">
                 <button type="button" class="btn btn-primary btn-search" id="addnewtest">Добавить тест</button>
-             </form>
+            </form>
 
             <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 15px">
             <table id="tests" class="table" data-provide="data-table" cellspacing="0" width="100%">
@@ -85,8 +85,6 @@
 
 <main>
 
-
-    <!-- Modal -->
 
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -117,92 +115,99 @@
                         </div>
 
                         <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 5px">
+
                         <div class="input-group">
-                            <span class="input-group-addon"><i class="ti-image"></i></span>
+                            <input type="hidden" id="pimg" name="pimg"/>
+                            <span class="input-group-addon"><i class="ti-paint-bucket"></i></span>
+                            <input id="uploadImage" type="file" accept="image/jpeg" title="Выберите файл картинки"
+                                   name="image"/>
                         </div>
 
-                    </div>
-                </div>
+                        <img id="uploadPreview" style="display:none; width:20%;"/>
 
-
-
-
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" onclick="clearParent()">Очистить родителя</button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="addcategory">Добавить
-                    </button>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" onclick="clearParent()">Очистить родителя
+                            </button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal" id="addcategory">Добавить
+                            </button>
+                        </div>
+                    </div><!-- /.modal-content -->
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
-
-    <div class="modal fade" id="upModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Обновить категорию</h4>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="ti-folder"></i></span>
-                            <input type="text" value="" class="form-control" name="upcategory" id="upcategory"
-                                   placeholder="Новое значение">
+            <div class="modal fade" id="upModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title">Обновить категорию</h4>
                         </div>
-                        <div class="input-group">
+                        <div class="modal-body">
+                            <div class="form-group">
 
-                            <input type="hidden" id="oldcategory" value="" class="form-control" name="parent"
-                                   placeholder="Старое значение" disabled>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="ti-folder"></i></span>
+                                    <input type="text" value="" class="form-control" name="upcategory" id="upcategory"
+                                           placeholder="Новое значение">
+                                </div>
+                                <div class="input-group">
+
+                                    <input type="hidden" id="oldcategory" value="" class="form-control" name="parent"
+                                           placeholder="Старое значение" disabled>
+                                </div>
+                                <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 5px">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="ti-folder"></i></span>
+                                    <input type="text" id="parent" value="" class="form-control" name="parent"
+                                           placeholder="Родитель" disabled>
+                                </div>
+                            </div>
                         </div>
-                        <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 5px">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="ti-folder"></i></span>
-                            <input type="text" id="parent" value="" class="form-control" name="parent"
-                                   placeholder="Родитель" disabled>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" onclick="clearParent()">Очистить родителя
+                            </button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
+                            <button type="button" class="btn btn-primary" data-dismiss="modal" id="updatecategory">
+                                Изменить
+                            </button>
                         </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" onclick="clearParent()">Очистить родителя</button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="updatecategory">Изменить
-                    </button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
 
 
-    <div class="modal fade" id="del" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                    <h4 class="modal-title">Удалить категорию</h4>
-                    <h6 class="modal-title">Внимание! Можно удалить только если нет связанных элементов</h6>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <div class="input-group">
-                            <span class="input-group-addon"><i class="ti-folder"></i></span>
-                            <input type="text" id="delcategory" value="" class="form-control" name="delcategory"
-                                   placeholder="Значение" disabled>
+            <div class="modal fade" id="del" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title">Удалить категорию</h4>
+                            <h6 class="modal-title">Внимание! Можно удалить только если нет связанных элементов</h6>
                         </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="ti-folder"></i></span>
+                                    <input type="text" id="delcategory" value="" class="form-control" name="delcategory"
+                                           placeholder="Значение" disabled>
+                                </div>
 
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Отмена</button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal" id="deletecategory">Удалить
-                    </button>
-                </div>
-            </div><!-- /.modal-content -->
-        </div><!-- /.modal-dialog -->
-    </div><!-- /.modal -->
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-primary" data-dismiss="modal">Отмена</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal" id="deletecategory">
+                                Удалить
+                            </button>
+                        </div>
+                    </div><!-- /.modal-content -->
+                </div><!-- /.modal-dialog -->
+            </div><!-- /.modal -->
 
 
 </main>
@@ -211,11 +216,11 @@
 <%--<%@ include file="../pages/template/templatefoot.jsp" %>--%>
 
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/jquery.min.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/JQuery.JSAjaxFileUploader.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/bootstrap.file-input.js"></script>
 <script type="text/javascript"
-src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js"></script>
+        src="${pageContext.request.contextPath}/resources/assets/js/bootstrap.file-input.js"></script>
+<script type="text/javascript"
+        src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js"></script>
 <script type="text/javascript"
         src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-treeview.js"></script>
 
@@ -240,28 +245,29 @@ src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js
 
 
 <script type="text/javascript">
-     $(document).ready(function () {
-        $("#addnewtest").click(function () {
+    $(document).ready(function () {
+                $("#addnewtest").click(function () {
 
-            if (document.getElementById('categoryforquestion').value=='') {
+                            if (document.getElementById('categoryforquestion').value == '') {
 
-                $.confirm({
-                    title: 'Внимание',
-                    titleIcon: 'glyphicon glyphicon-warning-sign',
-                    template: 'warning',
-                    templateOk: 'warning',
-                    message: "Выберите категорию для добавления теста.",
-                    labelOk: 'ОК',
-                    buttonCancel: false,
-                    onOk: function() {
-                    }
-                });
+                                $.confirm({
+                                    title: 'Внимание',
+                                    titleIcon: 'glyphicon glyphicon-warning-sign',
+                                    template: 'warning',
+                                    templateOk: 'warning',
+                                    message: "Выберите категорию для добавления теста.",
+                                    labelOk: 'ОК',
+                                    buttonCancel: false,
+                                    onOk: function () {
+                                    }
+                                });
 
-            }else {
-                $('#addnewtest').submit();
+                            } else {
+                                $('#addnewtest').submit();
+                            }
+                        }
+                )
             }
-          }
-        )}
     );
 </script>
 
@@ -287,8 +293,8 @@ src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js
                         message: msg,
                         labelOk: 'ОК',
                         buttonCancel: false,
-                        onOk: function() {
-                             }
+                        onOk: function () {
+                        }
                     });
 
                 }
@@ -302,7 +308,7 @@ src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js
                         message: 'Категория удалена.',
                         labelOk: 'ОК',
                         buttonCancel: false,
-                        onOk: function() {
+                        onOk: function () {
                             location.reload();
                         }
                     });
@@ -318,73 +324,26 @@ src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js
     $(document).ready(function () {
 
         $("#addcategory").click(function () {
-            if (document.getElementById('namecategory').value!=''){
-            $.ajax({
-                type: "POST",
-                url: "${pageContext.request.contextPath}/addcategorytest",
-                data: {
-                    namecategory: document.getElementById('namecategory').value,
-                    description: document.getElementById('description').value,
-                    parent: document.getElementById('category').value,
-                    picture:
-                }
-            }).done(function (tree) {
-                $.confirm({
-                    title: 'Информация',
-                    titleIcon: 'glyphicon glyphicon-info-sign',
-                    template: 'info',
-                    templateOk: 'info',
-                    message: 'Категория добавлена.',
-                    labelOk: 'ОК',
-                    buttonCancel: false,
-                    onOk: function() {
-                        location.reload();
-                    }
-                });
-            });
-        }
-        else{
-            $.confirm({
-                title: 'Внимание',
-                titleIcon: 'glyphicon glyphicon-warning-sign',
-                template: 'warning',
-                templateOk: 'warning',
-                message: 'Нельзя создавать пустую категорию.',
-                labelOk: 'ОК',
-                buttonCancel: false,
-                onOk: function() {
-                }
-            });
-        }
-    })
-    });
-</script>
-
-
-<script type="text/javascript">
-    $(document).ready(function () {
-        $("#updatecategory").click(function () {
-
-            if (document.getElementById('upcategory').value!=''){
+            if (document.getElementById('namecategory').value != '') {
                 $.ajax({
                     type: "POST",
-                    url: "${pageContext.request.contextPath}/updatecategorytest",
+                    url: "${pageContext.request.contextPath}/addcategorytest",
                     data: {
-                        namecategory: document.getElementById('upcategory').value,
-                        oldcategory: document.getElementById('oldcategory').value,
-                        parent: document.getElementById('parent').value
+                        namecategory: document.getElementById('namecategory').value,
+                        description: document.getElementById('description').value,
+                        parent: document.getElementById('category').value,
+                        picture:document.getElementById('pimg').value
                     }
                 }).done(function (tree) {
-
                     $.confirm({
                         title: 'Информация',
                         titleIcon: 'glyphicon glyphicon-info-sign',
                         template: 'info',
                         templateOk: 'info',
-                        message: 'Категория обновлена.',
+                        message: 'Категория добавлена.',
                         labelOk: 'ОК',
                         buttonCancel: false,
-                        onOk: function() {
+                        onOk: function () {
                             location.reload();
                         }
                     });
@@ -396,16 +355,63 @@ src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js
                     titleIcon: 'glyphicon glyphicon-warning-sign',
                     template: 'warning',
                     templateOk: 'warning',
-                    message: 'Нельзя исправлять на пустую категорию.',
+                    message: 'Нельзя создавать пустую категорию.',
                     labelOk: 'ОК',
                     buttonCancel: false,
-                    onOk: function() {
+                    onOk: function () {
                     }
                 });
             }
-        }
-    )
-    }
+        })
+    });
+</script>
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+                $("#updatecategory").click(function () {
+
+                            if (document.getElementById('upcategory').value != '') {
+                                $.ajax({
+                                    type: "POST",
+                                    url: "${pageContext.request.contextPath}/updatecategorytest",
+                                    data: {
+                                        namecategory: document.getElementById('upcategory').value,
+                                        oldcategory: document.getElementById('oldcategory').value,
+                                        parent: document.getElementById('parent').value
+                                    }
+                                }).done(function (tree) {
+
+                                    $.confirm({
+                                        title: 'Информация',
+                                        titleIcon: 'glyphicon glyphicon-info-sign',
+                                        template: 'info',
+                                        templateOk: 'info',
+                                        message: 'Категория обновлена.',
+                                        labelOk: 'ОК',
+                                        buttonCancel: false,
+                                        onOk: function () {
+                                            location.reload();
+                                        }
+                                    });
+                                });
+                            }
+                            else {
+                                $.confirm({
+                                    title: 'Внимание',
+                                    titleIcon: 'glyphicon glyphicon-warning-sign',
+                                    template: 'warning',
+                                    templateOk: 'warning',
+                                    message: 'Нельзя исправлять на пустую категорию.',
+                                    labelOk: 'ОК',
+                                    buttonCancel: false,
+                                    onOk: function () {
+                                    }
+                                });
+                            }
+                        }
+                )
+            }
     );
 </script>
 
@@ -421,11 +427,11 @@ src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js
     var parent;
     $('#treeview').on('nodeSelected', function (event, data) {
 
-        var cat=data.text.trim();
+        var cat = data.text.trim();
         var n = cat.search(" ");
-        var s=cat.substring(n+1,cat.length);
+        var s = cat.substring(n + 1, cat.length);
 
-        document.getElementById('upcategory').value =s;
+        document.getElementById('upcategory').value = s;
         document.getElementById('oldcategory').value = data.text;
         document.getElementById('category').value = data.text;
         document.getElementById('delcategory').value = data.text;
@@ -464,7 +470,7 @@ src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js
             template: 'primary',
             templateOk: 'primary',
             message: 'Вы уверены что хотите удалить тест?',
-            onOk: function() {
+            onOk: function () {
                 $.ajax({
                     type: "POST",
                     url: "${pageContext.request.contextPath}/deltest",
@@ -494,7 +500,7 @@ src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js
                             message: 'Нельзя удалить тест есть связанные элементы!',
                             labelOk: 'ОК',
                             buttonCancel: false,
-                            onOk: function() {
+                            onOk: function () {
                             }
                         });
 
@@ -508,7 +514,7 @@ src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js
                             message: 'Тест удален.',
                             labelOk: 'ОК',
                             buttonCancel: false,
-                            onOk: function() {
+                            onOk: function () {
                                 $("#tests").html(element);
                             }
                         });
@@ -516,7 +522,7 @@ src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js
                     }
                 });
             },
-            onCancel: function() {
+            onCancel: function () {
             }
         });
     }
@@ -524,7 +530,32 @@ src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js
 </script>
 
 
+<script type="text/javascript">
+    $(document).ready(function () {
+        var uploadPreview = $("#uploadPreview");
+        var jcrop_api, pic_width, pic_height;
+        $("#uploadImage").change(function () {
+            if (typeof  jcrop_api != 'undefined') {
+                jcrop_api.destroy();
+            }
+            var oFReader = new FileReader();
+            oFReader.readAsDataURL(document.getElementById("uploadImage").files[0]);
+            oFReader.onload = function (oFREvent) {
+                uploadPreview.attr('src', oFREvent.target.result).show();
+                $("#pimg").val(oFREvent.target.result);
+                var img = new Image();
+                img.onload = function () {
+                    pic_width = this.width;
+                    pic_height = this.height;
+                }
+                img.src = oFREvent.target.result;
 
+            };
+
+        });
+
+    });
+</script>
 </body>
 </html>
 
