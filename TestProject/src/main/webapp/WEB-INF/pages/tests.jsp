@@ -12,7 +12,7 @@
 
     <link href="${pageContext.request.contextPath}/resources/assets/css/bootstrap-theme.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/resources/assets/css/bootstrap.css" rel="stylesheet">
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/resources/assets/css/bootstrap-treeview.css"/>
+    <link href="${pageContext.request.contextPath}/resources/assets/css/bootstrap-treeview.css" rel="stylesheet"/>
     <link href="${pageContext.request.contextPath}/resources/assets/css/table.css" rel="stylesheet">
     <!-- Fonts -->
     <link href='http://fonts.googleapis.com/css?family=Oswald:100,300,400,500,600,800%7COpen+Sans:300,400,500,600,700,800%7CMontserrat:400,700'
@@ -119,16 +119,16 @@
                         <div class="input-group">
                             <input type="hidden" id="pimg" name="pimg"/>
                             <span class="input-group-addon"><i class="ti-paint-bucket"></i></span>
-                            <input id="uploadImage" type="file" accept="image/jpeg" title="Выберите файл картинки"
-                                   name="image"/>
+                            <input id="uploadImage" type="file" accept="image/*" title="Выберите файл картинки"
+                                   name="image" data-filename-placement="inside"/>
                         </div>
 
-                        <img id="uploadPreview" style="display:none; width:20%;"/>
+                        <img id="uploadPreview" style="display:none; align-content: center; width:20%;"/>
 
                         <div class="modal-footer">
                             <button type="button" class="btn btn-primary" onclick="clearParent()">Очистить родителя
                             </button>
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="clearElements()">Отмена</button>
                             <button type="button" class="btn btn-primary" data-dismiss="modal" id="addcategory">Добавить
                             </button>
                         </div>
@@ -138,76 +138,94 @@
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
-            <div class="modal fade" id="upModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h4 class="modal-title">Обновить категорию</h4>
-                        </div>
-                        <div class="modal-body">
-                            <div class="form-group">
+    <div class="modal fade" id="upModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Обновить категорию</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
 
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="ti-folder"></i></span>
-                                    <input type="text" value="" class="form-control" name="upcategory" id="upcategory"
-                                           placeholder="Новое значение">
-                                </div>
-                                <div class="input-group">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="ti-folder"></i></span>
+                            <input type="text" value="" class="form-control" name="upcategory" id="upcategory"
+                                   placeholder="Новое значение">
+                        </div>
+                        <input type="hidden" id="oldcategory" value="" class="form-control" name="parent"
+                                   placeholder="Старое значение" disabled>
 
-                                    <input type="hidden" id="oldcategory" value="" class="form-control" name="parent"
-                                           placeholder="Старое значение" disabled>
-                                </div>
-                                <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 5px">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="ti-folder"></i></span>
-                                    <input type="text" id="parent" value="" class="form-control" name="parent"
-                                           placeholder="Родитель" disabled>
-                                </div>
-                            </div>
+                        <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 5px">
+
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="ti-info"></i></span>
+                            <input type="text" value="" class="form-control" name="description" id="descr"
+                                   placeholder="Описание категории">
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" onclick="clearParent()">Очистить родителя
-                            </button>
-                            <button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
-                            <button type="button" class="btn btn-primary" data-dismiss="modal" id="updatecategory">
-                                Изменить
-                            </button>
+                        <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 5px">
+
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="ti-folder"></i></span>
+                            <input type="text" id="parent" value="" class="form-control" name="parent"
+                                   placeholder="Родитель" disabled>
                         </div>
-                    </div><!-- /.modal-content -->
-                </div><!-- /.modal-dialog -->
-            </div><!-- /.modal -->
+
+                        <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 5px">
+
+                        <div class="input-group">
+                            <input type="hidden" id="pimg2" name="pimg2"/>
+                            <span class="input-group-addon"><i class="ti-paint-bucket"></i></span>
+                            <input id="uploadIm" type="file" accept="image/*" title="Выберите файл картинки"
+                                   name="image" data-filename-placement="inside"/>
+                        </div>
+
+                        <img id="uploadPr" style="display:none; align-content: center; width:20%;"/>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" onclick="clearParent()">Очистить родителя
+                    </button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="updatecategory">
+                        Изменить
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 
 
-            <div class="modal fade" id="del" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-                 aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                            <h4 class="modal-title">Удалить категорию</h4>
-                            <h6 class="modal-title">Внимание! Можно удалить только если нет связанных элементов</h6>
+    <div class="modal fade" id="del" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Удалить категорию</h4>
+                    <h6 class="modal-title">Внимание! Можно удалить только если нет связанных элементов</h6>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="ti-folder"></i></span>
+                            <input type="text" id="delcategory" value="" class="form-control" name="delcategory"
+                                   placeholder="Значение" disabled>
                         </div>
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <div class="input-group">
-                                    <span class="input-group-addon"><i class="ti-folder"></i></span>
-                                    <input type="text" id="delcategory" value="" class="form-control" name="delcategory"
-                                           placeholder="Значение" disabled>
-                                </div>
 
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-primary" data-dismiss="modal">Отмена</button>
-                            <button type="button" class="btn btn-danger" data-dismiss="modal" id="deletecategory">
-                                Удалить
-                            </button>
-                        </div>
-                    </div><!-- /.modal-content -->
-                </div><!-- /.modal-dialog -->
-            </div><!-- /.modal -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" id="deletecategory">
+                        Удалить
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 
 
 </main>
@@ -241,15 +259,22 @@
         $('#treeview').treeview('collapseAll', {levels: 100, silent: true});
     }
 
+    function clearElements() {
+        document.getElementById('namecategory').value="";
+        document.getElementById('description').value="";
+        document.getElementById('category').value="";
+        document.getElementById('pimg').value="";
+        $('#uploadImage').siblings('span').html('Выберите файл картинки').attr('title','Выберите файл картинки').show();
+        $("#uploadPreview").hide();
+    }
+
 </script>
 
 
 <script type="text/javascript">
     $(document).ready(function () {
                 $("#addnewtest").click(function () {
-
                             if (document.getElementById('categoryforquestion').value == '') {
-
                                 $.confirm({
                                     title: 'Внимание',
                                     titleIcon: 'glyphicon glyphicon-warning-sign',
@@ -332,7 +357,7 @@
                         namecategory: document.getElementById('namecategory').value,
                         description: document.getElementById('description').value,
                         parent: document.getElementById('category').value,
-                        picture:document.getElementById('pimg').value
+                        picture: document.getElementById('pimg').value
                     }
                 }).done(function (tree) {
                     $.confirm({
@@ -378,7 +403,9 @@
                                     data: {
                                         namecategory: document.getElementById('upcategory').value,
                                         oldcategory: document.getElementById('oldcategory').value,
-                                        parent: document.getElementById('parent').value
+                                        parent: document.getElementById('parent').value,
+                                        description: document.getElementById('descr').value,
+                                        picture: document.getElementById('pimg2').value
                                     }
                                 }).done(function (tree) {
 
@@ -431,12 +458,13 @@
         var n = cat.search(" ");
         var s = cat.substring(n + 1, cat.length);
 
-        document.getElementById('upcategory').value = s;
-        document.getElementById('oldcategory').value = data.text;
-        document.getElementById('category').value = data.text;
-        document.getElementById('delcategory').value = data.text;
-        document.getElementById('parent').value = "";
-        document.getElementById('categoryforquestion').value = data.text;
+        $('#upcategory').val(s);
+        $('#oldcategory').val(data.text);
+        $('#category').val(data.text);
+        $('#delcategory').val(data.text);
+        $('#parent').val("");
+        $('#categoryforquestion').val(data.text);
+
         $.ajax({
             type: "POST",
             url: "${pageContext.request.contextPath}/getparenttest",
@@ -444,9 +472,44 @@
                 category: data.text
             }
         }).done(function (element) {
-            document.getElementById('parent').value = element;
+
+            pardesc = JSON.parse(element);
+
+            $('#parent').val(pardesc.parent);
+            $('#descr').val(pardesc.desc);
 
         });
+
+
+        $.ajax({
+            type: "POST",
+            url: "${pageContext.request.contextPath}/getpicture",
+            data: {
+                category: data.text
+            }
+        }).done(function (element) {
+
+            $('#pimg2').val("");
+            $('#uploadIm').siblings('span').html('Выберите файл картинки').attr('title','Выберите файл картинки').show();
+            $("#uploadPr").hide();
+
+            if (element!=""){
+                var uploadPreview = $("#uploadPr");
+                uploadPreview.attr('src',element).show();
+                $("#pimg2").val(element);
+            $("#uploadIm").change(function () {
+                var img = new Image();
+                img.onload = function () {
+                    pic_width = this.width;
+                    pic_height = this.height;
+                };
+                img.src = element;
+
+            });
+            }
+        });
+
+
 
 
         $.ajax({
@@ -526,14 +589,15 @@
             }
         });
     }
-    ;
 </script>
 
 
 <script type="text/javascript">
     $(document).ready(function () {
         var uploadPreview = $("#uploadPreview");
-        var jcrop_api, pic_width, pic_height;
+        var pic_width, pic_height;
+        var uploadPr = $("#uploadPr");
+
         $("#uploadImage").change(function () {
             if (typeof  jcrop_api != 'undefined') {
                 jcrop_api.destroy();
@@ -547,14 +611,34 @@
                 img.onload = function () {
                     pic_width = this.width;
                     pic_height = this.height;
-                }
+                };
                 img.src = oFREvent.target.result;
 
             };
 
         });
 
+        $("#uploadIm").change(function () {
+            if (typeof  jcrop_api != 'undefined') {
+                jcrop_api.destroy();
+            }
+            var oFReader = new FileReader();
+            oFReader.readAsDataURL(document.getElementById("uploadIm").files[0]);
+            oFReader.onload = function (oFREvent) {
+                uploadPr.attr('src', oFREvent.target.result).show();
+                $("#pimg2").val(oFREvent.target.result);
+                var img = new Image();
+                img.onload = function () {
+                    pic_width = this.width;
+                    pic_height = this.height;
+                };
+                img.src = oFREvent.target.result;
+
+            };
+
+        });
     });
+
 </script>
 </body>
 </html>

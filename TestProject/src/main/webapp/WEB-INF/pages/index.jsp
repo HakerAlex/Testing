@@ -80,7 +80,6 @@
             <c:forEach items="${allcategories}" var="categ">
                 <div class="category-grid">
                     <a href="${pageContext.request.contextPath}/${categ.id}">
-                            <%--<i class="fa fa-laptop"></i>--%>
                         <i><img src="${categ.picture}" class="img-circle"></i>
                         <h6>${categ.category}</h6>
                         <p>${categ.description}</p>
