@@ -29,12 +29,6 @@ public class CategoryController {
     @Autowired(required = false)
     private CreateTreeFromQuery treeBean;
 
-    private String returnCode(String parent) {
-        String ID = parent.substring(5);
-        int pos = ID.indexOf(" ");
-        return ID.substring(0, pos);
-    }
-
     @PreAuthorize("hasRole('admin')")
     @RequestMapping(value = "/updatetree", method = RequestMethod.GET)
     @ResponseBody
@@ -47,7 +41,7 @@ public class CategoryController {
     @ResponseBody
     public String delCategory(@RequestParam("namecategory") String namecategory) throws Exception {
 
-        int ourID = new Integer(returnCode(namecategory));
+        int ourID = new Integer(treeBean.returnCode(namecategory));
         List<CategoriesEntity> list = categoryRepository.getCategoriesByParentID(ourID);
         if (!list.isEmpty()) {
             return "Не могу удалить есть подчиненные элементы";
@@ -65,7 +59,7 @@ public class CategoryController {
     @RequestMapping(value = "/getparent", method = RequestMethod.POST, produces = {"text/plain; charset=UTF-8"})
     @ResponseBody
     public String getParent(@RequestParam("category") String namecategory) {
-        Integer parentID = categoryRepository.getCategoriesByID(new Integer(returnCode(namecategory))).getParent();
+        Integer parentID = categoryRepository.getCategoriesByID(new Integer(treeBean.returnCode(namecategory))).getParent();
         CategoriesEntity ourCategory = categoryRepository.getCategoriesByID(parentID);
         StringBuilder ourBuffer = new StringBuilder(100);
         ourBuffer.append(" Код:");
@@ -83,7 +77,7 @@ public class CategoryController {
         newCategory.setCategory(namecategory);
 
         if (!parent.equals("")) {
-            newCategory.setParent(new Integer(returnCode(parent)));
+            newCategory.setParent(new Integer(treeBean.returnCode(parent)));
         } else {
             newCategory.setParent(0);
         }
@@ -110,11 +104,11 @@ public class CategoryController {
     @RequestMapping(value = "/updatecategory", method = RequestMethod.POST)
     @ResponseBody
     public String updateCategory(@RequestParam("oldcategory") String oldcategory, @RequestParam("namecategory") String category, @RequestParam("parent") String parent) {
-        CategoriesEntity ourCategory = categoryRepository.getCategoriesByID(new Integer(returnCode(oldcategory)));
+        CategoriesEntity ourCategory = categoryRepository.getCategoriesByID(new Integer(treeBean.returnCode(oldcategory)));
         ourCategory.setCategory(category);
 
         if (!parent.equals("")) {
-            ourCategory.setParent(new Integer(returnCode(parent)));
+            ourCategory.setParent(new Integer(treeBean.returnCode(parent)));
         } else {
             ourCategory.setParent(0);
         }
@@ -127,82 +121,21 @@ public class CategoryController {
         return "";
     }
 
-    private String getInputQuestion(String category, String context) {
-        List<QuestionsEntity> ourQuestion = categoryRepository.getAllQuestionByCategoryID(new Integer(returnCode(category)));
-        StringBuilder ourTable = new StringBuilder(200);
 
-        ourTable.append(" <thead> ");
-        ourTable.append("<tr> ");
-        ourTable.append("<th>Код</th> ");
-        ourTable.append("<th>Вопрос</th> ");
-        ourTable.append("<th>Тип вопроса</th> ");
-        ourTable.append("<th>Редактировать</th> ");
-        ourTable.append("<th>Удалить</th> ");
-        ourTable.append("</tr> ");
-        ourTable.append("</thead> ");
-
-
-        ourTable.append("<tbody> ");
-        for (QuestionsEntity ourElement : ourQuestion) {
-            ourTable.append(" <tr> ");
-            ourTable.append(" <td> ");
-            ourTable.append(ourElement.getId());
-            ourTable.append(" </td> ");
-
-            ourTable.append(" <td>");
-            ourTable.append(ourElement.getQuestion());
-            ourTable.append(" </td> ");
-
-            ourTable.append(" <td> ");
-            ourTable.append(" <span class=\"label bg-success\" style=\"background: #00cc00\"> ");
-            if (ourElement.getTypeQuestion() == 1) {
-                ourTable.append("Один");
-            } else if (ourElement.getTypeQuestion() == 2) {
-                ourTable.append("Несколько");
-            } else if (ourElement.getTypeQuestion() == 3) {
-                ourTable.append("Поле ввода");
-            }
-            ourTable.append(" </span>");
-            ourTable.append(" </td>");
-
-            ourTable.append(" <td>");
-
-            ourTable.append(" <span class=\"tooltip-area\">");
-            ourTable.append(" <a href=\"");
-            ourTable.append(context);
-            ourTable.append("/editquestion/");
-            ourTable.append(ourElement.getId());
-            ourTable.append(context);
-            ourTable.append("\"");
-
-            ourTable.append(" class=\"label btn-info\"> <i class=\"fa fa-pencil\">Редактировать</i> </a>");
-            ourTable.append(" </span>");
-            ourTable.append(" </td>");
-
-            ourTable.append(" <td>");
-            ourTable.append(" <span class=\"tooltip-area\">");
-            ourTable.append(" <a href=\"");
-            ourTable.append("javascript:fundelquestion(");
-            ourTable.append(ourElement.getId());
-            ourTable.append(")\"");
-            ourTable.append(" class=\"label btn-danger\"> <i class=\"fa fa-trash\">Удалить</i></a>");
-            ourTable.append(" </span>");
-            ourTable.append(" </td>");
-
-            ourTable.append(" </tr>");
-
-        }
-        ourTable.append(" </tbody>");
-
-        return ourTable.toString();
-
-    }
 
     @PreAuthorize("hasRole('admin')")
     @RequestMapping(value = "/getquestion", method = RequestMethod.POST, produces = {"text/html; charset=UTF-8"})
     @ResponseBody
     public String getQuestions(@RequestParam("category") String category, @RequestParam("context") String context) {
-        return getInputQuestion(category, context);
+        return treeBean.getInputQuestion(category, context);
+    }
+
+
+    @PreAuthorize("hasRole('admin')")
+    @RequestMapping(value = "/getquestionfortest", method = RequestMethod.POST, produces = {"text/html; charset=UTF-8"})
+    @ResponseBody
+    public String getQuestionsForTest(@RequestParam("category") String category, @RequestParam("context") String context) {
+        return treeBean.getInputQuestionForTest(category, context);
     }
 
     @PreAuthorize("hasRole('admin')")
@@ -217,7 +150,7 @@ public class CategoryController {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            return getInputQuestion(category, context);
+            return treeBean.getInputQuestion(category, context);
         }
         return "error";
     }

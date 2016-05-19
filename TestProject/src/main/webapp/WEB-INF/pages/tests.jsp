@@ -58,7 +58,7 @@
 
             <form id="addtest" class="addtest" method="post"
                   action="${pageContext.request.contextPath}/addtest" commandName="addtest">
-                <input type="hidden" value="" class="form-control" id="categoryforquestion" name="categoryforquestion">
+                <input type="hidden" value="" class="form-control" id="categoryfortest" name="categoryfortest">
                 <button type="button" class="btn btn-primary btn-search" id="addnewtest">Добавить тест</button>
             </form>
 
@@ -67,7 +67,6 @@
 
                 <thead>
                 <tr>
-                    <th>Код</th>
                     <th>Тест</th>
                     <th>Редактировать</th>
                     <th>Удалить</th>
@@ -274,7 +273,7 @@
 <script type="text/javascript">
     $(document).ready(function () {
                 $("#addnewtest").click(function () {
-                            if (document.getElementById('categoryforquestion').value == '') {
+                            if (document.getElementById('categoryfortest').value == '') {
                                 $.confirm({
                                     title: 'Внимание',
                                     titleIcon: 'glyphicon glyphicon-warning-sign',
@@ -288,7 +287,7 @@
                                 });
 
                             } else {
-                                $('#addnewtest').submit();
+                                $('#addtest').submit();
                             }
                         }
                 )
@@ -463,7 +462,7 @@
         $('#category').val(data.text);
         $('#delcategory').val(data.text);
         $('#parent').val("");
-        $('#categoryforquestion').val(data.text);
+        $('#categoryfortest').val(data.text);
 
         $.ajax({
             type: "POST",

@@ -270,19 +270,8 @@
                 }
             }
         })
-    });
-</script>
 
-<script type="text/javascript">
-    function strip(html) {
-        var tmp = document.createElement("DIV");
-        tmp.innerHTML = html;
-        return tmp.textContent || tmp.innerText;
-    }
-</script>
 
-<script type="text/javascript">
-    $(document).ready(function () {
         $("#writean").click(function () {
             if ($("input[name='typequestion']:checked").val() == 3) {
                 if (document.getElementById('answertext').value.trim() != '') {
@@ -362,11 +351,8 @@
                 }
             }
         })
-    });
-</script>
 
-<script type="text/javascript">
-    $(document).ready(function () {
+
         $("#writeanswer").click(function () {
             if ($("input[name='typequestion']:checked").val() < 3) {
                 if (strip(CKEDITOR.instances.editorAn.getData()).trim() != '') {
@@ -445,11 +431,8 @@
                 });
             }
         });
-    });
-</script>
 
-<script type="text/javascript">
-    $(document).ready(function () {
+
         $("#writequestion").click(function () {
 
 
@@ -522,10 +505,10 @@
                                     dataType: "text",
                                     success: {
                                         function () {
-                                                                                   },
+                                        },
                                         error: {
                                             function () {
-                                                                                           }
+                                            }
                                         }
 
                                     }
@@ -550,10 +533,17 @@
                 }
             });
         });
+
+
     });
 </script>
 
 <script type="text/javascript" charset="utf-8">
+
+    function strip(html) {
+        return html.replace(/</g,"").replace(/>/g,"");
+    }
+
     function fundelanswer(idanswer, idquestion) {
         $.confirm({
             template: 'primary',
@@ -615,11 +605,7 @@
             }
         });
     }
-    ;
-</script>
 
-
-<script type="text/javascript" charset="utf-8">
     function funeditanswer(idanswer) {
         document.getElementById('answerid').value=idanswer;
         $.ajax({
@@ -652,7 +638,6 @@
 
         })
     }
-    ;
 </script>
 
 </body>

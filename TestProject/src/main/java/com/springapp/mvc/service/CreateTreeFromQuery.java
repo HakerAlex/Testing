@@ -1,6 +1,7 @@
 package com.springapp.mvc.service;
 
 import com.springapp.mvc.domain.CategoriesEntity;
+import com.springapp.mvc.domain.QuestionsEntity;
 import com.springapp.mvc.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -51,6 +52,122 @@ public class CreateTreeFromQuery {
         String replace = "nodes: \\[\\]";
         return ourTree.toString().replaceAll(replace, "");
     }
+
+    public String returnCode(String parent) {
+        String ID = parent.substring(5);
+        int pos = ID.indexOf(" ");
+        return ID.substring(0, pos);
+    }
+
+    @Transactional(readOnly = true)
+    public String getInputQuestion(String category, String context) {
+        List<QuestionsEntity> ourQuestion = categoryRepository.getAllQuestionByCategoryID(new Integer(returnCode(category)));
+        StringBuilder ourTable = new StringBuilder(200);
+
+        ourTable.append(" <thead> ");
+        ourTable.append("<tr> ");
+        ourTable.append("<th>Вопрос</th> ");
+        ourTable.append("<th>Тип вопроса</th> ");
+        ourTable.append("<th>Редактировать</th> ");
+        ourTable.append("<th>Удалить</th> ");
+        ourTable.append("</tr> ");
+        ourTable.append("</thead> ");
+
+
+        ourTable.append("<tbody> ");
+        for (QuestionsEntity ourElement : ourQuestion) {
+            ourTable.append(" <tr> ");
+
+            ourTable.append(" <td>");
+            ourTable.append(ourElement.getQuestion());
+            ourTable.append(" </td> ");
+
+            ourTable.append(" <td> ");
+            ourTable.append(" <span class=\"label bg-success\" style=\"background: #00cc00\"> ");
+            if (ourElement.getTypeQuestion() == 1) {
+                ourTable.append("Один");
+            } else if (ourElement.getTypeQuestion() == 2) {
+                ourTable.append("Несколько");
+            } else if (ourElement.getTypeQuestion() == 3) {
+                ourTable.append("Поле ввода");
+            }
+            ourTable.append(" </span>");
+            ourTable.append(" </td>");
+
+            ourTable.append(" <td>");
+
+            ourTable.append(" <span class=\"tooltip-area\">");
+            ourTable.append(" <a href=\"");
+            ourTable.append(context);
+            ourTable.append("/editquestion/");
+            ourTable.append(ourElement.getId());
+            ourTable.append(context);
+            ourTable.append("\"");
+
+            ourTable.append(" class=\"label btn-info\"> <i class=\"fa fa-pencil\">Редактировать</i> </a>");
+            ourTable.append(" </span>");
+            ourTable.append(" </td>");
+
+            ourTable.append(" <td>");
+            ourTable.append(" <span class=\"tooltip-area\">");
+            ourTable.append(" <a href=\"");
+            ourTable.append("javascript:fundelquestion(");
+            ourTable.append(ourElement.getId());
+            ourTable.append(")\"");
+            ourTable.append(" class=\"label btn-danger\"> <i class=\"fa fa-trash\">Удалить</i></a>");
+            ourTable.append(" </span>");
+            ourTable.append(" </td>");
+
+            ourTable.append(" </tr>");
+
+        }
+        ourTable.append(" </tbody>");
+
+        return ourTable.toString();
+
+    }
+
+
+    @Transactional(readOnly = true)
+    public String getInputQuestionForTest(String category, String context) {
+        List<QuestionsEntity> ourQuestion = categoryRepository.getAllQuestionByCategoryID(new Integer(returnCode(category)));
+        StringBuilder ourTable = new StringBuilder(200);
+
+        ourTable.append(" <thead> ");
+        ourTable.append("<tr> ");
+        ourTable.append("<th>Вопрос</th> ");
+        ourTable.append("<th>Добавить</th> ");
+        ourTable.append("</tr> ");
+        ourTable.append("</thead> ");
+
+
+        ourTable.append("<tbody> ");
+        for (QuestionsEntity ourElement : ourQuestion) {
+            ourTable.append(" <tr> ");
+
+            ourTable.append(" <td>");
+            ourTable.append(ourElement.getQuestion());
+            ourTable.append(" </td> ");
+
+            ourTable.append(" <td>");
+            ourTable.append(" <span class=\"tooltip-area\">");
+            ourTable.append(" <a href=\"");
+            ourTable.append("javascript:funaddquestion(");
+            ourTable.append(ourElement.getId());
+            ourTable.append(")\"");
+            ourTable.append(" class=\"label btn-success\"> <i class=\"fa fa-pencil\">Добавить</i></a>");
+            ourTable.append(" </span>");
+            ourTable.append(" </td>");
+
+            ourTable.append(" </tr>");
+
+        }
+        ourTable.append(" </tbody>");
+
+        return ourTable.toString();
+
+    }
+
 
 }
 

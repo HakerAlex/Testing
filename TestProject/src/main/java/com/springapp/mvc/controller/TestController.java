@@ -3,9 +3,11 @@ package com.springapp.mvc.controller;
 import com.springapp.mvc.domain.TestcategoriesEntity;
 import com.springapp.mvc.domain.TestsEntity;
 import com.springapp.mvc.repository.TestcategoryRepository;
+import com.springapp.mvc.service.CreateTreeFromQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +20,9 @@ public class TestController {
 
     @Autowired
     private TestcategoryRepository testcategoryRepository;
+
+    @Autowired(required = false)
+    private CreateTreeFromQuery treeBean;
 
     private String returnCode(String parent) {
         String ID = parent.substring(5);
@@ -133,4 +138,14 @@ public class TestController {
 
         return "";
     }
+
+
+    @PreAuthorize("hasRole('admin')")
+    @RequestMapping(value = "/addtest", method = RequestMethod.POST)
+    public String addtest(@RequestParam("categoryfortest")  String category, Model model) {
+        model.addAttribute("categoryfortest",category);
+        model.addAttribute("tree", treeBean.createTree());
+        return "addtest";
+    }
+
 }

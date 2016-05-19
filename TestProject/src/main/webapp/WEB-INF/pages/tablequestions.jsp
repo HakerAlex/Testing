@@ -68,7 +68,6 @@
 
                 <thead>
                 <tr>
-                    <th>Код</th>
                     <th>Вопрос</th>
                     <th>Тип вопроса</th>
                     <th>Редактировать</th>
@@ -242,14 +241,8 @@ src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js
             }else {
                 $('#addquestion').submit();
             }
-          }
-        )}
-    );
-</script>
+          });
 
-
-<script type="text/javascript">
-    $(document).ready(function () {
         $("#deletecategory").click(function () {
             $.ajax({
                 type: "POST",
@@ -289,14 +282,8 @@ src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js
                     });
 
                 }
-                ;
             });
         });
-    });
-</script>
-
-<script type="text/javascript">
-    $(document).ready(function () {
 
         $("#addcategory").click(function () {
             if (document.getElementById('namecategory').value!=''){
@@ -335,13 +322,8 @@ src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js
                 }
             });
         }
-    })
     });
-</script>
 
-
-<script type="text/javascript">
-    $(document).ready(function () {
         $("#updatecategory").click(function () {
 
             if (document.getElementById('upcategory').value!=''){
@@ -387,14 +369,6 @@ src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js
     }
     );
 </script>
-
-<script type="text/javascript">
-    function clearParent() {
-        document.getElementById('category').value = ""
-        document.getElementById('parent').value = ""
-    }
-</script>
-
 
 <script type="text/javascript" charset="utf-8">
     var parent;
@@ -499,7 +473,10 @@ src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js
             }
         });
     }
-    ;
+    function clearParent() {
+        document.getElementById('category').value = ""
+        document.getElementById('parent').value = ""
+    }
 </script>
 
 
