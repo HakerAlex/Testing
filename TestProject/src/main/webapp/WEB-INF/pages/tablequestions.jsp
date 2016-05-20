@@ -409,9 +409,7 @@ src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js
         })
 
     });
-</script>
 
-<script type="text/javascript" charset="utf-8">
     function fundelquestion(idquestion) {
         $.confirm({
             template: 'primary',

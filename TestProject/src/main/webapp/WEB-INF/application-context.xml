@@ -38,6 +38,8 @@
     <bean id="firstPageRepository" class="com.springapp.mvc.repository.FirstPageRepository"/>
     <bean id="userRepository" class="com.springapp.mvc.repository.UserRepository"/>
     <bean id="categoryRepository" class="com.springapp.mvc.repository.CategoryRepository"/>
+    <bean id="testcategoryRepository" class="com.springapp.mvc.repository.TestcategoryRepository"/>
+    <bean id="testRepository" class="com.springapp.mvc.repository.TestRepository"/>
     <bean id="questionRepository" class="com.springapp.mvc.repository.QuestionRepository"/>
 
     <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">

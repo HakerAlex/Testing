@@ -35,92 +35,119 @@
 
     <div class="container" style="border-color: transparent">
         <%----%>
-
-
         <div class="col-xs-4">
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="ti-folder"></i></span>
-                    <input type="text" value="${categoryfortest}" class="form-control" id="categoryfortest"
-                           name="categoryfortest" placeholder="Категория" disabled>
+
+
+            <div class="panel panel-info" style="background: transparent">
+                <div class="panel-heading">Справочная информация</div>
+                <br>
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="ti-folder"></i></span>
+                        <input type="text" value="${categoryfortest}" class="form-control" id="categoryfortest"
+                               name="categoryfortest" placeholder="Категория" disabled>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="ti-key"></i></span>
+                        <input type="text" value="${code}" class="form-control" id="code"
+                               name="code" placeholder="Код теста" disabled>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="ti-info"></i></span>
+                        <input type="text" class="form-control" id="href"
+                               name="href"  value="${href}" placeholder="Ссылка на тест" title="Прямая ссылка на тест" disabled>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="ti-info"></i></span>
+                        <input type="text" class="form-control" id="author"
+                               name="author" value="${author}" placeholder="Автор" title="Автор теста" disabled>
+                    </div>
                 </div>
             </div>
 
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="ti-info"></i></span>
-                    <input type="text" class="form-control" id="href"
-                           name="href" placeholder="Ссылка на тест" title="Прямая ссылка на тест" disabled >
+
+            <div class="panel panel-info" style="background: transparent">
+                <div class="panel-heading">Информация по тесту</div>
+                <br>
+
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="ti-agenda"></i></span>
+                        <input type="text" class="form-control" id="title"
+                               name="title"  value="${title}" placeholder="Название теста">
+                    </div>
                 </div>
-            </div>
 
-
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="ti-agenda"></i></span>
-                    <input type="text" class="form-control" id="title"
-                           name="title" placeholder="Название теста">
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="ti-calendar"></i></span>
+                        <input type="date" class="form-control" id="dateopen"
+                               name="dateopen" value="${dateopen}" placeholder="Дата открытия"
+                               title="Дата когда тест начнет быть доступным">
+                    </div>
                 </div>
-            </div>
 
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="ti-calendar"></i></span>
-                    <input type="date" class="form-control" id="dateopen"
-                           name="dateopen" placeholder="Дата открытия" title="Дата когда тест начнет быть доступным">
+                <div class="form-group">
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="ti-power-off"></i></span>
+                        <input type="date" class="form-control" id="dateclose"
+                               name="dateclose" placeholder="Дата закрытия"
+                               value="${dateclose}" title="Дата когда тест перестанет быть доступным">
+                    </div>
                 </div>
-            </div>
 
+                <div class="btn-group" data-toggle="buttons">
+                    <label class="btn btn-success active">
+                        <input type="radio" name="access" id="option1" value="all" checked=""> Всем
+                    </label>
 
-            <div class="form-group">
-                <div class="input-group">
-                    <span class="input-group-addon"><i class="ti-power-off"></i></span>
-                    <input type="date" class="form-control" id="dateclose"
-                           name="dateclose" placeholder="Дата закрытия" title="Дата когда тест перестанет быть доступным">
+                    <label class="btn btn-danger ">
+                        <input type="radio" name="access" id="option2" value="only"> По ссылке
+                    </label>
                 </div>
+
+                <div class="form-group">
+                    <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 15px">
+                    <button type="button" class="btn btn-primary btn-search" id="writetest">Записать тест в базу
+                    </button>
+                </div>
+
             </div>
 
-            <div class="btn-group" data-toggle="buttons">
-                <label class="btn btn-success active">
-                    <input type="radio" name="access" id="option1" value="all"> Всем
-                </label>
-
-                <label class="btn btn-danger ">
-                    <input type="radio" name="access" id="option2" value="only" checked=""> По ссылке
-                </label>
-            </div>
-
-        </div>
+    </div>
 
 
-        <div class="col-lg-8">
+    <div class="col-lg-8">
+        <button type="button" class="btn btn-primary btn-search" id="addquestions">Добавить вопросы</button>
+        <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 15px">
+        <table id="test" class="table" data-provide="data-table" cellspacing="0" width="100%">
 
-            <div class="form-group">
-                <a href="#myModal" data-toggle="modal"
-                   class="btn btn-primary btn-search">Добавить вопросы</a>
-            </div>
+            <thead>
+            <tr>
+                <th>Вопрос</th>
+                <th>Удалить</th>
+            </tr>
+            </thead>
 
-            <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 15px">
-            <table id="test" class="table" data-provide="data-table" cellspacing="0" width="100%">
-
-                <thead>
-                <tr>
-                    <th>Вопрос</th>
-                    <th>Удалить</th>
-                </tr>
-                </thead>
-
-            </table>
-
-        </div>
+        </table>
+    </div>
+    </div>
 
     </div>
 
 </header>
 
 <main>
-    <%--ouranswerID--%>
-    <input type="hidden" class="form-control" id="answerid" name="answerid">
 
 
     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
@@ -185,14 +212,16 @@
 <script type="text/javascript"
         src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-treeview.js"></script>
 
+<script type="text/javascript"
+        src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-notify.js"></script>
+
+
 <script type="text/javascript">
     function getTree() {
         return ${tree};
     }
     $('#treeview').treeview({data: getTree()});
-</script>
 
-<script type="text/javascript">
     function expand() {
         $('#treeview').treeview('expandAll', {levels: 100, silent: true});
     }
@@ -200,10 +229,6 @@
         $('#treeview').treeview('collapseAll', {levels: 100, silent: true});
     }
 
-</script>
-
-
-<script type="text/javascript" charset="utf-8">
     var parent;
     $('#treeview').on('nodeSelected', function (event, data) {
 
@@ -222,7 +247,93 @@
     });
 </script>
 
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#writetest").click(function () {
 
+
+            if ($('#title').val()=="") {
+
+                $.confirm({
+                            title: 'Информация',
+                            titleIcon: 'glyphicon glyphicon-info-sign',
+                            template: 'info',
+                            templateOk: 'info',
+                            message: 'Напишите название теста',
+                            labelOk: 'ОК',
+                            buttonCancel: false,
+                            onOk: function () {
+                            }
+                        }
+                )
+            }
+
+            else {
+
+            $.ajax({
+                type: "POST",
+                url: "${pageContext.request.contextPath}/writetest",
+                data: {
+                    category: $('#categoryfortest').val(),
+                    context: "${pageContext.request.contextPath}",
+                    title: $('#title').val(),
+                    dateopen: $('#dateopen').val(),
+                    dateclose: $('#dateclose').val(),
+                    code: $('#code').val(),
+                    access: $("input[name='access']:checked").val(),
+                    success: {
+                        function (codeQ) {
+                        }
+                    },
+                    error: {
+                        function (codeQ) {
+                        }
+                    }
+                }
+            }).done(function (element) {
+                pardesc = JSON.parse(element);
+                $('#code').val(pardesc.code);
+                $('#href').val(pardesc.href);
+                $('#author').val(pardesc.author);
+
+                $.confirm({
+                            title: 'Информация',
+                            titleIcon: 'glyphicon glyphicon-info-sign',
+                            template: 'info',
+                            templateOk: 'info',
+                            message: 'Тест записан',
+                            labelOk: 'ОК',
+                            buttonCancel: false,
+                            onOk: function () {
+                            }
+                        }
+                )
+            })
+        }
+    });
+        $("#addquestions").click(function () {
+
+            if (document.getElementById('code').value.trim() == '') {
+                $.confirm({
+                            title: 'Информация',
+                            titleIcon: 'glyphicon glyphicon-info-sign',
+                            template: 'info',
+                            templateOk: 'info',
+                            message: 'Необходимо записать тест, перед добавлением ответов',
+                            labelOk: 'ОК',
+                            buttonCancel: false,
+                            onOk: function () {
+                            }
+                        }
+                )
+            }
+            else {
+                $("#myModal").modal('show');
+            }
+        })
+
+    });
+</script>
 </body>
 </html>
 

@@ -242,15 +242,14 @@
         src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-treeview.js"></script>
 
 <script type="text/javascript">
+
     $('input[type=file]').bootstrapFileInput();
 
     function getTree() {
         return ${tree};
     }
     $('#treeview').treeview({data: getTree()});
-</script>
 
-<script type="text/javascript">
     function expand() {
         $('#treeview').treeview('expandAll', {levels: 100, silent: true});
     }
@@ -338,7 +337,6 @@
                     });
 
                 }
-                ;
             });
         });
     });
@@ -537,7 +535,7 @@
                     type: "POST",
                     url: "${pageContext.request.contextPath}/deltest",
                     data: {
-                        id: idquestion,
+                        id: idtest,
                         context: "${pageContext.request.contextPath}",
                         category: document.getElementById('category').value
                     },

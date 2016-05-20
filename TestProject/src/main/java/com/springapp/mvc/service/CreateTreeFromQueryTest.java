@@ -1,7 +1,9 @@
 package com.springapp.mvc.service;
 
 import com.springapp.mvc.domain.CategoriesEntity;
+import com.springapp.mvc.domain.QuestionsEntity;
 import com.springapp.mvc.domain.TestcategoriesEntity;
+import com.springapp.mvc.domain.TestsEntity;
 import com.springapp.mvc.repository.CategoryRepository;
 import com.springapp.mvc.repository.TestcategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,9 @@ public class CreateTreeFromQueryTest {
 
     @Autowired
     private TestcategoryRepository testcategoryRepository;
+
+    @Autowired(required = false)
+    private CreateTreeFromQuery treeBean;
 
 
     private StringBuilder getElementTree(TestcategoriesEntity ourElement, StringBuilder element) {
@@ -52,6 +57,59 @@ public class CreateTreeFromQueryTest {
         ourTree.append("]");
         String replace = "nodes: \\[\\]";
         return ourTree.toString().replaceAll(replace, "");
+    }
+
+    @Transactional(readOnly = true)
+    public String getTestByCategory(String category, String context) {
+        List<TestsEntity> ourQuestion = testcategoryRepository.getAllTestByCategoryID(new Integer(treeBean.returnCode(category)));
+        StringBuilder ourTable = new StringBuilder(200);
+
+        ourTable.append(" <thead> ");
+        ourTable.append("<tr> ");
+        ourTable.append("<th>Тест</th> ");
+        ourTable.append("<th>Редактировать</th> ");
+        ourTable.append("<th>Удалить</th> ");
+        ourTable.append("</tr> ");
+        ourTable.append("</thead> ");
+
+
+        ourTable.append("<tbody> ");
+        for (TestsEntity ourElement : ourQuestion) {
+            ourTable.append(" <tr> ");
+
+            ourTable.append(" <td>");
+            ourTable.append(ourElement.getTestname());
+            ourTable.append(" </td> ");
+
+
+            ourTable.append(" <td>");
+            ourTable.append(" <span class=\"tooltip-area\">");
+            ourTable.append(" <a href=\"");
+            ourTable.append("javascript:funedittest(");
+            ourTable.append(ourElement.getId());
+            ourTable.append(")\"");
+            ourTable.append(" class=\"label btn-success\"> <i class=\"fa fa-pencil\">Редактировать</i></a>");
+            ourTable.append(" </span>");
+            ourTable.append(" </td>");
+
+
+            ourTable.append(" <td>");
+            ourTable.append(" <span class=\"tooltip-area\">");
+            ourTable.append(" <a href=\"");
+            ourTable.append("javascript:fundeltest(");
+            ourTable.append(ourElement.getId());
+            ourTable.append(")\"");
+            ourTable.append(" class=\"label btn-danger\"> <i class=\"fa fa-trash\">Удалить</i></a>");
+            ourTable.append(" </span>");
+            ourTable.append(" </td>");
+
+            ourTable.append(" </tr>");
+
+        }
+        ourTable.append(" </tbody>");
+
+        return ourTable.toString();
+
     }
 
 }
