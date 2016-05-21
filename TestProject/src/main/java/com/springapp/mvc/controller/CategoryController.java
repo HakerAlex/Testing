@@ -146,6 +146,7 @@ public class CategoryController {
         if (getChildElement.intValue() == 0) {
             QuestionsEntity ques = questionRepository.getQuestionByID(question);
             try {
+                questionRepository.deleteAnswersByQuestion(question);
                 questionRepository.deleteQuestion(ques);
             } catch (Exception e) {
                 e.printStackTrace();

@@ -1,10 +1,8 @@
 package com.springapp.mvc.service;
 
-import com.springapp.mvc.domain.CategoriesEntity;
-import com.springapp.mvc.domain.QuestionsEntity;
-import com.springapp.mvc.domain.TestcategoriesEntity;
-import com.springapp.mvc.domain.TestsEntity;
+import com.springapp.mvc.domain.*;
 import com.springapp.mvc.repository.CategoryRepository;
+import com.springapp.mvc.repository.TestRepository;
 import com.springapp.mvc.repository.TestcategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,9 +16,11 @@ public class CreateTreeFromQueryTest {
     @Autowired
     private TestcategoryRepository testcategoryRepository;
 
+    @Autowired
+    private TestRepository testRepository;
+
     @Autowired(required = false)
     private CreateTreeFromQuery treeBean;
-
 
     private StringBuilder getElementTree(TestcategoriesEntity ourElement, StringBuilder element) {
         element.append("{text:  \" Код:");
@@ -68,6 +68,7 @@ public class CreateTreeFromQueryTest {
         ourTable.append("<tr> ");
         ourTable.append("<th>Тест</th> ");
         ourTable.append("<th>Редактировать</th> ");
+        ourTable.append("<th>Скопировать</th> ");
         ourTable.append("<th>Удалить</th> ");
         ourTable.append("</tr> ");
         ourTable.append("</thead> ");
@@ -85,13 +86,66 @@ public class CreateTreeFromQueryTest {
             ourTable.append(" <td>");
             ourTable.append(" <span class=\"tooltip-area\">");
             ourTable.append(" <a href=\"");
-            ourTable.append("javascript:funedittest(");
+            ourTable.append(context);
+            ourTable.append("/edittest/");
             ourTable.append(ourElement.getId());
-            ourTable.append(")\"");
-            ourTable.append(" class=\"label btn-success\"> <i class=\"fa fa-pencil\">Редактировать</i></a>");
+            ourTable.append("\"");
+            ourTable.append(" class=\"label btn-info\"> <i class=\"fa fa-pencil\">Редактировать</i> </a>");
             ourTable.append(" </span>");
             ourTable.append(" </td>");
 
+            ourTable.append(" <td>");
+            ourTable.append(" <span class=\"tooltip-area\">");
+            ourTable.append(" <a href=\"");
+            ourTable.append("javascript:funcopytest(");
+            ourTable.append(ourElement.getId());
+            ourTable.append(")\"");
+            ourTable.append(" class=\"label btn-primary\"> <i class=\"fa fa-pencil\">Скопировать</i></a>");
+            ourTable.append(" </span>");
+            ourTable.append(" </td>");
+
+
+            ourTable.append(" <td>");
+            ourTable.append(" <span class=\"tooltip-area\">");
+            ourTable.append(" <a href=\"");
+            ourTable.append("javascript:fundeltest(");
+            ourTable.append(ourElement.getId());
+            ourTable.append(")\"");
+            ourTable.append(" class=\"label btn-danger\"> <i class=\"fa fa-trash\">Удалить</i></a>");
+            ourTable.append(" </span>");
+            ourTable.append(" </td>");
+
+
+
+            ourTable.append(" </tr>");
+
+        }
+        ourTable.append(" </tbody>");
+
+        return ourTable.toString();
+
+    }
+
+    @Transactional(readOnly = true)
+    public String getQuestionsByTestID(int id) {
+        List<TestQuestionsEntity> ourQuestions = testRepository.getQuestionByTestID(id);
+        StringBuilder ourTable = new StringBuilder(200);
+
+        ourTable.append(" <thead> ");
+        ourTable.append("<tr> ");
+        ourTable.append("<th>Вопрос</th> ");
+        ourTable.append("<th>Удалить</th> ");
+        ourTable.append("</tr> ");
+        ourTable.append("</thead> ");
+
+
+        ourTable.append("<tbody> ");
+        for (TestQuestionsEntity ourElement : ourQuestions) {
+            ourTable.append(" <tr> ");
+
+            ourTable.append(" <td>");
+            ourTable.append(ourElement.getQuestionsEntity().getQuestion());
+            ourTable.append(" </td> ");
 
             ourTable.append(" <td>");
             ourTable.append(" <span class=\"tooltip-area\">");
@@ -111,6 +165,8 @@ public class CreateTreeFromQueryTest {
         return ourTable.toString();
 
     }
+
+
 
 }
 

@@ -93,11 +93,19 @@ public class QuestionRepository {
 
     public BigDecimal getChildRecordCount(int questionid) {
         return (BigDecimal) session.getCurrentSession().createSQLQuery("SELECT SUM(reccount) as reccount from\n" +
-                "  (SELECT count(ID_question) as reccount from answers where ID_question=:id\n" +
-                "UNION ALL\n" +
-                "   SELECT count(ID_question) from answers_user WHERE ID_question=:id\n" +
+                "  (SELECT count(ID_question) as reccount from answers_user WHERE ID_question=:id\n" +
                 "UNION All\n" +
                 "   SELECT count(ID_question) from test_questions WHERE ID_question=:id) as ob").setInteger("id", questionid).uniqueResult();
+    }
+
+
+    public void deleteAnswersByQuestion(int idQuestion) throws Exception {
+        try {
+            session.getCurrentSession().createSQLQuery("delete from answers where ID_question=:idquestion").setInteger("idquestion",idQuestion).executeUpdate();
+        } catch (HibernateException e) {
+            throw new Exception("Невозможно удалить вопрос ", e);
+        }
+
     }
 
     public void deleteQuestion(QuestionsEntity questionsEntity) throws Exception {

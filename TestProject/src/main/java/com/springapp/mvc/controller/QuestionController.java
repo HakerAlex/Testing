@@ -4,6 +4,7 @@ import com.springapp.mvc.domain.AnswersEntity;
 import com.springapp.mvc.domain.AnswersUserEntity;
 import com.springapp.mvc.domain.QuestionsEntity;
 import com.springapp.mvc.repository.QuestionRepository;
+import com.springapp.mvc.service.CreateTreeFromQuery;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -18,11 +19,8 @@ public class QuestionController {
     @Autowired
     private QuestionRepository questionRepository;
 
-    private String returnCode(String parent) {
-        String ID = parent.substring(5);
-        int pos = ID.indexOf(" ");
-        return ID.substring(0, pos);
-    }
+    @Autowired(required = false)
+    private CreateTreeFromQuery treeBean;
 
     public String stripTags(String xmlStr){
         xmlStr = xmlStr.replaceAll("<(.)+?>", "");
@@ -37,7 +35,7 @@ public class QuestionController {
 
         int categoryID;
         if (!category.equals("")) {
-            categoryID = new Integer(returnCode(category));
+            categoryID = new Integer(treeBean.returnCode(category));
         } else {
             categoryID = 0;
         }
@@ -182,19 +180,21 @@ public class QuestionController {
             }
         }
 
+        if (answerid.equals("")) {answerid="0";}
+
         List<AnswersEntity> myAnswers = questionRepository.getAnswersByQuestion(codequestion);
 
         StringBuilder error=new StringBuilder(100);
 
         if (typeq == 3 && myAnswers.size() > 0) {
-            if (myAnswers.get(0).getId() != new Integer(answerid) || myAnswers.size()>1) {
+            if (myAnswers.get(0).getId() != new Integer(answerid)) {
                 error.append("Не может быть несколько ответов при таком типе вопроса");
                 return error.toString();
             }
         }
 
         AnswersEntity ourAnswer;
-        if (!answerid.equals("")) {
+        if (!answerid.equals("0")) {
             ourAnswer = questionRepository.getAnswersByID(new Integer(answerid));
         } else {
             ourAnswer = new AnswersEntity(); //empty entities
@@ -259,6 +259,7 @@ public class QuestionController {
 
         return "addquestion";
     }
+
     @PreAuthorize("hasRole('admin')")
     @RequestMapping(value = "/editquestion/{id}/{context}", method = RequestMethod.GET)
     public String addQuestion(@PathVariable int id, @PathVariable String context, Model model) {

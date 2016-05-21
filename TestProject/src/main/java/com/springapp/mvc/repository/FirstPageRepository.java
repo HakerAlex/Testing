@@ -22,5 +22,8 @@ public class FirstPageRepository {
         return sessionFactory.getCurrentSession().createSQLQuery("SELECT * FROM testcategories").addEntity(TestcategoriesEntity.class).list();
     }
 
+    public List<TestcategoriesEntity> listCategoriesByParentID(int parentid) {
+        return sessionFactory.getCurrentSession().createSQLQuery("SELECT * FROM testcategories WHERE parent=:parentid").addEntity(TestcategoriesEntity.class).setInteger("parentid",parentid).list();
+    }
 
 }

@@ -69,6 +69,7 @@
                 <tr>
                     <th>Тест</th>
                     <th>Редактировать</th>
+                    <th>Скопировать</th>
                     <th>Удалить</th>
                 </tr>
                 </thead>
@@ -127,7 +128,9 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-primary" onclick="clearParent()">Очистить родителя
                             </button>
-                            <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="clearElements()">Отмена</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal" onclick="clearElements()">
+                                Отмена
+                            </button>
                             <button type="button" class="btn btn-primary" data-dismiss="modal" id="addcategory">Добавить
                             </button>
                         </div>
@@ -154,7 +157,7 @@
                                    placeholder="Новое значение">
                         </div>
                         <input type="hidden" id="oldcategory" value="" class="form-control" name="parent"
-                                   placeholder="Старое значение" disabled>
+                               placeholder="Старое значение" disabled>
 
                         <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 5px">
 
@@ -258,11 +261,11 @@
     }
 
     function clearElements() {
-        document.getElementById('namecategory').value="";
-        document.getElementById('description').value="";
-        document.getElementById('category').value="";
-        document.getElementById('pimg').value="";
-        $('#uploadImage').siblings('span').html('Выберите файл картинки').attr('title','Выберите файл картинки').show();
+        $('#namecategory').val("");
+        $('#description').val("");
+        $('#category').val("");
+        $('#pimg').val("");
+        $('#uploadImage').siblings('span').html('Выберите файл картинки').attr('title', 'Выберите файл картинки').show();
         $("#uploadPreview").hide();
     }
 
@@ -272,7 +275,7 @@
 <script type="text/javascript">
     $(document).ready(function () {
                 $("#addnewtest").click(function () {
-                            if (document.getElementById('categoryfortest').value == '') {
+                            if ($('#categoryfortest').val() == '') {
                                 $.confirm({
                                     title: 'Внимание',
                                     titleIcon: 'glyphicon glyphicon-warning-sign',
@@ -298,99 +301,88 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
-        $("#deletecategory").click(function () {
-            $.ajax({
-                type: "POST",
-                url: "${pageContext.request.contextPath}/delcategorytest",
-                data: {
-                    namecategory: document.getElementById('delcategory').value
-                }
-            }).done(function (msg) {
-                if (msg != "") {
-
-                    $.confirm({
-                        title: 'Внимание',
-                        titleIcon: 'glyphicon glyphicon-warning-sign',
-                        template: 'warning',
-                        templateOk: 'warning',
-                        message: msg,
-                        labelOk: 'ОК',
-                        buttonCancel: false,
-                        onOk: function () {
+                $("#deletecategory").click(function () {
+                    $.ajax({
+                        type: "POST",
+                        url: "${pageContext.request.contextPath}/delcategorytest",
+                        data: {
+                            namecategory: document.getElementById('delcategory').value
                         }
-                    });
+                    }).done(function (msg) {
+                        if (msg != "") {
 
-                }
-                else {
+                            $.confirm({
+                                title: 'Внимание',
+                                titleIcon: 'glyphicon glyphicon-warning-sign',
+                                template: 'warning',
+                                templateOk: 'warning',
+                                message: msg,
+                                labelOk: 'ОК',
+                                buttonCancel: false,
+                                onOk: function () {
+                                }
+                            });
 
-                    $.confirm({
-                        title: 'Информация',
-                        titleIcon: 'glyphicon glyphicon-info-sign',
-                        template: 'info',
-                        templateOk: 'info',
-                        message: 'Категория удалена.',
-                        labelOk: 'ОК',
-                        buttonCancel: false,
-                        onOk: function () {
-                            location.reload();
                         }
-                    });
+                        else {
 
-                }
-            });
-        });
-    });
-</script>
+                            $.confirm({
+                                title: 'Информация',
+                                titleIcon: 'glyphicon glyphicon-info-sign',
+                                template: 'info',
+                                templateOk: 'info',
+                                message: 'Категория удалена.',
+                                labelOk: 'ОК',
+                                buttonCancel: false,
+                                onOk: function () {
+                                    location.reload();
+                                }
+                            });
 
-<script type="text/javascript">
-    $(document).ready(function () {
-
-        $("#addcategory").click(function () {
-            if (document.getElementById('namecategory').value != '') {
-                $.ajax({
-                    type: "POST",
-                    url: "${pageContext.request.contextPath}/addcategorytest",
-                    data: {
-                        namecategory: document.getElementById('namecategory').value,
-                        description: document.getElementById('description').value,
-                        parent: document.getElementById('category').value,
-                        picture: document.getElementById('pimg').value
-                    }
-                }).done(function (tree) {
-                    $.confirm({
-                        title: 'Информация',
-                        titleIcon: 'glyphicon glyphicon-info-sign',
-                        template: 'info',
-                        templateOk: 'info',
-                        message: 'Категория добавлена.',
-                        labelOk: 'ОК',
-                        buttonCancel: false,
-                        onOk: function () {
-                            location.reload();
                         }
                     });
                 });
-            }
-            else {
-                $.confirm({
-                    title: 'Внимание',
-                    titleIcon: 'glyphicon glyphicon-warning-sign',
-                    template: 'warning',
-                    templateOk: 'warning',
-                    message: 'Нельзя создавать пустую категорию.',
-                    labelOk: 'ОК',
-                    buttonCancel: false,
-                    onOk: function () {
+
+                $("#addcategory").click(function () {
+                    if ($('#namecategory').val() != '') {
+                        $.ajax({
+                            type: "POST",
+                            url: "${pageContext.request.contextPath}/addcategorytest",
+                            data: {
+                                namecategory: document.getElementById('namecategory').value,
+                                description: document.getElementById('description').value,
+                                parent: document.getElementById('category').value,
+                                picture: document.getElementById('pimg').value
+                            }
+                        }).done(function (tree) {
+                            $.confirm({
+                                title: 'Информация',
+                                titleIcon: 'glyphicon glyphicon-info-sign',
+                                template: 'info',
+                                templateOk: 'info',
+                                message: 'Категория добавлена.',
+                                labelOk: 'ОК',
+                                buttonCancel: false,
+                                onOk: function () {
+                                    location.reload();
+                                }
+                            });
+                        });
+                    }
+                    else {
+                        $.confirm({
+                            title: 'Внимание',
+                            titleIcon: 'glyphicon glyphicon-warning-sign',
+                            template: 'warning',
+                            templateOk: 'warning',
+                            message: 'Нельзя создавать пустую категорию.',
+                            labelOk: 'ОК',
+                            buttonCancel: false,
+                            onOk: function () {
+                            }
+                        });
                     }
                 });
-            }
-        })
-    });
-</script>
-
-
-<script type="text/javascript">
-    $(document).ready(function () {
                 $("#updatecategory").click(function () {
 
                             if (document.getElementById('upcategory').value != '') {
@@ -398,11 +390,11 @@
                                     type: "POST",
                                     url: "${pageContext.request.contextPath}/updatecategorytest",
                                     data: {
-                                        namecategory: document.getElementById('upcategory').value,
-                                        oldcategory: document.getElementById('oldcategory').value,
-                                        parent: document.getElementById('parent').value,
-                                        description: document.getElementById('descr').value,
-                                        picture: document.getElementById('pimg2').value
+                                        namecategory: $('#upcategory').val(),
+                                        oldcategory: $('#oldcategory').val(),
+                                        parent: $('#parent').val(),
+                                        description: $('#descr').val(),
+                                        picture: $('#pimg2').val()
                                     }
                                 }).done(function (tree) {
 
@@ -441,13 +433,9 @@
 
 <script type="text/javascript">
     function clearParent() {
-        document.getElementById('category').value = ""
-        document.getElementById('parent').value = ""
+        $('#category').val("");
+        $('#parent').val("");
     }
-</script>
-
-
-<script type="text/javascript" charset="utf-8">
     var parent;
     $('#treeview').on('nodeSelected', function (event, data) {
 
@@ -487,27 +475,24 @@
         }).done(function (element) {
 
             $('#pimg2').val("");
-            $('#uploadIm').siblings('span').html('Выберите файл картинки').attr('title','Выберите файл картинки').show();
+            $('#uploadIm').siblings('span').html('Выберите файл картинки').attr('title', 'Выберите файл картинки').show();
             $("#uploadPr").hide();
 
-            if (element!=""){
+            if (element != "") {
                 var uploadPreview = $("#uploadPr");
-                uploadPreview.attr('src',element).show();
+                uploadPreview.attr('src', element).show();
                 $("#pimg2").val(element);
-            $("#uploadIm").change(function () {
-                var img = new Image();
-                img.onload = function () {
-                    pic_width = this.width;
-                    pic_height = this.height;
-                };
-                img.src = element;
+                $("#uploadIm").change(function () {
+                    var img = new Image();
+                    img.onload = function () {
+                        pic_width = this.width;
+                        pic_height = this.height;
+                    };
+                    img.src = element;
 
-            });
+                });
             }
         });
-
-
-
 
         $.ajax({
             type: "POST",
@@ -522,10 +507,16 @@
         })
 
     });
-</script>
 
-<script type="text/javascript" charset="utf-8">
     function fundeltest(idtest) {
+        var cont;
+        if (${pageContext.request.contextPath==""}) {
+            cont = "empty";
+        }
+        else {
+            cont = "${pageContext.request.contextPath}"
+        }
+
         $.confirm({
             template: 'primary',
             templateOk: 'primary',
@@ -536,8 +527,8 @@
                     url: "${pageContext.request.contextPath}/deltest",
                     data: {
                         id: idtest,
-                        context: "${pageContext.request.contextPath}",
-                        category: document.getElementById('category').value
+                        context: cont,
+                        category: $('#category').val()
                     },
                     dataType: "text",
                     success: {
@@ -580,6 +571,58 @@
                         });
 
                     }
+                });
+            },
+            onCancel: function () {
+            }
+        });
+    }
+
+
+    function funcopytest(idtest) {
+        var cont;
+        if (${pageContext.request.contextPath==""}) {
+            cont = "empty";
+        }
+        else {
+            cont = "${pageContext.request.contextPath}"
+        }
+
+        $.confirm({
+            template: 'primary',
+            templateOk: 'primary',
+            message: 'Вы уверены что хотите скопировать тест?',
+            onOk: function () {
+                $.ajax({
+                    type: "POST",
+                    url: "${pageContext.request.contextPath}/copytest",
+                    data: {
+                        id: idtest,
+                        context: cont,
+                        category: $('#category').val()
+                    },
+                    dataType: "text",
+                    success: {
+                        function () {
+                        },
+                        error: {
+                            function () {
+                            }
+                        }
+                    }
+                }).done(function (element) {
+                    $.confirm({
+                        title: 'Информация',
+                        titleIcon: 'glyphicon glyphicon-info-sign',
+                        template: 'info',
+                        templateOk: 'info',
+                        message: 'Тест скопирован',
+                        labelOk: 'ОК',
+                        buttonCancel: false,
+                        onOk: function () {
+                            $("#tests").html(element);
+                        }
+                    });
                 });
             },
             onCancel: function () {

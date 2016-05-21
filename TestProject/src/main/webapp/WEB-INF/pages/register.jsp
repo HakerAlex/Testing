@@ -45,7 +45,7 @@
                         <span class="input-group-addon"><i class="ti-user"></i></span>
                         <input type="text" value="${name}" class="form-control" name="name" placeholder="Ваше имя">
                     </div>
-
+                </div>
                     <c:if test="${!empty errorname}">
                         <div class="bs-example">
                             <div class="alert alert-danger">
@@ -55,7 +55,7 @@
                         </div>
                     </c:if>
 
-                </div>
+
 
                 <hr class="hr-xs">
 

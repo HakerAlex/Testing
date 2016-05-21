@@ -62,13 +62,14 @@
                     <div class="input-group">
                         <span class="input-group-addon"><i class="ti-info"></i></span>
                         <input type="text" class="form-control" id="href"
-                               name="href"  value="${href}" placeholder="Ссылка на тест" title="Прямая ссылка на тест" disabled>
+                               name="href" value="${href}" placeholder="Ссылка на тест" title="Прямая ссылка на тест"
+                               disabled>
                     </div>
                 </div>
 
                 <div class="form-group">
                     <div class="input-group">
-                        <span class="input-group-addon"><i class="ti-info"></i></span>
+                        <span class="input-group-addon"><i class="ti-user"></i></span>
                         <input type="text" class="form-control" id="author"
                                name="author" value="${author}" placeholder="Автор" title="Автор теста" disabled>
                     </div>
@@ -84,7 +85,7 @@
                     <div class="input-group">
                         <span class="input-group-addon"><i class="ti-agenda"></i></span>
                         <input type="text" class="form-control" id="title"
-                               name="title"  value="${title}" placeholder="Название теста">
+                               name="title" value="${title}" placeholder="Название теста">
                     </div>
                 </div>
 
@@ -106,14 +107,27 @@
                     </div>
                 </div>
 
-                <div class="btn-group" data-toggle="buttons">
-                    <label class="btn btn-success active">
-                        <input type="radio" name="access" id="option1" value="all" checked=""> Всем
-                    </label>
 
-                    <label class="btn btn-danger ">
-                        <input type="radio" name="access" id="option2" value="only"> По ссылке
-                    </label>
+                <div class="btn-group" data-toggle="buttons">
+                    <c:if test="${type==1}">
+                        <label class="btn btn-success active">
+                            <input type="radio" name="access" id="option1" value="all" checked=""> Всем
+                        </label>
+
+                        <label class="btn btn-danger ">
+                            <input type="radio" name="access" id="option2" value="only"> По ссылке
+                        </label>
+                    </c:if>
+
+                    <c:if test="${type==0}">
+                        <label class="btn btn-success">
+                            <input type="radio" name="access" id="option1" value="all"> Всем
+                        </label>
+
+                        <label class="btn btn-danger active">
+                            <input type="radio" name="access" id="option2" value="only" checked=""> По ссылке
+                        </label>
+                    </c:if>
                 </div>
 
                 <div class="form-group">
@@ -124,23 +138,16 @@
 
             </div>
 
-    </div>
+        </div>
 
 
-    <div class="col-lg-8">
-        <button type="button" class="btn btn-primary btn-search" id="addquestions">Добавить вопросы</button>
-        <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 15px">
-        <table id="test" class="table" data-provide="data-table" cellspacing="0" width="100%">
-
-            <thead>
-            <tr>
-                <th>Вопрос</th>
-                <th>Удалить</th>
-            </tr>
-            </thead>
-
-        </table>
-    </div>
+        <div class="col-lg-8">
+            <button type="button" class="btn btn-primary btn-search" id="addquestions">Добавить вопросы</button>
+            <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 15px">
+            <table id="test" class="table" data-provide="data-table" cellspacing="0" width="100%">
+                ${table}
+            </table>
+        </div>
     </div>
 
     </div>
@@ -245,6 +252,107 @@
         })
 
     });
+
+    function funaddquestion(id) {
+        $.ajax({
+            type: "POST",
+            url: "${pageContext.request.contextPath}/addquestionfortest",
+            data: {
+                idtest: $('#code').val(),
+                idquestion: id
+            }
+        }).done(function (element) {
+
+                    if (element != "Вопрос уже добавлен!") {
+
+                        $.notify({
+                            icon: 'glyphicon glyphicon-info-sign',
+                            message: "Внимание добавлен вопрос в тест"
+                        }, {
+                            // settings
+                            type: 'success',
+                            delay: 200
+                        });
+
+                        $("#test").html(element);
+
+                    }
+                    else {
+                        $.confirm({
+                                    title: 'Информация',
+                                    titleIcon: 'glyphicon glyphicon-info-sign',
+                                    template: 'info',
+                                    templateOk: 'info',
+                                    message: element,
+                                    labelOk: 'ОК',
+                                    buttonCancel: false,
+                                    onOk: function () {
+                                    }
+                                }
+                        )
+                    }
+
+                }
+        )
+    }
+
+    function fundeltest(id) {
+
+
+        $.confirm({
+                    title: 'Подтверждение',
+                    titleIcon: 'glyphicon glyphicon-info-sign',
+                    template: 'info',
+                    templateOk: 'info',
+                    message: 'Вы уверены что хотите удалить вопрос?',
+                    labelOk: 'ОК',
+                    buttonCancel: false,
+                    onOk: function () {
+
+                        $.ajax({
+                            type: "POST",
+                            url: "${pageContext.request.contextPath}/delquestionfromtest",
+                            data: {
+                                idtest: $('#code').val(),
+                                idquestion: id,
+                            }
+                        }).done(function (element) {
+
+                            if (element != "error") {
+                                $.notify({
+                                    icon: 'glyphicon glyphicon-info-sign',
+                                    message: "Внимание вопрос удален из теста"
+                                }, {
+                                    // settings
+                                    type: 'danger',
+                                    delay: 200
+                                });
+
+
+                                $("#test").html(element);
+                            }
+                            else {
+                                $.confirm({
+                                            title: 'Внимание',
+                                            titleIcon: 'glyphicon glyphicon-warning-sign',
+                                            template: 'warning',
+                                            templateOk: 'warning',
+                                            message: "Невозможно удалить, есть связанные элементы",
+                                            labelOk: 'ОК',
+                                            buttonCancel: false,
+                                            onOk: function () {
+                                            }
+                                        }
+                                )
+                            }
+
+                        });
+                    }
+                }
+        );
+    }
+
+
 </script>
 
 <script type="text/javascript">
@@ -252,7 +360,7 @@
         $("#writetest").click(function () {
 
 
-            if ($('#title').val()=="") {
+            if ($('#title').val() == "") {
 
                 $.confirm({
                             title: 'Информация',
@@ -270,47 +378,47 @@
 
             else {
 
-            $.ajax({
-                type: "POST",
-                url: "${pageContext.request.contextPath}/writetest",
-                data: {
-                    category: $('#categoryfortest').val(),
-                    context: "${pageContext.request.contextPath}",
-                    title: $('#title').val(),
-                    dateopen: $('#dateopen').val(),
-                    dateclose: $('#dateclose').val(),
-                    code: $('#code').val(),
-                    access: $("input[name='access']:checked").val(),
-                    success: {
-                        function (codeQ) {
-                        }
-                    },
-                    error: {
-                        function (codeQ) {
-                        }
-                    }
-                }
-            }).done(function (element) {
-                pardesc = JSON.parse(element);
-                $('#code').val(pardesc.code);
-                $('#href').val(pardesc.href);
-                $('#author').val(pardesc.author);
-
-                $.confirm({
-                            title: 'Информация',
-                            titleIcon: 'glyphicon glyphicon-info-sign',
-                            template: 'info',
-                            templateOk: 'info',
-                            message: 'Тест записан',
-                            labelOk: 'ОК',
-                            buttonCancel: false,
-                            onOk: function () {
+                $.ajax({
+                    type: "POST",
+                    url: "${pageContext.request.contextPath}/writetest",
+                    data: {
+                        category: $('#categoryfortest').val(),
+                        context: "${pageContext.request.contextPath}",
+                        title: $('#title').val(),
+                        dateopen: $('#dateopen').val(),
+                        dateclose: $('#dateclose').val(),
+                        code: $('#code').val(),
+                        access: $("input[name='access']:checked").val(),
+                        success: {
+                            function (codeQ) {
+                            }
+                        },
+                        error: {
+                            function (codeQ) {
                             }
                         }
-                )
-            })
-        }
-    });
+                    }
+                }).done(function (element) {
+                    pardesc = JSON.parse(element);
+                    $('#code').val(pardesc.code);
+                    $('#href').val(pardesc.href);
+                    $('#author').val(pardesc.author);
+
+                    $.confirm({
+                                title: 'Информация',
+                                titleIcon: 'glyphicon glyphicon-info-sign',
+                                template: 'info',
+                                templateOk: 'info',
+                                message: 'Тест записан',
+                                labelOk: 'ОК',
+                                buttonCancel: false,
+                                onOk: function () {
+                                }
+                            }
+                    )
+                })
+            }
+        });
         $("#addquestions").click(function () {
 
             if (document.getElementById('code').value.trim() == '') {

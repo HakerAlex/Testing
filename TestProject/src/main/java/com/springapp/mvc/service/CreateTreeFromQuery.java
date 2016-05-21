@@ -53,6 +53,23 @@ public class CreateTreeFromQuery {
         return ourTree.toString().replaceAll(replace, "");
     }
 
+
+    @Transactional(readOnly = true)
+    public String createTreeTestQuestion(int idCategory){
+        List<CategoriesEntity> ourList1 = categoryRepository.getCategoriesByParentID(idCategory);
+
+        StringBuilder ourTree = new StringBuilder(200);
+
+        for (CategoriesEntity ourElement1 : ourList1) {
+            recursionTrees(ourElement1, getElementTree(ourElement1, ourTree)).append("]},");
+        }
+
+
+
+        return "";
+    }
+
+
     public String returnCode(String parent) {
         String ID = parent.substring(5);
         int pos = ID.indexOf(" ");

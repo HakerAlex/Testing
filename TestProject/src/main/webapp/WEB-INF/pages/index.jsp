@@ -11,12 +11,13 @@
     <title>Тестирование</title>
 
 
-    <link href="${pageContext.request.contextPath}/resources/assets/css/lity.css" rel="stylesheet">
-    <link href="${pageContext.request.contextPath}/resources/assets/css/dropify.css" rel="stylesheet">
+    <%--<link href="${pageContext.request.contextPath}/resources/assets/css/lity.css" rel="stylesheet">--%>
+    <link href="${pageContext.request.contextPath}/resources/assets/css/app.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/resources/assets/css/custom.css" rel="stylesheet">
-    <link href="${pageContext.request.contextPath}/resources/assets/css/bootstrap-theme.min.css" rel="stylesheet">
-    <link href="${pageContext.request.contextPath}/resources/assets/css/bootstrap.css" rel="stylesheet">
-    <link href="${pageContext.request.contextPath}/resources/assets/css/bootstrap-select.css" rel="stylesheet">
+
+    <%--<link href="${pageContext.request.contextPath}/resources/assets/css/bootstrap-theme.min.css" rel="stylesheet">--%>
+    <%--<link href="${pageContext.request.contextPath}/resources/assets/css/bootstrap.css" rel="stylesheet">--%>
+    <%--<link href="${pageContext.request.contextPath}/resources/assets/css/bootstrap-select.css" rel="stylesheet">--%>
     <!-- Fonts -->
     <link href='http://fonts.googleapis.com/css?family=Oswald:100,300,400,500,600,800%7COpen+Sans:300,400,500,600,700,800%7CMontserrat:400,700'
           rel='stylesheet' type='text/css'>
@@ -62,6 +63,9 @@
         </div>
 
     </div>
+
+
+
 </header>
 <!-- END Site header -->
 
@@ -76,17 +80,17 @@
             <header class="section-header">
                 <h2>Категории</h2>
             </header>
-
+            <div class="category-grid">
             <c:forEach items="${allcategories}" var="categ">
-                <div class="category-grid">
-                    <a href="${pageContext.request.contextPath}/${categ.id}">
+
+                    <a href="${pageContext.request.contextPath}/open/${categ.id}">
                         <i><img src="${categ.picture}" class="img-circle"></i>
                         <h6>${categ.category}</h6>
                         <p>${categ.description}</p>
                     </a>
-                </div>
-            </c:forEach>
 
+            </c:forEach>
+            </div>
 
         </div>
     </section>
