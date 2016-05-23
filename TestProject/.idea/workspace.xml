@@ -3,10 +3,15 @@
   <component name="ChangeListManager">
     <list default="true" id="e6a11882-a561-469c-abd2-7c0c86289170" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/createDB.sql" afterPath="$PROJECT_DIR$/createDB.sql" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/springapp/mvc/controller/FirstpageController.java" afterPath="$PROJECT_DIR$/src/main/java/com/springapp/mvc/controller/FirstpageController.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/springapp/mvc/controller/CategoryController.java" afterPath="$PROJECT_DIR$/src/main/java/com/springapp/mvc/controller/CategoryController.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/springapp/mvc/controller/QuestionController.java" afterPath="$PROJECT_DIR$/src/main/java/com/springapp/mvc/controller/QuestionController.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/springapp/mvc/controller/TestController.java" afterPath="$PROJECT_DIR$/src/main/java/com/springapp/mvc/controller/TestController.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/springapp/mvc/service/CreateTreeFromQuery.java" afterPath="$PROJECT_DIR$/src/main/java/com/springapp/mvc/service/CreateTreeFromQuery.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/java/com/springapp/mvc/service/CreateTreeFromQueryTest.java" afterPath="$PROJECT_DIR$/src/main/java/com/springapp/mvc/service/CreateTreeFromQueryTest.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/addquestion.jsp" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/addquestion.jsp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/addtest.jsp" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/addtest.jsp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/categorylist.jsp" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/categorylist.jsp" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/tablequestions.jsp" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/tablequestions.jsp" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/tests.jsp" afterPath="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/tests.jsp" />
     </list>
     <ignored path="TestProject.iws" />
@@ -38,36 +43,45 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="categorylist.jsp" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/categorylist.jsp">
+      <file leaf-file-name="CategoryController.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/springapp/mvc/controller/CategoryController.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="199">
-              <caret line="68" column="20" selection-start-line="68" selection-start-column="20" selection-end-line="68" selection-end-column="20" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="FirstpageController.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/springapp/mvc/controller/FirstpageController.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="361">
-              <caret line="49" column="44" selection-start-line="49" selection-start-column="44" selection-end-line="49" selection-end-column="44" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="CreateTreeFromQueryTest.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/java/com/springapp/mvc/service/CreateTreeFromQueryTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="293">
-              <caret line="48" column="35" selection-start-line="48" selection-start-column="35" selection-end-line="48" selection-end-column="35" />
+            <state relative-caret-position="647">
+              <caret line="90" column="9" selection-start-line="90" selection-start-column="9" selection-end-line="90" selection-end-column="9" />
               <folding>
-                <element signature="method#getElementTree#0;class#CreateTreeFromQueryTest#0" expanded="false" />
-                <element signature="method#getTestByCategory#0;class#CreateTreeFromQueryTest#0" expanded="false" />
-                <element signature="method#getQuestionsByTestID#0;class#CreateTreeFromQueryTest#0" expanded="false" />
+                <element signature="e#1232#1233#0" expanded="true" />
+                <element signature="e#1276#1277#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="TestController.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/java/com/springapp/mvc/controller/TestController.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="246">
+              <caret line="86" column="61" selection-start-line="86" selection-start-column="49" selection-end-line="86" selection-end-column="61" />
+              <folding>
+                <element signature="method#updateCategoryTest#0;class#TestController#0" expanded="false" />
+                <element signature="method#delCategory#0;class#TestController#0" expanded="false" />
+                <element signature="method#writeTest#0;class#TestController#0" expanded="false" />
+                <element signature="method#addQuestionToTest#0;class#TestController#0" expanded="false" />
+                <element signature="method#delTest#0;class#TestController#0" expanded="false" />
+                <element signature="method#copyTest#0;class#TestController#0" expanded="false" />
+                <element signature="method#delQuestionFromTest#0;class#TestController#0" expanded="false" />
+                <element signature="method#addtest#0;class#TestController#0" expanded="false" />
+                <element signature="method#editTest#0;class#TestController#0" expanded="false" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="tests.jsp" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/tests.jsp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="84">
+              <caret line="343" column="0" selection-start-line="343" selection-start-column="0" selection-end-line="343" selection-end-column="0" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -122,28 +136,28 @@
         <option value="$PROJECT_DIR$/src/main/java/com/springapp/mvc/domain/TestcategoriesEntity.java" />
         <option value="$PROJECT_DIR$/src/main/webapp/resources/assets/js/bootstrap.file-input.js" />
         <option value="$PROJECT_DIR$/src/main/java/com/springapp/mvc/repository/TestcategoryRepository.java" />
-        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/addquestion.jsp" />
-        <option value="$PROJECT_DIR$/src/main/webapp/resources/assets/css/table.css" />
-        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/tablequestions.jsp" />
         <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/application-context.xml" />
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/webapp/resources/assets/css/bootstrap.css" />
         <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/register.jsp" />
         <option value="$APPLICATION_CONFIG_DIR$/consoles/db/bfbfa7de-fe7f-49a3-8458-1f92d7b1ead3/console.sql" />
-        <option value="$PROJECT_DIR$/src/main/java/com/springapp/mvc/controller/QuestionController.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/springapp/mvc/repository/TestRepository.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/springapp/mvc/repository/QuestionRepository.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/springapp/mvc/controller/CategoryController.java" />
-        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/addtest.jsp" />
         <option value="$PROJECT_DIR$/src/main/java/com/springapp/mvc/repository/FirstPageRepository.java" />
         <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/index.jsp" />
         <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/template/templatefoot.jsp" />
-        <option value="$PROJECT_DIR$/src/main/java/com/springapp/mvc/service/CreateTreeFromQuery.java" />
-        <option value="$PROJECT_DIR$/src/main/java/com/springapp/mvc/controller/TestController.java" />
-        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/tests.jsp" />
-        <option value="$PROJECT_DIR$/src/main/java/com/springapp/mvc/service/CreateTreeFromQueryTest.java" />
         <option value="$PROJECT_DIR$/src/main/java/com/springapp/mvc/controller/FirstpageController.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/springapp/mvc/service/CreateTreeFromQuery.java" />
         <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/categorylist.jsp" />
+        <option value="$PROJECT_DIR$/src/main/java/com/springapp/mvc/controller/QuestionController.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/springapp/mvc/controller/CategoryController.java" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/addquestion.jsp" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/tablequestions.jsp" />
+        <option value="$PROJECT_DIR$/src/main/webapp/resources/assets/css/table.css" />
+        <option value="$PROJECT_DIR$/src/main/java/com/springapp/mvc/service/CreateTreeFromQueryTest.java" />
+        <option value="$PROJECT_DIR$/src/main/java/com/springapp/mvc/controller/TestController.java" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/addtest.jsp" />
+        <option value="$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/tests.jsp" />
       </list>
     </option>
   </component>
@@ -174,8 +188,8 @@
   <component name="ProjectFrameBounds">
     <option name="x" value="-8" />
     <option name="y" value="-8" />
-    <option name="width" value="1936" />
-    <option name="height" value="1066" />
+    <option name="width" value="1382" />
+    <option name="height" value="744" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <OptionsSetting value="true" id="Add" />
@@ -203,7 +217,7 @@
     </navigator>
     <panes>
       <pane id="Scratches" />
-      <pane id="Scope" />
+      <pane id="PackagesPane" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -518,7 +532,7 @@
           </PATH>
         </subPane>
       </pane>
-      <pane id="PackagesPane" />
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -839,6 +853,31 @@
     <configuration default="true" type="JavascriptDebugType" factoryName="JavaScript Debug">
       <method />
     </configuration>
+    <configuration default="true" type="JetRunConfigurationType" factoryName="Kotlin">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="MAIN_CLASS_NAME" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <module name="testing" />
+      <envs />
+      <method />
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType" factoryName="Kotlin script">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <option name="filePath" />
+      <option name="vmParameters" />
+      <option name="alternativeJrePath" />
+      <option name="programParameters" />
+      <option name="passParentEnvs" value="true" />
+      <option name="workingDirectory" />
+      <option name="isAlternativeJrePathEnabled" value="false" />
+      <envs />
+      <method />
+    </configuration>
     <configuration default="true" type="Remote" factoryName="Remote">
       <option name="USE_SOCKET_TRANSPORT" value="true" />
       <option name="SERVER_MODE" value="false" />
@@ -1049,6 +1088,7 @@
       <workItem from="1463767025398" duration="10796000" />
       <workItem from="1463821541185" duration="34418000" />
       <workItem from="1464009691229" duration="4481000" />
+      <workItem from="1464019710064" duration="12761000" />
     </task>
     <task id="LOCAL-00001" summary="init project">
       <created>1462356355411</created>
@@ -1124,7 +1164,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="420396000" />
+    <option name="totallyTimeSpent" value="433157000" />
   </component>
   <component name="TodoView" selected-index="4">
     <todo-panel id="selected-file">
@@ -1136,12 +1176,12 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1066" extended-state="6" />
+    <frame x="-8" y="-8" width="1382" height="744" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3294979" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32569557" sideWeight="0.4969743" order="14" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.5286416" sideWeight="0.4969743" order="14" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Java Enterprise" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289689" sideWeight="0.4969743" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -1149,20 +1189,20 @@
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289689" sideWeight="0.4969743" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289689" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2636656" sideWeight="0.49270833" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.44680852" sideWeight="0.49270833" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Spring" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289689" sideWeight="0.4969743" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3289689" sideWeight="0.4969743" order="12" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Persistence" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="true" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27985075" sideWeight="0.9116203" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.27760968" sideWeight="0.9116203" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Web" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.290469" sideWeight="0.0883797" order="5" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.26172465" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="true" content_ui="tabs" />
-      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.30975348" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
+      <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.31423897" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Cvs" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -1204,8 +1244,14 @@
           <line>4</line>
           <option name="timeStamp" value="30" />
         </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/com/springapp/mvc/controller/TestController.java</url>
+          <line>87</line>
+          <properties />
+          <option name="timeStamp" value="151" />
+        </line-breakpoint>
       </breakpoints>
-      <option name="time" value="148" />
+      <option name="time" value="152" />
     </breakpoint-manager>
     <watches-manager>
       <configuration name="#com.intellij.j2ee.web.tomcat.TomcatRunConfigurationFactory">
@@ -1263,7 +1309,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="34">
           <caret line="2" column="13" selection-start-line="2" selection-start-column="13" selection-end-line="2" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1289,13 +1334,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/webapp/resources/assets/js/app.min.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-5508">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/webapp/resources/assets/js/bootstrap-treeview.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -1312,13 +1350,6 @@
         <state relative-caret-position="459">
           <caret line="60" column="29" selection-start-line="60" selection-start-column="24" selection-end-line="60" selection-end-column="29" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/webapp/resources/assets/css/table.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3417">
-          <caret line="42" column="80" selection-start-line="42" selection-start-column="80" selection-end-line="42" selection-end-column="80" />
         </state>
       </provider>
     </entry>
@@ -1390,22 +1421,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/webapp/resources/assets/css/bootstrap.css">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="442">
-          <caret line="13314" column="27" selection-start-line="13314" selection-start-column="27" selection-end-line="13314" selection-end-column="27" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/tablequestions.jsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-443">
-          <caret line="222" column="31" selection-start-line="222" selection-start-column="31" selection-end-line="222" selection-end-column="31" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/springapp/mvc/domain/TestsEntity.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="194">
@@ -1414,22 +1429,6 @@
             <element signature="e#3764#3765#0" expanded="false" />
             <element signature="e#3801#3802#0" expanded="false" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/addquestion.jsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="238">
-          <caret line="285" column="71" selection-start-line="285" selection-start-column="63" selection-end-line="285" selection-end-column="71" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/springapp/mvc/component/RegisterValidator.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-34">
-          <caret line="15" column="13" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1513,7 +1512,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="194">
           <caret line="15186" column="1" selection-start-line="15186" selection-start-column="1" selection-end-line="15186" selection-end-column="1" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1525,43 +1523,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/springapp/mvc/controller/QuestionController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-30">
-          <caret line="21" column="32" selection-start-line="21" selection-start-column="32" selection-end-line="21" selection-end-column="32" />
-          <folding>
-            <element signature="method#stripTags#0;class#QuestionController#0" expanded="false" />
-            <element signature="method#writeQuestion#0;class#QuestionController#0" expanded="false" />
-            <element signature="method#getTree#0;class#QuestionController#0" expanded="false" />
-            <element signature="method#createTable#0;class#QuestionController#0" expanded="false" />
-            <element signature="method#writeAnswer#0;class#QuestionController#0" expanded="false" />
-            <element signature="method#delanswer#0;class#QuestionController#0" expanded="false" />
-            <element signature="method#addQuestion#0;class#QuestionController#0" expanded="false" />
-            <element signature="method#addQuestion#1;class#QuestionController#0" expanded="false" />
-            <element signature="method#editAnswer#0;class#QuestionController#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/springapp/mvc/repository/QuestionRepository.java">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="279">
           <caret line="101" column="29" selection-start-line="101" selection-start-column="29" selection-end-line="101" selection-end-column="29" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/springapp/mvc/service/CreateTreeFromQuery.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="325">
-          <caret line="61" column="0" selection-start-line="61" selection-start-column="0" selection-end-line="61" selection-end-column="0" />
-          <folding>
-            <element signature="method#getElementTree#0;class#CreateTreeFromQuery#0" expanded="false" />
-            <element signature="method#recursionTrees#0;class#CreateTreeFromQuery#0" expanded="false" />
-            <element signature="method#returnCode#0;class#CreateTreeFromQuery#0" expanded="false" />
-            <element signature="method#getInputQuestion#0;class#CreateTreeFromQuery#0" expanded="false" />
-            <element signature="method#getInputQuestionForTest#0;class#CreateTreeFromQuery#0" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1580,24 +1546,135 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/springapp/mvc/repository/TestcategoryRepository.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="255">
+          <caret line="23" column="32" selection-start-line="23" selection-start-column="32" selection-end-line="23" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/resources/assets/css/bootstrap.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="131">
+          <caret line="6741" column="61" selection-start-line="6741" selection-start-column="61" selection-end-line="6741" selection-end-column="61" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/springapp/mvc/controller/FirstpageController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="361">
+          <caret line="49" column="44" selection-start-line="49" selection-start-column="44" selection-end-line="49" selection-end-column="44" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/springapp/mvc/controller/QuestionController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="654">
+          <caret line="247" column="0" selection-start-line="247" selection-start-column="0" selection-end-line="247" selection-end-column="0" />
+          <folding>
+            <element signature="method#stripTags#0;class#QuestionController#0" expanded="false" />
+            <element signature="method#writeQuestion#0;class#QuestionController#0" expanded="false" />
+            <element signature="method#getTree#0;class#QuestionController#0" expanded="false" />
+            <element signature="method#createTable#0;class#QuestionController#0" expanded="false" />
+            <element signature="method#writeAnswer#0;class#QuestionController#0" expanded="false" />
+            <element signature="method#delanswer#0;class#QuestionController#0" expanded="false" />
+            <element signature="method#addQuestion#1;class#QuestionController#0" expanded="false" />
+            <element signature="method#editAnswer#0;class#QuestionController#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/addquestion.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="442">
+          <caret line="630" column="61" selection-start-line="630" selection-start-column="61" selection-end-line="630" selection-end-column="61" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/resources/assets/js/app.min.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="131">
+          <caret line="5115" column="23" selection-start-line="5115" selection-start-column="23" selection-end-line="5115" selection-end-column="23" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/resources/assets/css/table.css">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-136715">
+          <caret line="83" column="6" selection-start-line="83" selection-start-column="6" selection-end-line="83" selection-end-column="6" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/tablequestions.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="204">
+          <caret line="15" column="76" selection-start-line="15" selection-start-column="76" selection-end-line="15" selection-end-column="76" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/springapp/mvc/service/CreateTreeFromQuery.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="332">
+          <caret line="75" column="110" selection-start-line="75" selection-start-column="110" selection-end-line="75" selection-end-column="110" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/categorylist.jsp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="788">
+          <caret line="79" column="20" selection-start-line="79" selection-start-column="20" selection-end-line="79" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/springapp/mvc/component/RegisterValidator.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="15" column="13" selection-start-line="15" selection-start-column="13" selection-end-line="15" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/springapp/mvc/service/CreateTreeFromQueryTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="194">
+          <caret line="66" column="18" selection-start-line="66" selection-start-column="18" selection-end-line="66" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/addtest.jsp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="105">
-          <caret line="214" column="0" selection-start-line="214" selection-start-column="0" selection-end-line="215" selection-end-column="118" />
+        <state relative-caret-position="-952">
+          <caret line="232" column="0" selection-start-line="232" selection-start-column="0" selection-end-line="232" selection-end-column="0" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/com/springapp/mvc/controller/CategoryController.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="647">
+          <caret line="90" column="9" selection-start-line="90" selection-start-column="9" selection-end-line="90" selection-end-column="9" />
+          <folding>
+            <element signature="e#1232#1233#0" expanded="true" />
+            <element signature="e#1276#1277#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/com/springapp/mvc/controller/TestController.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="45" column="0" selection-start-line="45" selection-start-column="0" selection-end-line="45" selection-end-column="0" />
+        <state relative-caret-position="246">
+          <caret line="86" column="61" selection-start-line="86" selection-start-column="49" selection-end-line="86" selection-end-column="61" />
           <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="method#addParentTest#0;class#TestController#0" expanded="false" />
-            <element signature="method#getTests#0;class#TestController#0" expanded="false" />
-            <element signature="method#addPictureTest#0;class#TestController#0" expanded="false" />
-            <element signature="method#addCategoryTest#0;class#TestController#0" expanded="false" />
             <element signature="method#updateCategoryTest#0;class#TestController#0" expanded="false" />
             <element signature="method#delCategory#0;class#TestController#0" expanded="false" />
             <element signature="method#writeTest#0;class#TestController#0" expanded="false" />
@@ -1611,65 +1688,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/springapp/mvc/controller/CategoryController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="533">
-          <caret line="148" column="69" selection-start-line="148" selection-start-column="69" selection-end-line="148" selection-end-column="69" />
-          <folding>
-            <element signature="method#delCategory#0;class#CategoryController#0" expanded="false" />
-            <element signature="method#getParent#0;class#CategoryController#0" expanded="false" />
-            <element signature="method#addCategory#0;class#CategoryController#0" expanded="false" />
-            <element signature="method#addQuestion#0;class#CategoryController#0" expanded="false" />
-            <element signature="method#updateCategory#0;class#CategoryController#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/tests.jsp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="371">
-          <caret line="41" column="18" selection-start-line="38" selection-start-column="0" selection-end-line="42" selection-end-column="87" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/springapp/mvc/repository/TestcategoryRepository.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="255">
-          <caret line="23" column="32" selection-start-line="23" selection-start-column="32" selection-end-line="23" selection-end-column="32" />
-          <folding>
-            <marker date="1463481523565" expanded="true" signature="668:713" placeholder="Select * fro... testcategories" />
-            <marker date="1463481523565" expanded="true" signature="930:971" placeholder="Select * fro... testcategories" />
-            <marker date="1463481523565" expanded="true" signature="1186:1235" placeholder="Select * fro... tests" />
-            <marker date="1463481523565" expanded="true" signature="1437:1465" placeholder="Select * fro... testcategories" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/springapp/mvc/service/CreateTreeFromQueryTest.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="293">
-          <caret line="48" column="35" selection-start-line="48" selection-start-column="35" selection-end-line="48" selection-end-column="35" />
-          <folding>
-            <element signature="method#getElementTree#0;class#CreateTreeFromQueryTest#0" expanded="false" />
-            <element signature="method#getTestByCategory#0;class#CreateTreeFromQueryTest#0" expanded="false" />
-            <element signature="method#getQuestionsByTestID#0;class#CreateTreeFromQueryTest#0" expanded="false" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/com/springapp/mvc/controller/FirstpageController.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="361">
-          <caret line="49" column="44" selection-start-line="49" selection-start-column="44" selection-end-line="49" selection-end-column="44" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/webapp/WEB-INF/pages/categorylist.jsp">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="199">
-          <caret line="68" column="20" selection-start-line="68" selection-start-column="20" selection-end-line="68" selection-end-column="20" />
+        <state relative-caret-position="84">
+          <caret line="343" column="0" selection-start-line="343" selection-start-column="0" selection-end-line="343" selection-end-column="0" />
           <folding />
         </state>
       </provider>

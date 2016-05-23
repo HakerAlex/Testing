@@ -41,7 +41,7 @@ public class CategoryController {
     @ResponseBody
     public String delCategory(@RequestParam("namecategory") String namecategory) throws Exception {
 
-        int ourID = new Integer(treeBean.returnCode(namecategory));
+        int ourID = new Integer(namecategory);
         List<CategoriesEntity> list = categoryRepository.getCategoriesByParentID(ourID);
         if (!list.isEmpty()) {
             return "Не могу удалить есть подчиненные элементы";
@@ -59,14 +59,16 @@ public class CategoryController {
     @RequestMapping(value = "/getparent", method = RequestMethod.POST, produces = {"text/plain; charset=UTF-8"})
     @ResponseBody
     public String getParent(@RequestParam("category") String namecategory) {
-        Integer parentID = categoryRepository.getCategoriesByID(new Integer(treeBean.returnCode(namecategory))).getParent();
+        Integer parentID = categoryRepository.getCategoriesByID(new Integer(namecategory)).getParent();
         CategoriesEntity ourCategory = categoryRepository.getCategoriesByID(parentID);
-        StringBuilder ourBuffer = new StringBuilder(100);
-        ourBuffer.append(" Код:");
-        ourBuffer.append(ourCategory.getId());
-        ourBuffer.append(" ");
-        ourBuffer.append(ourCategory.getCategory());
-        return ourBuffer.toString();
+
+        StringBuilder json = new StringBuilder(100);
+        json.append("{\"code\":\"");
+        json.append(ourCategory.getId());
+        json.append("\",\"parent\":\"");
+        json.append(ourCategory.getCategory());
+        json.append("\"}");
+        return json.toString();
     }
 
     @PreAuthorize("hasRole('admin')")
@@ -77,7 +79,7 @@ public class CategoryController {
         newCategory.setCategory(namecategory);
 
         if (!parent.equals("")) {
-            newCategory.setParent(new Integer(treeBean.returnCode(parent)));
+            newCategory.setParent(new Integer(parent));
         } else {
             newCategory.setParent(0);
         }
@@ -92,8 +94,9 @@ public class CategoryController {
 
     @PreAuthorize("hasRole('admin')")
     @RequestMapping(value = "/addquestion", method = RequestMethod.POST)
-    public String addQuestion(@RequestParam("categoryforquestion") String category, Model model) {
+    public String addQuestion(@RequestParam("categoryforquestion") String category, @RequestParam("categoryforquestionid") String categoryid, Model model) {
         model.addAttribute("category", category);
+        model.addAttribute("categoryid", categoryid);
         model.addAttribute("code", "");
         model.addAttribute("questiontext", "");
         model.addAttribute("questiontype", 1);
@@ -104,11 +107,11 @@ public class CategoryController {
     @RequestMapping(value = "/updatecategory", method = RequestMethod.POST)
     @ResponseBody
     public String updateCategory(@RequestParam("oldcategory") String oldcategory, @RequestParam("namecategory") String category, @RequestParam("parent") String parent) {
-        CategoriesEntity ourCategory = categoryRepository.getCategoriesByID(new Integer(treeBean.returnCode(oldcategory)));
+        CategoriesEntity ourCategory = categoryRepository.getCategoriesByID(new Integer(oldcategory));
         ourCategory.setCategory(category);
 
         if (!parent.equals("")) {
-            ourCategory.setParent(new Integer(treeBean.returnCode(parent)));
+            ourCategory.setParent(new Integer(parent));
         } else {
             ourCategory.setParent(0);
         }

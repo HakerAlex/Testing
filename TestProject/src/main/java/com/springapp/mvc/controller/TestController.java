@@ -43,22 +43,23 @@ public class TestController {
     @PreAuthorize("hasRole('admin')")
     @RequestMapping(value = "/getparenttest", method = RequestMethod.POST, produces = {"text/plain; charset=UTF-8"})
     @ResponseBody
-    public String addParentTest(@RequestParam("category") String namecategory) {
-        TestcategoriesEntity ourCategory = testcategoryRepository.getCategoryByID(new Integer(treeBean.returnCode(namecategory)));
+    public String addParentTest(@RequestParam("category") int namecategory) {
+        TestcategoriesEntity ourCategory = testcategoryRepository.getCategoryByID(namecategory);
         TestcategoriesEntity ourCategoryParent = testcategoryRepository.getCategoryByID(ourCategory.getParent());
-        StringBuilder ourBuffer = new StringBuilder(100);
+        StringBuilder ourBuffer = new StringBuilder(10);
+        StringBuilder ourBufferCode = new StringBuilder(10);
 
         if (ourCategoryParent!=null){
-            ourBuffer.append(" Код:");
-            ourBuffer.append(ourCategoryParent.getId());
-            ourBuffer.append(" ");
             ourBuffer.append(ourCategoryParent.getCategory());
+            ourBufferCode.append(ourCategoryParent.getId());
         }
         StringBuilder json = new StringBuilder(100);
         json.append("{\"parent\":\"");
         json.append(ourBuffer.toString());
         json.append("\",\"desc\":\"");
         json.append(ourCategory.getDescription());
+        json.append("\",\"parentid\":\"");
+        json.append( ourBufferCode.toString());
         json.append("\"}");
         return json.toString();
     }
@@ -67,15 +68,15 @@ public class TestController {
     @PreAuthorize("hasRole('admin')")
     @RequestMapping(value = "/gettest", method = RequestMethod.POST, produces = {"text/plain; charset=UTF-8"})
     @ResponseBody
-    public String getTests(@RequestParam("category") String category, @RequestParam("context") String context) {
+    public String getTests(@RequestParam("category") int category, @RequestParam("context") String context) {
         return treeTestBean.getTestByCategory(category, context);
     }
 
     @PreAuthorize("hasRole('admin')")
     @RequestMapping(value = "/getpicture", method = RequestMethod.POST)
     @ResponseBody
-    public String addPictureTest(@RequestParam("category") String namecategory) {
-        TestcategoriesEntity ourCategory = testcategoryRepository.getCategoryByID(new Integer(treeBean.returnCode(namecategory)));
+    public String addPictureTest(@RequestParam("category") int namecategory) {
+        TestcategoriesEntity ourCategory = testcategoryRepository.getCategoryByID(namecategory);
 
         return ourCategory.getPicture();
     }
@@ -88,7 +89,7 @@ public class TestController {
         newCategory.setCategory(namecategory);
 
         if (!parent.equals("")) {
-            newCategory.setParent(new Integer(treeBean.returnCode(parent)));
+            newCategory.setParent(new Integer(parent));
         } else {
             newCategory.setParent(0);
         }
@@ -108,12 +109,12 @@ public class TestController {
     @RequestMapping(value = "/updatecategorytest", method = RequestMethod.POST)
     @ResponseBody
     public String updateCategoryTest(@RequestParam("namecategory") String namecategory, @RequestParam("oldcategory") String oldcategory, @RequestParam("parent") String parent, @RequestParam("description") String description, @RequestParam("picture") String picture) {
-        TestcategoriesEntity newCategory = testcategoryRepository.getCategoryByID(new Integer(treeBean.returnCode(oldcategory)));
+        TestcategoriesEntity newCategory = testcategoryRepository.getCategoryByID(new Integer(oldcategory));
 
         newCategory.setCategory(namecategory);
 
         if (!parent.equals("")) {
-            newCategory.setParent(new Integer(treeBean.returnCode(parent)));
+            newCategory.setParent(new Integer(parent));
         } else {
             newCategory.setParent(0);
         }
@@ -134,7 +135,7 @@ public class TestController {
     @ResponseBody
     public String delCategory(@RequestParam("namecategory") String namecategory) throws Exception {
 
-        int ourID = new Integer(treeBean.returnCode(namecategory));
+        int ourID = new Integer(namecategory);
 
         List<TestcategoriesEntity> list = testcategoryRepository.getCategoriesByParentID(ourID);
         if (!list.isEmpty()) {
@@ -174,7 +175,7 @@ public class TestController {
         } else {
             ourTest.setFirstpage((byte) 0);
         }
-        ourTest.setIdCategory(new Integer(treeBean.returnCode(category)));
+        ourTest.setIdCategory(new Integer(category));
 
         if (!dateopen.equals("")) {
             ourTest.setDateStart(Date.valueOf(dateopen));
@@ -229,7 +230,7 @@ public class TestController {
     @PreAuthorize("hasRole('admin')")
     @RequestMapping(value = "/deltest", method = RequestMethod.POST, produces = {"text/plain; charset=UTF-8"})
     @ResponseBody
-    public String delTest(@RequestParam("id") int idtest, @RequestParam("context") String context, @RequestParam("category") String category) throws Exception {
+    public String delTest(@RequestParam("id") int idtest, @RequestParam("context") String context, @RequestParam("category") int category) throws Exception {
 
         if (context.equals("empty")) {
             context = "";
@@ -252,7 +253,7 @@ public class TestController {
     @PreAuthorize("hasRole('admin')")
     @RequestMapping(value = "/copytest", method = RequestMethod.POST, produces = {"text/plain; charset=UTF-8"})
     @ResponseBody
-    public String copyTest(@RequestParam("id") int idtest, @RequestParam("context") String context, @RequestParam("category") String category) throws Exception {
+    public String copyTest(@RequestParam("id") int idtest, @RequestParam("context") String context, @RequestParam("category") int category) throws Exception {
 
         if (context.equals("empty")) {
             context = "";
@@ -300,8 +301,9 @@ public class TestController {
 
     @PreAuthorize("hasRole('admin')")
     @RequestMapping(value = "/addtest", method = RequestMethod.POST)
-    public String addtest(@RequestParam("categoryfortest") String category, Model model) {
+    public String addtest(@RequestParam("categoryfortest") String category, @RequestParam("categoryfortestid") String categoryid,Model model) {
         model.addAttribute("categoryfortest", category);
+        model.addAttribute("categoryfortestid", categoryid);
         model.addAttribute("tree", treeBean.createTree());
         model.addAttribute("type", 1);
         model.addAttribute("table", treeTestBean.getQuestionsByTestID(0));

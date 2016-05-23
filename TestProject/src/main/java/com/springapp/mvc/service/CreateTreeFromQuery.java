@@ -17,10 +17,11 @@ public class CreateTreeFromQuery {
 
 
     private StringBuilder getElementTree(CategoriesEntity ourElement, StringBuilder element) {
-        element.append("{text:  \" Код:");
-        element.append(ourElement.getId());
-        element.append(" ");
+        element.append("{text:  \"");
         element.append(ourElement.getCategory());
+        element.append("\",");
+        element.append("href: \"");
+        element.append(ourElement.getId());
         element.append("\"");
         element.append(",icon: \"glyphicon glyphicon-folder-close\"");
         element.append(",selectedIcon: \"glyphicon glyphicon-folder-open\"");
@@ -70,15 +71,9 @@ public class CreateTreeFromQuery {
     }
 
 
-    public String returnCode(String parent) {
-        String ID = parent.substring(5);
-        int pos = ID.indexOf(" ");
-        return ID.substring(0, pos);
-    }
-
     @Transactional(readOnly = true)
     public String getInputQuestion(String category, String context) {
-        List<QuestionsEntity> ourQuestion = categoryRepository.getAllQuestionByCategoryID(new Integer(returnCode(category)));
+        List<QuestionsEntity> ourQuestion = categoryRepository.getAllQuestionByCategoryID(new Integer(category));
         StringBuilder ourTable = new StringBuilder(200);
 
         ourTable.append(" <thead> ");
@@ -147,7 +142,7 @@ public class CreateTreeFromQuery {
 
     @Transactional(readOnly = true)
     public String getInputQuestionForTest(String category, String context) {
-        List<QuestionsEntity> ourQuestion = categoryRepository.getAllQuestionByCategoryID(new Integer(returnCode(category)));
+        List<QuestionsEntity> ourQuestion = categoryRepository.getAllQuestionByCategoryID(new Integer(category));
         StringBuilder ourTable = new StringBuilder(200);
 
         ourTable.append(" <thead> ");

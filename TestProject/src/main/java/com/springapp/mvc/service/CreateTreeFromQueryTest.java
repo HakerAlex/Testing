@@ -21,16 +21,12 @@ public class CreateTreeFromQueryTest {
     @Autowired
     private TestRepository testRepository;
 
-    @Autowired(required = false)
-    private CreateTreeFromQuery treeBean;
-
     private StringBuilder getElementTree(TestcategoriesEntity ourElement, StringBuilder element) {
-        element.append("{text:  \" Код:");
-        element.append(ourElement.getId());
-        element.append(" ");
+        element.append("{text:  \"");
         element.append(ourElement.getCategory());
-        element.append("\"");
-        element.append(",icon: \"glyphicon glyphicon-folder-close\"");
+        element.append("\",href:\"");
+        element.append(ourElement.getId());
+        element.append("\",icon: \"glyphicon glyphicon-folder-close\"");
         element.append(",selectedIcon: \"glyphicon glyphicon-folder-open\"");
         element.append(",selectable: true");
         element.append(",nodes: [");
@@ -68,8 +64,8 @@ public class CreateTreeFromQueryTest {
     }
 
     @Transactional(readOnly = true)
-    public String getTestByCategory(String category, String context) {
-        List<TestsEntity> ourQuestion = testcategoryRepository.getAllTestByCategoryID(new Integer(treeBean.returnCode(category)));
+    public String getTestByCategory(int category, String context) {
+        List<TestsEntity> ourQuestion = testcategoryRepository.getAllTestByCategoryID(category);
         StringBuilder ourTable = new StringBuilder(200);
 
         ourTable.append(" <thead> ");

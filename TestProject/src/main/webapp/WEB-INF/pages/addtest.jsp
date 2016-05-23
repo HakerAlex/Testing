@@ -44,6 +44,8 @@
                 <div class="form-group">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="ti-folder"></i></span>
+                        <input type="hidden" value="${categoryfortestid}" id="categoryfortestid"
+                               name="categoryfortestid">
                         <input type="text" value="${categoryfortest}" class="form-control" id="categoryfortest"
                                name="categoryfortest" placeholder="Категория" disabled>
                     </div>
@@ -243,7 +245,7 @@
             type: "POST",
             url: "${pageContext.request.contextPath}/getquestionfortest",
             data: {
-                category: data.text,
+                category: data.href,
                 context: "${pageContext.request.contextPath}"
             }
         }).done(function (element) {
@@ -382,7 +384,7 @@
                     type: "POST",
                     url: "${pageContext.request.contextPath}/writetest",
                     data: {
-                        category: $('#categoryfortest').val(),
+                        category: $('#categoryfortestid').val(),
                         context: "${pageContext.request.contextPath}",
                         title: $('#title').val(),
                         dateopen: $('#dateopen').val(),
@@ -421,7 +423,7 @@
         });
         $("#addquestions").click(function () {
 
-            if (document.getElementById('code').value.trim() == '') {
+            if ($('#code').val().trim() == '') {
                 $.confirm({
                             title: 'Информация',
                             titleIcon: 'glyphicon glyphicon-info-sign',

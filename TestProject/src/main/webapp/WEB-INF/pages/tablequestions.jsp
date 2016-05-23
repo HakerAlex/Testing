@@ -59,6 +59,7 @@
             <form id="addquestion" class="addquestion" method="post"
                   action="${pageContext.request.contextPath}/addquestion" commandName="addquestion">
                 <input type="hidden" value="" class="form-control" id="categoryforquestion" name="categoryforquestion">
+                <input type="hidden" value="" class="form-control" id="categoryforquestionid" name="categoryforquestionid">
                 <button type="button" class="btn btn-primary btn-search" id="addnewquestion">Добавить вопрос</button>
                 <%--<button class="btn btn-primary btn-search" type="submit">Добавить вопрос</button>--%>
             </form>
@@ -106,8 +107,9 @@
                         </div>
                         <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 5px">
                         <div class="input-group">
+                            <input type="hidden" id="categoryid" name="categoryid">
                             <span class="input-group-addon"><i class="ti-folder"></i></span>
-                            <input type="text" id="category" value="" class="form-control" name="name"
+                            <input type="text" id="category" name="category" class="form-control"
                                    placeholder="Родитель" disabled>
                         </div>
                     </div>
@@ -132,19 +134,16 @@
                 </div>
                 <div class="modal-body">
                     <div class="form-group">
-
                         <div class="input-group">
+                            <input type="hidden" id="oldcategory" name="parent">
                             <span class="input-group-addon"><i class="ti-folder"></i></span>
                             <input type="text" value="" class="form-control" name="upcategory" id="upcategory"
                                    placeholder="Новое значение">
                         </div>
-                        <div class="input-group">
 
-                            <input type="hidden" id="oldcategory" value="" class="form-control" name="parent"
-                                   placeholder="Старое значение" disabled>
-                        </div>
                         <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 5px">
                         <div class="input-group">
+                            <input type="hidden" id="parentid" name="parentid">
                             <span class="input-group-addon"><i class="ti-folder"></i></span>
                             <input type="text" id="parent" value="" class="form-control" name="parent"
                                    placeholder="Родитель" disabled>
@@ -174,6 +173,7 @@
                     <div class="form-group">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="ti-folder"></i></span>
+                            <input type="hidden" id="delcategoryid" name="delcategoryid">
                             <input type="text" id="delcategory" value="" class="form-control" name="delcategory"
                                    placeholder="Значение" disabled>
                         </div>
@@ -207,9 +207,7 @@ src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js
         return ${tree};
     }
     $('#treeview').treeview({data: getTree()});
-</script>
 
-<script type="text/javascript">
     function expand() {
         $('#treeview').treeview('expandAll', {levels: 100, silent: true});
     }
@@ -224,7 +222,7 @@ src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js
     $(document).ready(function () {
         $("#addnewquestion").click(function () {
 
-            if (document.getElementById('categoryforquestion').value=='') {
+            if ($('#categoryforquestion').val()=='') {
 
                 $.confirm({
                     title: 'Внимание',
@@ -248,7 +246,7 @@ src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js
                 type: "POST",
                 url: "${pageContext.request.contextPath}/delcategory",
                 data: {
-                    namecategory: document.getElementById('delcategory').value
+                    namecategory: $('#delcategoryid').val()
                 }
             }).done(function (msg) {
                 if (msg != "") {
@@ -286,13 +284,13 @@ src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js
         });
 
         $("#addcategory").click(function () {
-            if (document.getElementById('namecategory').value!=''){
+            if ($('#namecategory').val()!=''){
             $.ajax({
                 type: "POST",
                 url: "${pageContext.request.contextPath}/addcategory",
                 data: {
-                    namecategory: document.getElementById('namecategory').value,
-                    parent: document.getElementById('category').value
+                    namecategory: $('#namecategory').val(),
+                    parent: $('#categoryid').val()
                 }
             }).done(function (tree) {
                 $.confirm({
@@ -326,14 +324,14 @@ src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js
 
         $("#updatecategory").click(function () {
 
-            if (document.getElementById('upcategory').value!=''){
+            if ($('#upcategory').val()!=''){
                 $.ajax({
                     type: "POST",
                     url: "${pageContext.request.contextPath}/updatecategory",
                     data: {
-                        namecategory: document.getElementById('upcategory').value,
-                        oldcategory: document.getElementById('oldcategory').value,
-                        parent: document.getElementById('parent').value
+                        namecategory: $('#upcategory').val(),
+                        oldcategory: $('#oldcategory').val(),
+                        parent: $('#parentid').val()
                     }
                 }).done(function (tree) {
 
@@ -373,25 +371,30 @@ src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js
 <script type="text/javascript" charset="utf-8">
     var parent;
     $('#treeview').on('nodeSelected', function (event, data) {
-
         var cat=data.text.trim();
         var n = cat.search(" ");
-        var s=cat.substring(n+1,cat.length);
 
-        document.getElementById('upcategory').value =s;
-        document.getElementById('oldcategory').value = data.text;
-        document.getElementById('category').value = data.text;
-        document.getElementById('delcategory').value = data.text;
-        document.getElementById('parent').value = "";
-        document.getElementById('categoryforquestion').value = data.text;
+        $('#upcategory').val(cat.substring(n+1,cat.length));
+        $('#oldcategory').val(data.href);
+        $('#category').val(data.text);
+        $('#categoryid').val(data.href);
+        $('#delcategory').val(data.text);
+        $('#delcategoryid').val(data.href);
+        $('#parent').val("");
+        $('#categoryforquestion').val(data.text);
+        $('#categoryforquestionid').val(data.href);
         $.ajax({
             type: "POST",
             url: "${pageContext.request.contextPath}/getparent",
             data: {
-                category: data.text
+                category: data.href
             }
         }).done(function (element) {
-            document.getElementById('parent').value = element;
+
+            pardesc = JSON.parse(element);
+
+            $('#parent').val(pardesc.parent);
+            $('#parentid').val(pardesc.code);
 
         });
 
@@ -400,7 +403,7 @@ src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js
             type: "POST",
             url: "${pageContext.request.contextPath}/getquestion",
             data: {
-                category: data.text,
+                category: data.href,
                 context: "${pageContext.request.contextPath}"
             }
         }).done(function (element) {
@@ -422,7 +425,7 @@ src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js
                     data: {
                         id: idquestion,
                         context: "${pageContext.request.contextPath}",
-                        category: document.getElementById('category').value
+                        category: $('#categoryid').val()
                     },
                     dataType: "text",
                     success: {
@@ -472,8 +475,8 @@ src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js
         });
     }
     function clearParent() {
-        document.getElementById('category').value = ""
-        document.getElementById('parent').value = ""
+        $('#category').val("");
+        $('#parent').val("");
     }
 </script>
 

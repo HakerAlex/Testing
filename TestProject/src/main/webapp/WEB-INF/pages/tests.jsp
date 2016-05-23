@@ -59,6 +59,7 @@
             <form id="addtest" class="addtest" method="post"
                   action="${pageContext.request.contextPath}/addtest" commandName="addtest">
                 <input type="hidden" value="" class="form-control" id="categoryfortest" name="categoryfortest">
+                <input type="hidden" value="" class="form-control" id="categoryfortestid" name="categoryfortestid">
                 <button type="button" class="btn btn-primary btn-search" id="addnewtest">Добавить тест</button>
             </form>
 
@@ -110,6 +111,7 @@
                         <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 5px">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="ti-folder"></i></span>
+                            <input type="hidden" id="categoryid" name="categoryid">
                             <input type="text" id="category" value="" class="form-control" name="name"
                                    placeholder="Родитель" disabled>
                         </div>
@@ -156,6 +158,7 @@
                             <input type="text" value="" class="form-control" name="upcategory" id="upcategory"
                                    placeholder="Новое значение">
                         </div>
+                        <input type="hidden" id="oldcategoryid" name="oldcategoryid">
                         <input type="hidden" id="oldcategory" value="" class="form-control" name="parent"
                                placeholder="Старое значение" disabled>
 
@@ -170,6 +173,7 @@
 
                         <div class="input-group">
                             <span class="input-group-addon"><i class="ti-folder"></i></span>
+                            <input type="hidden" id="parentid" name="parentid">
                             <input type="text" id="parent" value="" class="form-control" name="parent"
                                    placeholder="Родитель" disabled>
                         </div>
@@ -213,6 +217,7 @@
                     <div class="form-group">
                         <div class="input-group">
                             <span class="input-group-addon"><i class="ti-folder"></i></span>
+                            <input type="hidden" id="delcategoryid"  name="delcategoryid">
                             <input type="text" id="delcategory" value="" class="form-control" name="delcategory"
                                    placeholder="Значение" disabled>
                         </div>
@@ -264,6 +269,7 @@
         $('#namecategory').val("");
         $('#description').val("");
         $('#category').val("");
+        $('#categoryid').val("");
         $('#pimg').val("");
         $('#uploadImage').siblings('span').html('Выберите файл картинки').attr('title', 'Выберите файл картинки').show();
         $("#uploadPreview").hide();
@@ -299,7 +305,7 @@
                         type: "POST",
                         url: "${pageContext.request.contextPath}/delcategorytest",
                         data: {
-                            namecategory: document.getElementById('delcategory').value
+                            namecategory: $('#delcategoryid').val()
                         }
                     }).done(function (msg) {
                         if (msg != "") {
@@ -342,10 +348,10 @@
                             type: "POST",
                             url: "${pageContext.request.contextPath}/addcategorytest",
                             data: {
-                                namecategory: document.getElementById('namecategory').value,
-                                description: document.getElementById('description').value,
-                                parent: document.getElementById('category').value,
-                                picture: document.getElementById('pimg').value
+                                namecategory: $('#namecategory').val(),
+                                parent: $('#categoryid').val(),
+                                description: $('#description').val(),
+                                picture: $('#pimg').val()
                             }
                         }).done(function (tree) {
                             $.confirm({
@@ -378,14 +384,14 @@
                 });
                 $("#updatecategory").click(function () {
 
-                            if (document.getElementById('upcategory').value != '') {
+                            if ($('#upcategory').val() != '') {
                                 $.ajax({
                                     type: "POST",
                                     url: "${pageContext.request.contextPath}/updatecategorytest",
                                     data: {
                                         namecategory: $('#upcategory').val(),
-                                        oldcategory: $('#oldcategory').val(),
-                                        parent: $('#parent').val(),
+                                        oldcategory: $('#oldcategoryid').val(),
+                                        parent: $('#parentid').val(),
                                         description: $('#descr').val(),
                                         picture: $('#pimg2').val()
                                     }
@@ -432,28 +438,30 @@
     var parent;
     $('#treeview').on('nodeSelected', function (event, data) {
 
-        var cat = data.text.trim();
-        var n = cat.search(" ");
-        var s = cat.substring(n + 1, cat.length);
-
-        $('#upcategory').val(s);
+        $('#upcategory').val(data.text);
         $('#oldcategory').val(data.text);
+        $('#oldcategoryid').val(data.href);
         $('#category').val(data.text);
+        $('#categoryid').val(data.href);
         $('#delcategory').val(data.text);
+        $('#delcategoryid').val(data.href);
         $('#parent').val("");
+        $('#parentid').val("");
         $('#categoryfortest').val(data.text);
+        $('#categoryfortestid').val(data.href);
 
         $.ajax({
             type: "POST",
             url: "${pageContext.request.contextPath}/getparenttest",
             data: {
-                category: data.text
+                category: data.href
             }
         }).done(function (element) {
 
             pardesc = JSON.parse(element);
 
             $('#parent').val(pardesc.parent);
+            $('#parentid').val(pardesc.parentid);
             $('#descr').val(pardesc.desc);
 
         });
@@ -463,7 +471,7 @@
             type: "POST",
             url: "${pageContext.request.contextPath}/getpicture",
             data: {
-                category: data.text
+                category: data.href
             }
         }).done(function (element) {
 
@@ -491,7 +499,7 @@
             type: "POST",
             url: "${pageContext.request.contextPath}/gettest",
             data: {
-                category: data.text,
+                category: data.href,
                 context: "${pageContext.request.contextPath}"
             }
         }).done(function (element) {
@@ -521,7 +529,7 @@
                     data: {
                         id: idtest,
                         context: cont,
-                        category: $('#category').val()
+                        category: $('#categoryid').val()
                     },
                     dataType: "text",
                     success: {
@@ -592,7 +600,7 @@
                     data: {
                         id: idtest,
                         context: cont,
-                        category: $('#category').val()
+                        category: $('#categoryid').val()
                     },
                     dataType: "text",
                     success: {

@@ -40,6 +40,7 @@
             <div class="input-group">
                 <span class="input-group-addon"><i class="ti-folder"></i></span>
                 <input type="text" value="${category}" class="form-control" id="category" name="category" disabled>
+                <input type="hidden" value="${categoryid}" id="categoryid" name="categoryid" disabled>
             </div>
             <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 5px">
             <div class="input-group">
@@ -243,7 +244,7 @@
     $(document).ready(function () {
         $("#addanswer").click(function () {
 
-            if (document.getElementById('code').value.trim() == '') {
+            if ($('#code').val().trim() == '') {
                 $.confirm({
                             title: 'Информация',
                             titleIcon: 'glyphicon glyphicon-info-sign',
@@ -258,8 +259,8 @@
                 )
             }
             else {
-                document.getElementById('answerid').value='';
-                document.getElementById('answertext').value='';
+                $('#answerid').val('');
+                $('#answertext').val('');
                 CKEDITOR.instances.editorAn.setData('');
 
                 if ($("input[name='typequestion']:checked").val() < 3) {
@@ -274,16 +275,16 @@
 
         $("#writean").click(function () {
             if ($("input[name='typequestion']:checked").val() == 3) {
-                if (document.getElementById('answertext').value.trim() != '') {
+                if ($('#answertext').val().trim() != '') {
                     $.ajax({
                         type: "POST",
                         url: "${pageContext.request.contextPath}/writeanswer",
                         data: {
-                            answer: document.getElementById('answertext').value,
-                            codequestion: document.getElementById('code').value,
+                            answer: $('#answertext').val(),
+                            codequestion: $('#code').val(),
                             flag: 1,
                             typeq: $("input[name='typequestion']:checked").val(),
-                            answerid: document.getElementById('answerid').value,
+                            answerid: $('#answerid').val(),
                             context: "${pageContext.request.contextPath}"
                         },
                         dataType: "text",
@@ -362,10 +363,10 @@
                         url: "${pageContext.request.contextPath}/writeanswer",
                         data: {
                             answer: CKEDITOR.instances.editorAn.getData(),
-                            codequestion: document.getElementById('code').value,
+                            codequestion: $('#code').val(),
                             flag: $("input[name='typeanswer']:checked").val(),
                             typeq: $("input[name='typequestion']:checked").val(),
-                            answerid: document.getElementById('answerid').value,
+                            answerid: $('#answerid').val(),
                             context: "${pageContext.request.contextPath}"
                         },
                         dataType: "text",
@@ -442,15 +443,15 @@
                     type: "POST",
                     url: "${pageContext.request.contextPath}/writequestion",
                     data: {
-                        category: document.getElementById('category').value,
+                        category: $('#categoryid').val(),
                         question: CKEDITOR.instances.editorCk.getData(),
-                        code: document.getElementById('code').value,
+                        code: $('#code').val(),
                         typeq: $("input[name='typequestion']:checked").val()
                     },
                     dataType: "text",
                     success: {
                         function (codeQ) {
-                            document.getElementById('code').value = codeQ;
+                            $('#code').val(codeQ);
                         },
                         error: {
                             function (codeQ) {
@@ -499,7 +500,7 @@
                                     type: "POST",
                                     url: "${pageContext.request.contextPath}/createtree",
                                     data: {
-                                        code: document.getElementById('code').value,
+                                        code: $('#code').val(),
                                         context: "${pageContext.request.contextPath}"
                                     },
                                     dataType: "text",
@@ -632,7 +633,7 @@
                 $("#myModalRadioChecked").modal('show');
             }
             else {
-                document.getElementById('answertext').value=element;
+                $('#answertext').val(element);
                 $("#myModalText").modal('show');
             }
 

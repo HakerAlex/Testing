@@ -53,13 +53,31 @@
         </div>
         <div class="col-xs-8">
             <div class="list-group">
-                <a href="#" class="list-group-item clearfix">
+                <a href="#" class="list-group-item" style="text-align: left">
                     <span class="glyphicon glyphicon-star"></span>
                     Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 
                 </a>
+                <a href="#" class="list-group-item" style="text-align: left">
+                    <span class="glyphicon glyphicon-star"></span>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 
+                </a>
+                <a href="#" class="list-group-item" style="text-align: left">
+                    <span class="glyphicon glyphicon-star"></span>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 
+                </a>
+                <a href="#" class="list-group-item" style="text-align: left">
+                    <span class="glyphicon glyphicon-star"></span>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+
+                </a>
+                <a href="#" class="list-group-item" style="text-align: left">
+                    <span class="glyphicon glyphicon-star"></span>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+
+                </a>
             </div>
         </div>
     </div>

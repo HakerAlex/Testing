@@ -35,7 +35,7 @@ public class QuestionController {
 
         int categoryID;
         if (!category.equals("")) {
-            categoryID = new Integer(treeBean.returnCode(category));
+            categoryID = new Integer(category);
         } else {
             categoryID = 0;
         }
@@ -245,13 +245,8 @@ public class QuestionController {
     public String addQuestion(@PathVariable int id, Model model) {
         QuestionsEntity ourQuestion = questionRepository.getQuestionByID(id);
 
-        StringBuilder ourCategory = new StringBuilder(20);
-        ourCategory.append(" Код:");
-        ourCategory.append(ourQuestion.getCategoryById().getId());
-        ourCategory.append(" ");
-        ourCategory.append(ourQuestion.getCategoryById().getCategory());
-
-        model.addAttribute("category", ourCategory.toString());
+        model.addAttribute("categoryid", ourQuestion.getCategoryById().getId());
+        model.addAttribute("category", ourQuestion.getCategoryById().getCategory());
         model.addAttribute("code", ourQuestion.getId());
         model.addAttribute("questiontext", ourQuestion.getQuestion());
         model.addAttribute("questiontype", ourQuestion.getTypeQuestion());
@@ -265,13 +260,8 @@ public class QuestionController {
     public String addQuestion(@PathVariable int id, @PathVariable String context, Model model) {
         QuestionsEntity ourQuestion = questionRepository.getQuestionByID(id);
 
-        StringBuilder ourCategory = new StringBuilder(20);
-        ourCategory.append(" Код:");
-        ourCategory.append(ourQuestion.getCategoryById().getId());
-        ourCategory.append(" ");
-        ourCategory.append(ourQuestion.getCategoryById().getCategory());
-
-        model.addAttribute("category", ourCategory.toString());
+        model.addAttribute("categoryid", ourQuestion.getCategoryById().getId());
+        model.addAttribute("category", ourQuestion.getCategoryById().getCategory());
         model.addAttribute("code", ourQuestion.getId());
         model.addAttribute("questiontext", ourQuestion.getQuestion());
         model.addAttribute("questiontype", ourQuestion.getTypeQuestion());
