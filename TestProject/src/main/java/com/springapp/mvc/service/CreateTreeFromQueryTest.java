@@ -1,13 +1,15 @@
 package com.springapp.mvc.service;
 
-import com.springapp.mvc.domain.*;
-import com.springapp.mvc.repository.CategoryRepository;
+import com.springapp.mvc.domain.TestQuestionsEntity;
+import com.springapp.mvc.domain.TestcategoriesEntity;
+import com.springapp.mvc.domain.TestsEntity;
 import com.springapp.mvc.repository.TestRepository;
 import com.springapp.mvc.repository.TestcategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("treeCreateTest")
@@ -45,8 +47,14 @@ public class CreateTreeFromQueryTest {
     }
 
     @Transactional(readOnly = true)
-    public String createTree() {
-        List<TestcategoriesEntity> ourList1 = testcategoryRepository.getCategoriesByParentID(0);
+    public String createTree(int category) {
+        List<TestcategoriesEntity> ourList1 = new ArrayList<>();
+        if (category == 0) {
+            ourList1 = testcategoryRepository.getCategoriesByParentID(0);
+        } else {
+            ourList1.add(testcategoryRepository.getCategoryByID(category));
+        }
+
 
         StringBuilder ourTree = new StringBuilder(200);
         ourTree.append("[");
@@ -116,7 +124,6 @@ public class CreateTreeFromQueryTest {
             ourTable.append(" </td>");
 
 
-
             ourTable.append(" </tr>");
 
         }
@@ -165,7 +172,6 @@ public class CreateTreeFromQueryTest {
         return ourTable.toString();
 
     }
-
 
 
 }

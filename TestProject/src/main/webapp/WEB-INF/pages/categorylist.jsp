@@ -43,31 +43,22 @@
                     </div>
                 </div>
             </div>
+            <div class="form-group">
+                <button class="btn btn-primary btn-search" type="submit" onclick="expand()">Развернуть</button>
+                <button class="btn btn-primary btn-search" type="submit" onclick="collapse()">Свернуть</button>
+            </div>
+            <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 5px">
+            <div id="treeview" style="color: dodgerblue; text-align:left "></div>
+
         </div>
         <div class="col-xs-8">
-            <div class="panel panel-info" style="background: transparent; text-align:left">
-                ${tree}
+            <div class="list-group">
+                <a href="#" class="list-group-item clearfix">
+                    <span class="glyphicon glyphicon-star"></span>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
 
-                    <ul class="nav nav-list">
-                        <li>First item</li>
-                        <ul>
-                            <li>First item</li>
-                            <li>Second item</li>
-                            <ul>
-                                <li>First item</li>
-                                <li>Second item</li>
-                                <ul>
-                                    <li> <i class="ti-write"></i>First item</li>
-                                    <li>Second item</li>
-                                    <li>Third item</li>
-                                </ul>
-                                <li>Third item</li>
-                            </ul>
-                            <li>Third item</li>
-                        </ul>
-                        <li>Second item</li>
-                        <li>Third item</li>
-                    </ul>
+                </a>
+
 
             </div>
         </div>
@@ -89,6 +80,26 @@
 <%--<%@ include file="../pages/template/templatefoot.jsp" %>--%>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/jquery.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/bootstrap.min.js"></script>
+<script type="text/javascript"
+        src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-treeview.js"></script>
+
+<script type="text/javascript">
+
+    function getTree() {
+        return ${tree};
+    }
+    $('#treeview').treeview({data: getTree(), levels:100});
+
+    function expand() {
+        $('#treeview').treeview('expandAll', {levels: 100, silent: true});
+    }
+    function collapse() {
+        $('#treeview').treeview('collapseAll', {levels: 100, silent: true});
+    }
+
+
+</script>
+
 </body>
 </html>
 

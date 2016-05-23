@@ -292,15 +292,8 @@
                                 $('#addtest').submit();
                             }
                         }
-                )
-            }
-    );
-</script>
+                );
 
-
-<script type="text/javascript">
-
-    $(document).ready(function () {
                 $("#deletecategory").click(function () {
                     $.ajax({
                         type: "POST",

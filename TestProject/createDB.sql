@@ -68,7 +68,7 @@ CREATE TABLE test_questions (
 CREATE TABLE testcategories (
     category text ,
     ID int  AUTO_INCREMENT,
-    pathtopicture text ,
+    pathtopicture longtext ,
     picture blob ,
     description text ,
     CONSTRAINT testcategories_pk PRIMARY KEY (ID)

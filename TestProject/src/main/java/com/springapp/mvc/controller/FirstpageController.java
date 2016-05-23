@@ -56,7 +56,7 @@ public class FirstpageController {
     @PreAuthorize("hasRole('admin')")
     @RequestMapping(value = "/tests", method = RequestMethod.GET)
     public String getTests(Model model) {
-        model.addAttribute("tree", treeTestBean.createTree());
+        model.addAttribute("tree", treeTestBean.createTree(0));
         return "tests";
     }
 
@@ -67,6 +67,8 @@ public class FirstpageController {
         model.addAttribute("picture",ourCategory.getPicture());
         model.addAttribute("category",ourCategory.getCategory());
         model.addAttribute("description",ourCategory.getDescription());
+        model.addAttribute("tree",treeTestBean.createTree(ourCategory.getId()));
+
         return "categorylist";
     }
 
