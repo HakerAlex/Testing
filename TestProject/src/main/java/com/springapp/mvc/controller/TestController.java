@@ -320,13 +320,8 @@ public class TestController {
         author.append(" ");
         author.append(ourTest.getUsersById().getSurname());
 
-        StringBuilder ourBuffer = new StringBuilder(100);
-        ourBuffer.append(" Код:");
-        ourBuffer.append(ourTest.getCategoryById().getId());
-        ourBuffer.append(" ");
-        ourBuffer.append(ourTest.getCategoryById().getCategory());
-
-        model.addAttribute("categoryfortest", ourBuffer.toString());
+        model.addAttribute("categoryfortest", ourTest.getCategoryById().getCategory());
+        model.addAttribute("categoryfortestid", ourTest.getCategoryById().getId());
         model.addAttribute("tree", treeBean.createTree());
         model.addAttribute("code", ourTest.getId());
         model.addAttribute("href", ourTest.getPathtotest());

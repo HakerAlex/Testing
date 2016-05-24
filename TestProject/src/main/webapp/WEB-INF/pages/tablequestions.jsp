@@ -371,10 +371,7 @@ src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js
 <script type="text/javascript" charset="utf-8">
     var parent;
     $('#treeview').on('nodeSelected', function (event, data) {
-        var cat=data.text.trim();
-        var n = cat.search(" ");
-
-        $('#upcategory').val(cat.substring(n+1,cat.length));
+        $('#upcategory').val(data.text);
         $('#oldcategory').val(data.href);
         $('#category').val(data.text);
         $('#categoryid').val(data.href);

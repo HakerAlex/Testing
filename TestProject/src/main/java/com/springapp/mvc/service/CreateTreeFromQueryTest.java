@@ -169,6 +169,23 @@ public class CreateTreeFromQueryTest {
 
     }
 
+    @Transactional(readOnly = true)
+    public String createList(int categoryID){
+        List<TestsEntity> listTest=testcategoryRepository.getAllTestByCategoryID(categoryID);
+        StringBuilder ourBuffer=new StringBuilder(100);
+
+        for (TestsEntity ourElement: listTest){
+            ourBuffer.append("<a href=\"javascript:opentest('");
+            ourBuffer.append(ourElement.getPathtotest());
+            ourBuffer.append("')\" class=\"list-group-item\" style=\"text-align: left\">");
+            ourBuffer.append("<span class=\"glyphicon glyphicon-star\"></span>");
+            ourBuffer.append(ourElement.getTestname());
+            ourBuffer.append("</a>");
+        }
+
+        return ourBuffer.toString();
+    }
+
 
 }
 

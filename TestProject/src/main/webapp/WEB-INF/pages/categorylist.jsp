@@ -52,35 +52,22 @@
 
         </div>
         <div class="col-xs-8">
-            <div class="list-group">
-                <a href="#" class="list-group-item" style="text-align: left">
-                    <span class="glyphicon glyphicon-star"></span>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-
-                </a>
-                <a href="#" class="list-group-item" style="text-align: left">
-                    <span class="glyphicon glyphicon-star"></span>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-
-                </a>
-                <a href="#" class="list-group-item" style="text-align: left">
-                    <span class="glyphicon glyphicon-star"></span>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-
-                </a>
-                <a href="#" class="list-group-item" style="text-align: left">
-                    <span class="glyphicon glyphicon-star"></span>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-
-                </a>
-                <a href="#" class="list-group-item" style="text-align: left">
-                    <span class="glyphicon glyphicon-star"></span>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit.
-
-                </a>
+            <h3>Список тестов</h3>
+            <div class="list-group" id="listtest">
+                ${list}
             </div>
         </div>
     </div>
+
+    <form id="opentest" class="opentest" method="post"
+          action="${pageContext.request.contextPath}/opentest">
+        <input type="hidden" id="testnumber" name="testnumber">
+    </form>
+
+
+    <sec:authorize access="isAuthenticated()">
+        <input type="hidden" value="active" id="activeuser">
+    </sec:authorize>
 </header>
 
 
@@ -100,6 +87,8 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/bootstrap.min.js"></script>
 <script type="text/javascript"
         src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-treeview.js"></script>
+<script type="text/javascript"
+        src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js"></script>
 
 <script type="text/javascript">
 
@@ -115,6 +104,42 @@
         $('#treeview').treeview('collapseAll', {levels: 100, silent: true});
     }
 
+
+
+    $('#treeview').on('nodeSelected', function (event, data) {
+
+        $.ajax({
+            type: "POST",
+            url: "${pageContext.request.contextPath}/getlisttest",
+            data: {
+                category: data.href
+            }
+        }).done(function (element) {
+            $('#listtest').html(element);
+        });
+    });
+
+    function opentest(codetest){
+        if ($('#activeuser').val()=='active')
+        {
+            $('#testnumber').val(codetest);
+            $('#opentest').submit();
+        }
+        else{
+            $.confirm({
+                        title: 'Информация',
+                        titleIcon: 'glyphicon glyphicon-info-sign',
+                        template: 'info',
+                        templateOk: 'info',
+                        message: 'Необходимо войти в систему для прохождения тестов!!!',
+                        labelOk: 'ОК',
+                        buttonCancel: false,
+                        onOk: function () {
+                        }
+                    }
+            )
+        }
+    }
 
 </script>
 

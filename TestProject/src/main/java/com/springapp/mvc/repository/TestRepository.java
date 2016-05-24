@@ -33,6 +33,10 @@ public class TestRepository {
     }
 
 
+    public TestsEntity getTestByPath(String path){
+        return (TestsEntity) session.getCurrentSession().createSQLQuery("select * from tests WHERE pathtotest=:test").addEntity(TestsEntity.class).setString("test", path).uniqueResult();
+    }
+
     public void createTest(TestsEntity test) throws Exception {
         try {
             session.getCurrentSession().save(test);

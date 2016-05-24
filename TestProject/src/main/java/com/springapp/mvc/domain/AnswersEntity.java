@@ -10,7 +10,6 @@ public class AnswersEntity {
     private String answer;
     private byte correct;
     private int idQuestion;
-    private String pathtopicture;
 
     private QuestionsEntity questionById;
 
@@ -54,15 +53,6 @@ public class AnswersEntity {
         this.idQuestion = idQuestion;
     }
 
-    @Basic
-    @Column(name = "pathtopicture")
-    public String getPathtopicture() {
-        return pathtopicture;
-    }
-
-    public void setPathtopicture(String pathtopicture) {
-        this.pathtopicture = pathtopicture;
-    }
 
     @Override
     public boolean equals(Object o) {
@@ -75,8 +65,6 @@ public class AnswersEntity {
         if (correct != that.correct) return false;
         if (idQuestion != that.idQuestion) return false;
         if (answer != null ? !answer.equals(that.answer) : that.answer != null) return false;
-        if (pathtopicture != null ? !pathtopicture.equals(that.pathtopicture) : that.pathtopicture != null)
-            return false;
 
         return true;
     }
@@ -87,7 +75,6 @@ public class AnswersEntity {
         result = 31 * result + (answer != null ? answer.hashCode() : 0);
         result = 31 * result + (int) correct;
         result = 31 * result + idQuestion;
-        result = 31 * result + (pathtopicture != null ? pathtopicture.hashCode() : 0);
         return result;
     }
 
