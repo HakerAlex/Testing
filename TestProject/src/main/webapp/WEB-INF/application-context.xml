@@ -33,6 +33,7 @@
         <property name="password" value="${jdbc.password}"/>
     </bean>
 
+    <bean id="createListTestBean" class="com.springapp.mvc.service.CreateListTest"/>
     <bean id="treeBean" class="com.springapp.mvc.service.CreateTreeFromQuery"/>
     <bean id="treeTestBean" class="com.springapp.mvc.service.CreateTreeFromQueryTest"/>
     <bean id="firstPageRepository" class="com.springapp.mvc.repository.FirstPageRepository"/>

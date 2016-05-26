@@ -28,6 +28,10 @@ public class TestRepository {
         return session.getCurrentSession().createSQLQuery("Select * from test_questions WHERE test_questions.ID_test=:id").addEntity(TestQuestionsEntity.class).setInteger("id", id).list();
     }
 
+    public List<QuestionsEntity> getQuestionsByTestPath(String path) {
+        return session.getCurrentSession().createSQLQuery("SELECT questions.* FROM testdb.tests left join test_questions on testdb.tests.ID=test_questions.ID_test left join questions on  test_questions.ID_question=questions.ID where testdb.tests.pathtotest=:path").addEntity(QuestionsEntity.class).setString("path", path).list();
+    }
+
     public List<FormsEntity> getFormsWrite(int id) {
         return session.getCurrentSession().createSQLQuery("Select * from forms WHERE ID_test=:idtest").addEntity(FormsEntity.class).setInteger("idtest", id).list();
     }
