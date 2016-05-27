@@ -1,9 +1,6 @@
 package com.springapp.mvc.controller;
 
-import com.springapp.mvc.domain.CategoriesEntity;
-import com.springapp.mvc.domain.TestcategoriesEntity;
-import com.springapp.mvc.domain.TestsEntity;
-import com.springapp.mvc.domain.UsersEntity;
+import com.springapp.mvc.domain.*;
 import com.springapp.mvc.repository.FirstPageRepository;
 import com.springapp.mvc.repository.TestRepository;
 import com.springapp.mvc.repository.TestcategoryRepository;
@@ -12,6 +9,10 @@ import com.springapp.mvc.service.CreateListTest;
 import com.springapp.mvc.service.CreateTreeFromQuery;
 import com.springapp.mvc.service.CreateTreeFromQueryTest;
 import org.apache.commons.lang.time.DateUtils;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,6 +21,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Timestamp;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -69,14 +72,12 @@ public class FirstpageController {
         return "tablequestions";
     }
 
-
     @PreAuthorize("hasRole('admin')")
     @RequestMapping(value = "/tests", method = RequestMethod.GET)
     public String getTests(Model model) {
         model.addAttribute("tree", treeTestBean.createTree(0));
         return "tests";
     }
-
 
 
     @RequestMapping(value = "/open/{id}", method = RequestMethod.GET)
@@ -132,17 +133,77 @@ public class FirstpageController {
         model.addAttribute("phone",ourUser.getPhone());
         model.addAttribute("email",ourUser.getEmail());
         model.addAttribute("description",ourTest.getTestname());
+        Calendar calendar = Calendar.getInstance();
+        long now = calendar.getTimeInMillis();
+        model.addAttribute("datestart",now);
+        model.addAttribute("testid",ourTest.getId());
 
         if (flag==0) //all OK
         {
-
             model.addAttribute("list",createListTestBean.createListTest(testnumber));
-
         }
 
 
         return "testform";
     }
 
+
+    @PreAuthorize("isAuthenticated()")
+    @RequestMapping(value = "/writetestuser", method = RequestMethod.POST, produces = {"text/html; charset=UTF-8"})
+    @ResponseBody
+    public String writeTestUser(@RequestParam("ourResult") String ourResult, @RequestParam("datebegin") long date,@RequestParam("testid") int testid) throws Exception {
+
+        JSONParser parser = new JSONParser();
+
+        Object listObj = parser.parse(ourResult);
+        JSONArray arrayJSON = (JSONArray)listObj;
+
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UsersEntity ourUser=userRepository.findUserByEmail(user.getUsername());
+
+        FormsEntity ourForm=new FormsEntity();
+        ourForm.setIdUser(ourUser.getId());
+
+        Calendar calendar = Calendar.getInstance();
+        long now = calendar.getTimeInMillis();
+
+        ourForm.setDatestart(new Timestamp(date));
+        ourForm.setDatefinish(new Timestamp(now));
+        ourForm.setIdTest(testid);
+        ourForm.setCorrectQuestion(0);
+        ourForm.setQuantityQuestion(0);
+
+        ourForm=testRepository.addForm(ourForm); //save to base
+
+        AnswersUserEntity ourAnswer=new AnswersUserEntity();
+
+        for (int i=0;i<arrayJSON.size();i++){
+            JSONObject obj = (JSONObject)arrayJSON.get(i);
+
+            String ourElement=obj.get("name").toString();
+            String ourValue=obj.get("value").toString();
+
+
+            if (ourElement.contains("question"))//it's a question
+            {
+                ourAnswer.setIdQuestion(new Integer(ourElement.replace("question","")));
+                ourAnswer.setIdForm(ourForm.getId());
+                ourAnswer.setIdAnswer(0);
+            }
+
+            if (ourElement.contains("answer"))//it's an answer
+            {
+                ourAnswer.setIdAnswer(new Integer(ourElement.replace("answer"+ourAnswer.getIdQuestion()+"id","")));
+                if (!ourValue.equals("")) {
+                    ourAnswer.setTextanswer(ourValue);
+                }
+            }
+
+            testRepository.addResult(ourAnswer); //write to base our result
+
+        }
+
+        return "";
+    }
 
 }

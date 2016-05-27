@@ -11,7 +11,6 @@ public class FormsEntity {
     private int id;
     private int idTest;
     private int idUser;
-    private Date date;
     private Timestamp datestart;
     private Timestamp datefinish;
     private int quantityQuestion;
@@ -50,16 +49,6 @@ public class FormsEntity {
 
     public void setIdUser(int idUser) {
         this.idUser = idUser;
-    }
-
-    @Basic
-    @Column(name = "date")
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
     }
 
     @Basic
@@ -114,7 +103,6 @@ public class FormsEntity {
         if (idUser != that.idUser) return false;
         if (quantityQuestion != that.quantityQuestion) return false;
         if (correctQuestion != that.correctQuestion) return false;
-        if (date != null ? !date.equals(that.date) : that.date != null) return false;
         if (datestart != null ? !datestart.equals(that.datestart) : that.datestart != null) return false;
         if (datefinish != null ? !datefinish.equals(that.datefinish) : that.datefinish != null) return false;
 
@@ -126,7 +114,6 @@ public class FormsEntity {
         int result = id;
         result = 31 * result + idTest;
         result = 31 * result + idUser;
-        result = 31 * result + (date != null ? date.hashCode() : 0);
         result = 31 * result + (datestart != null ? datestart.hashCode() : 0);
         result = 31 * result + (datefinish != null ? datefinish.hashCode() : 0);
         result = 31 * result + quantityQuestion;

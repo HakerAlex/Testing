@@ -36,14 +36,17 @@
                 <div class="form-group">
                     <h4>Фамилия: <span style="color: dodgerblue">${surname}</span> Имя: <span style="color: dodgerblue">${name}</span></h4>
                     <h5>Телефон: <span style="color: dodgerblue">${phone}</span> E-mail: <span style="color: dodgerblue">${email}</span> </h5>
+                    <input type="hidden" id="datebegin" value="${datestart}">
                 </div>
             </div>
+            <input type="hidden" id="testid" value="${testid}">
             <h3>${description}</h3>
-            <ul class="list-group" style="color: black">
+            <form>
+            <ul id="ourTest" class="list-group" style="color: black">
                 ${list}
             </ul>
-
-            <button class="btn btn-primary btn-block" type="submit">Закончить тест</button>
+            <button class="btn btn-primary btn-block" type="submit" >Закончить тест</button>
+            </form>
         </div>
     </div>
 
@@ -67,6 +70,38 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/bootstrap.min.js"></script>
 <script type="text/javascript"
         src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js"></script>
+
+<script type="text/javascript">
+
+    $( "form" ).submit(function( event ) {
+        event.preventDefault();
+
+        var data = JSON.stringify($(this).serializeArray());
+
+        $.ajax({
+            type: "POST",
+            url: "${pageContext.request.contextPath}/writetestuser",
+            data: {
+                ourResult: data,
+                datebegin: $("#datebegin").val(),
+                testid:$("#testid").val()
+            },
+            success: {
+                function (codeQ) {
+                }
+            },
+            error: {
+                function (codeQ) {
+                }
+            }
+        }).done(function (element) {
+
+        });
+
+    });
+
+</script>
+
 
 
 

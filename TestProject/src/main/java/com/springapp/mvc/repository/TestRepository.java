@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -36,7 +37,6 @@ public class TestRepository {
         return session.getCurrentSession().createSQLQuery("Select * from forms WHERE ID_test=:idtest").addEntity(FormsEntity.class).setInteger("idtest", id).list();
     }
 
-
     public TestsEntity getTestByPath(String path){
         return (TestsEntity) session.getCurrentSession().createSQLQuery("select * from tests WHERE pathtotest=:test").addEntity(TestsEntity.class).setString("test", path).uniqueResult();
     }
@@ -65,7 +65,6 @@ public class TestRepository {
 
     }
 
-
     public void deleteQuestionFromTest(int idTest) throws Exception {
         try {
             session.getCurrentSession().createSQLQuery("delete from test_questions WHERE ID_test=:idtest").setInteger("idtest",idTest).executeUpdate();
@@ -78,8 +77,6 @@ public class TestRepository {
     public TestQuestionsEntity getQuestionRow(int idQuestion) {
         return (TestQuestionsEntity) session.getCurrentSession().createSQLQuery("Select * from test_questions WHERE ID=:idquestion").addEntity(TestQuestionsEntity.class).setInteger("idquestion", idQuestion).uniqueResult();
     }
-
-
 
     public void deleteQuestionFromTest(TestQuestionsEntity question) throws Exception {
         try {
@@ -107,5 +104,21 @@ public class TestRepository {
 
     }
 
+    public FormsEntity addForm(FormsEntity ourForm) throws Exception {
+        try {
+            session.getCurrentSession().save(ourForm);
+            return (FormsEntity) session.getCurrentSession().get(FormsEntity.class,ourForm.getId());
+        } catch (HibernateException e) {
+            throw new Exception("Невозможно создать форму результат" , e);
+        }
+    }
+
+    public void addResult(AnswersUserEntity ourAnswer) throws Exception {
+        try {
+            session.getCurrentSession().save(ourAnswer);
+        } catch (HibernateException e) {
+            throw new Exception("Невозможно создать строку результатв" , e);
+        }
+    }
 
 }

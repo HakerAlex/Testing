@@ -24,8 +24,26 @@ public class CreateListTest {
 
       StringBuilder ourBuffer=new StringBuilder(500);
 
+      int flag=0;
       for (QuestionsEntity ourQuen: ourQuestions){
-          ourBuffer.append("<li class=\"list-group-item\">");
+
+          if (flag==0)
+          {
+              ourBuffer.append("<li class=\"list-group-item list-group-item-success\">");
+              flag++;
+          }
+          else if (flag==1){
+              ourBuffer.append("<li class=\"list-group-item list-group-item-warning\">");
+              flag++;
+          } else if (flag==2) {
+              ourBuffer.append("<li class=\"list-group-item list-group-item-info\">");
+              flag++;
+          }
+          else if (flag==3) {
+              ourBuffer.append("<li class=\"list-group-item list-group-item-danger\">");
+              flag=0;
+          }
+
           ourBuffer.append("<span class=\"glyphicon glyphicon-star\"></span>");
           ourBuffer.append("<h4 class=\"list-group-item-heading\">");
           ourBuffer.append(ourQuen.getQuestion());
@@ -52,22 +70,28 @@ public class CreateListTest {
                   ourBuffer.append("<label class=\"btn btn-primary\">");
 
                   if (ourQuen.getTypeQuestion()==1) {
-                      ourBuffer.append("<input type=\"radio\" name=\"answer\" id=\"option\"");
+                      ourBuffer.append("<input type=\"radio\" name=\"answer");
+                      ourBuffer.append(ourQuen.getId());
+                      ourBuffer.append("id");
+                      ourBuffer.append(ourAnswers.get(i-1).getId());
+                      ourBuffer.append("\" id=\"option\"");
                       ourBuffer.append(ourQuen.getId());
                       ourBuffer.append(" value=\"");
                       ourBuffer.append(i);
                       ourBuffer.append("\">");
-                      ourBuffer.append("");
                       ourBuffer.append("Ответ №"+i);
                   }
 
                   if (ourQuen.getTypeQuestion()==2) {
-                      ourBuffer.append("<input type=\"checkbox\" name=\"answer\" id=\"option\"");
+                      ourBuffer.append("<input type=\"checkbox\" name=\"answer");
+                      ourBuffer.append(ourQuen.getId());
+                      ourBuffer.append("id");
+                      ourBuffer.append(ourAnswers.get(i-1).getId());
+                      ourBuffer.append("\" id=\"option\"");
                       ourBuffer.append(ourQuen.getId());
                       ourBuffer.append(" value=\"");
                       ourBuffer.append(i);
                       ourBuffer.append("\">");
-                      ourBuffer.append("");
                       ourBuffer.append("Ответ №"+i);
                   }
                   ourBuffer.append("</label>");
@@ -75,12 +99,14 @@ public class CreateListTest {
               ourBuffer.append("</div>");
           }
 
-          if (ourQuen.getTypeQuestion()==3) {
+          if (ourQuen.getTypeQuestion()==3 && ourAnswers.size()>0) {
               ourBuffer.append("<div class=\"form-group\">");
               ourBuffer.append("<div class=\"input-group\">");
               ourBuffer.append("<span class=\"input-group-addon\"><i class=\"ti-info\"></i></span>");
-              ourBuffer.append("<input type=\"form-control\" class=\"form-control\" name=\"text");
+              ourBuffer.append("<input type=\"form-control\" class=\"form-control\" name=\"answer");
               ourBuffer.append(ourQuen.getId());
+              ourBuffer.append("id");
+              ourBuffer.append(ourAnswers.get(0).getId());
               ourBuffer.append("\">");
               ourBuffer.append("</div>");
               ourBuffer.append("</div>");
