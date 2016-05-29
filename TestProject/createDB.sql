@@ -5,7 +5,6 @@ CREATE TABLE answers (
     answer text ,
     correct bool,
     ID_question int,
-    pathtopicture text ,
     CONSTRAINT answers_pk PRIMARY KEY (ID)
 );
 
@@ -32,7 +31,6 @@ CREATE TABLE forms (
     ID int  AUTO_INCREMENT,
     ID_test int ,
     ID_user int ,
-    date date ,
     datestart timestamp ,
     datefinish timestamp ,
     quantity_question int ,
@@ -68,8 +66,7 @@ CREATE TABLE test_questions (
 CREATE TABLE testcategories (
     category text ,
     ID int  AUTO_INCREMENT,
-    pathtopicture longtext ,
-    picture blob ,
+    picture longtext ,
     description text ,
     CONSTRAINT testcategories_pk PRIMARY KEY (ID)
 );
@@ -97,7 +94,6 @@ CREATE TABLE users (
     ID_rule int ,
     surname varchar(100) ,
     phone varchar(25) ,
-    avatar blob ,
     CONSTRAINT users_pk PRIMARY KEY (ID)
 );
 

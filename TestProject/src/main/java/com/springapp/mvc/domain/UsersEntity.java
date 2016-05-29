@@ -109,7 +109,6 @@ public class UsersEntity {
 
         UsersEntity that = (UsersEntity) o;
 
-        if (id != that.id) return false;
         if (status != that.status) return false;
         if (idRule != that.idRule) return false;
         if (name != null ? !name.equals(that.name) : that.name != null) return false;
@@ -122,7 +121,7 @@ public class UsersEntity {
 
     @Override
     public int hashCode() {
-        int result = id;
+        int result = 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (password != null ? password.hashCode() : 0);
         result = 31 * result + (int) status;
