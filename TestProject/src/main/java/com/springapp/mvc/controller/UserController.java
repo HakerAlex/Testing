@@ -4,6 +4,7 @@ import com.springapp.mvc.component.RegisterValidator;
 import com.springapp.mvc.domain.UsersEntity;
 import com.springapp.mvc.forms.RegisterForm;
 import com.springapp.mvc.repository.UserRepository;
+import com.springapp.mvc.service.CreateListTest;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -19,6 +20,9 @@ public class UserController {
     @Autowired
     private UserRepository userRepository;
     private RegisterValidator registerValidator;
+
+    @Autowired(required = false)
+    private CreateListTest createListTestBean;
 
     @RequestMapping(value = "/createuser", method = RequestMethod.POST)
     public String getUser(@ModelAttribute("new_user") RegisterForm userForm, Model model, BindingResult result) throws Exception {
@@ -139,5 +143,21 @@ public class UserController {
         model.addAttribute("users", userRepository.getAllUsers());
         return "tableuser";
     }
+
+    @PreAuthorize("hasRole('admin')")
+    @RequestMapping(value = "/resultuser/{userid}", method = RequestMethod.GET)
+    public String resultUser(@PathVariable int userid, Model model) {
+        model.addAttribute("table", userRepository.getUsersResult(userid));
+        return "userstest";
+
+    }
+
+    @PreAuthorize("hasRole('admin')")
+    @RequestMapping(value = "/getuserresult", method = RequestMethod.POST, produces = {"text/html; charset=UTF-8"})
+    @ResponseBody
+    public String getUserResult(@RequestParam("testid") int testid){
+         return createListTestBean.returnResult(testid);
+    }
+
 
 }

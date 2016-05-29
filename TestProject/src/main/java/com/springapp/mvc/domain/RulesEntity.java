@@ -13,6 +13,7 @@ public class RulesEntity {
     private Collection<UsersEntity> usersEntityCollection;
 
     @Id
+    @GeneratedValue
     @Column(name = "ID", nullable = false)
     public int getId() {
         return id;

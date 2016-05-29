@@ -16,7 +16,7 @@ public class TestsEntity {
     private int idCategory;
     private String pathtotest;
 
-    private CategoriesEntity categoriesById;
+    private TestcategoriesEntity categoriesById;
     private UsersEntity usersById;
 
     private Collection<TestQuestionsEntity> testQuestionsEntities;
@@ -24,6 +24,7 @@ public class TestsEntity {
 
 
     @Id
+    @GeneratedValue
     @Column(name = "ID", nullable = false)
     public int getId() {
         return id;
@@ -138,11 +139,11 @@ public class TestsEntity {
 
     @ManyToOne
     @JoinColumn(name = "ID_category", referencedColumnName = "ID", insertable = false, updatable = false)
-    public CategoriesEntity getCategoryById() {
+    public TestcategoriesEntity getCategoryById() {
         return categoriesById;
     }
 
-    public void setCategoryById(CategoriesEntity categoriesById) {
+    public void setCategoryById(TestcategoriesEntity categoriesById) {
         this.categoriesById = categoriesById;
     }
 

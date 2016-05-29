@@ -14,6 +14,7 @@ public class AnswersEntity {
     private QuestionsEntity questionById;
 
     @Id
+    @GeneratedValue
     @Column(name = "ID")
     public int getId() {
         return id;

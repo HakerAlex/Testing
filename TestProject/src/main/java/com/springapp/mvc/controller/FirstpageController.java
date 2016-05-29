@@ -8,11 +8,9 @@ import com.springapp.mvc.repository.UserRepository;
 import com.springapp.mvc.service.CreateListTest;
 import com.springapp.mvc.service.CreateTreeFromQuery;
 import com.springapp.mvc.service.CreateTreeFromQueryTest;
-import org.apache.commons.lang.time.DateUtils;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -55,8 +53,10 @@ public class FirstpageController {
     public String getBasic(Model model) {
         String countTest = firstPageRepository.testQuantity();
         List<TestcategoriesEntity> listCategories = firstPageRepository.listCategoriesByParentID(0);
+        List<TestcategoriesEntity> allCategories = firstPageRepository.listCategories();
         model.addAttribute("count", countTest);
-        model.addAttribute("allcategories", listCategories);
+        model.addAttribute("categories", listCategories);
+        model.addAttribute("allcategories", allCategories);
         return "index";
     }
 
@@ -81,14 +81,14 @@ public class FirstpageController {
 
 
     @RequestMapping(value = "/open/{id}", method = RequestMethod.GET)
-    public String openCategory(@PathVariable int id,  Model model) {
+    public String openCategory(@PathVariable int id, Model model) {
 
-        TestcategoriesEntity ourCategory=testcategoryRepository.getCategoryByID(id);
-        model.addAttribute("picture",ourCategory.getPicture());
-        model.addAttribute("category",ourCategory.getCategory());
-        model.addAttribute("description",ourCategory.getDescription());
-        model.addAttribute("tree",treeTestBean.createTree(ourCategory.getId()));
-        model.addAttribute("list",treeTestBean.createList(ourCategory.getId()));
+        TestcategoriesEntity ourCategory = testcategoryRepository.getCategoryByID(id);
+        model.addAttribute("picture", ourCategory.getPicture());
+        model.addAttribute("category", ourCategory.getCategory());
+        model.addAttribute("description", ourCategory.getDescription());
+        model.addAttribute("tree", treeTestBean.createTree(ourCategory.getId()));
+        model.addAttribute("list", treeTestBean.createList(ourCategory.getId()));
         return "categorylist";
     }
 
@@ -99,49 +99,78 @@ public class FirstpageController {
     }
 
 
+    @RequestMapping(value = "/search", method = RequestMethod.POST, produces = {"text/html; charset=UTF-8"})
+    @ResponseBody
+    public String getSearch(@RequestParam("category") int category,@RequestParam("search") String search) {
+        return createListTestBean.returnSearchList(category,search);
+    }
+
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/opentest", method = RequestMethod.POST)
     public String openTest(@RequestParam("testnumber") String testnumber, Model model) {
-        TestsEntity ourTest=testRepository.getTestByPath(testnumber);
+        TestsEntity ourTest = testRepository.getTestByPath(testnumber);
 
-        Date ourCurrentDate=new Date(System.currentTimeMillis());
+        Date ourCurrentDate = new Date(System.currentTimeMillis());
 
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UsersEntity ourUser=userRepository.findUserByEmail(user.getUsername());
+        UsersEntity ourUser = userRepository.findUserByEmail(user.getUsername());
 
-        int flag=0;
+        int flag = 0;
 
-        Date dateStart=ourTest.getDateStart();
-        Date dateFinish=ourTest.getDateFinish();
+        Date dateStart = ourTest.getDateStart();
+        Date dateFinish = ourTest.getDateFinish();
 
-        if (dateStart!=null) {
+        if (dateStart != null) {
             if (ourCurrentDate.before(dateStart)) {
-                model.addAttribute("flag","before");
-                flag=1;
+                model.addAttribute("flag", "before");
+                StringBuilder ourBuffer = new StringBuilder(500);
+                ourBuffer.append("<li class=\"list-group-item list-group-item-danger\">");
+                ourBuffer.append("<span class=\"glyphicon glyphicon-star\"></span>");
+                ourBuffer.append("<h4 class=\"list-group-item-heading\">");
+                ourBuffer.append("Тест будет доступен после: ");
+                ourBuffer.append(dateStart);
+                ourBuffer.append("</h4>");
+                ourBuffer.append("</li>");
+                model.addAttribute("list",ourBuffer.toString());
+                model.addAttribute("count",0);
+                flag = 1;
             }
         }
 
-        if (dateFinish!=null) {
+        if (dateFinish != null) {
             if (ourCurrentDate.after(dateFinish)) {
-                model.addAttribute("flag","after");
-                flag=1;
+                model.addAttribute("flag", "after");
+                StringBuilder ourBuffer = new StringBuilder(500);
+                ourBuffer.append("<li class=\"list-group-item list-group-item-danger\">");
+                ourBuffer.append("<span class=\"glyphicon glyphicon-star\"></span>");
+                ourBuffer.append("<h4 class=\"list-group-item-heading\">");
+                ourBuffer.append("Тест закрыт с: ");
+                ourBuffer.append(dateFinish);
+                ourBuffer.append("</h4>");
+                ourBuffer.append("</li>");
+                model.addAttribute("list",ourBuffer.toString());
+                model.addAttribute("count",0);
+                flag = 1;
             }
         }
 
-        model.addAttribute("surname",ourUser.getSurname());
-        model.addAttribute("name",ourUser.getName());
-        model.addAttribute("phone",ourUser.getPhone());
-        model.addAttribute("email",ourUser.getEmail());
-        model.addAttribute("description",ourTest.getTestname());
+        model.addAttribute("surname", ourUser.getSurname());
+        model.addAttribute("name", ourUser.getName());
+        model.addAttribute("phone", ourUser.getPhone());
+        model.addAttribute("email", ourUser.getEmail());
+        model.addAttribute("description", ourTest.getTestname());
         Calendar calendar = Calendar.getInstance();
         long now = calendar.getTimeInMillis();
-        model.addAttribute("datestart",now);
-        model.addAttribute("testid",ourTest.getId());
+        model.addAttribute("datestart", now);
+        model.addAttribute("testid", ourTest.getId());
 
-        if (flag==0) //all OK
+        if (flag == 0) //all OK
         {
-            model.addAttribute("list",createListTestBean.createListTest(testnumber));
+            model.addAttribute("list", createListTestBean.createListTest(testnumber));
+            model.addAttribute("count", testRepository.getCountQuestionByTestID(ourTest.getId()));
         }
+
+
 
 
         return "testform";
@@ -151,17 +180,17 @@ public class FirstpageController {
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/writetestuser", method = RequestMethod.POST, produces = {"text/html; charset=UTF-8"})
     @ResponseBody
-    public String writeTestUser(@RequestParam("ourResult") String ourResult, @RequestParam("datebegin") long date,@RequestParam("testid") int testid) throws Exception {
+    public String writeTestUser(@RequestParam("ourResult") String ourResult, @RequestParam("datebegin") long date, @RequestParam("testid") int testid) throws Exception {
 
         JSONParser parser = new JSONParser();
 
         Object listObj = parser.parse(ourResult);
-        JSONArray arrayJSON = (JSONArray)listObj;
+        JSONArray arrayJSON = (JSONArray) listObj;
 
         User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UsersEntity ourUser=userRepository.findUserByEmail(user.getUsername());
+        UsersEntity ourUser = userRepository.findUserByEmail(user.getUsername());
 
-        FormsEntity ourForm=new FormsEntity();
+        FormsEntity ourForm = new FormsEntity();
         ourForm.setIdUser(ourUser.getId());
 
         Calendar calendar = Calendar.getInstance();
@@ -173,37 +202,47 @@ public class FirstpageController {
         ourForm.setCorrectQuestion(0);
         ourForm.setQuantityQuestion(0);
 
-        ourForm=testRepository.addForm(ourForm); //save to base
+        ourForm = testRepository.addForm(ourForm); //save to base
 
-        AnswersUserEntity ourAnswer=new AnswersUserEntity();
+        AnswersUserEntity ourAnswer = null;
+        int flag = 0;
+        for (int i = 0; i < arrayJSON.size(); i++) {
+            JSONObject obj = (JSONObject) arrayJSON.get(i);
 
-        for (int i=0;i<arrayJSON.size();i++){
-            JSONObject obj = (JSONObject)arrayJSON.get(i);
-
-            String ourElement=obj.get("name").toString();
-            String ourValue=obj.get("value").toString();
+            String ourElement = obj.get("name").toString();
+            String ourValue = obj.get("value").toString();
 
 
             if (ourElement.contains("question"))//it's a question
             {
-                ourAnswer.setIdQuestion(new Integer(ourElement.replace("question","")));
+                ourAnswer = new AnswersUserEntity();
+                ourAnswer.setIdQuestion(new Integer(ourElement.replace("question", "")));
                 ourAnswer.setIdForm(ourForm.getId());
                 ourAnswer.setIdAnswer(0);
+                testRepository.addResult(ourAnswer); //write to base our result
+                flag = 0;
+                continue;
             }
 
             if (ourElement.contains("answer"))//it's an answer
             {
-                ourAnswer.setIdAnswer(new Integer(ourElement.replace("answer"+ourAnswer.getIdQuestion()+"id","")));
+                ourAnswer.setIdAnswer(new Integer(ourElement.replace("answer" + ourAnswer.getIdQuestion() + "id", "")));
                 if (!ourValue.equals("")) {
                     ourAnswer.setTextanswer(ourValue);
                 }
+                if (flag == 0) {
+                    testRepository.updateResult(ourAnswer); //update to base our result
+                    flag++;
+                } else {
+                    testRepository.addResult(ourAnswer);
+                }
+
             }
 
-            testRepository.addResult(ourAnswer); //write to base our result
 
         }
 
-        return "";
+        return createListTestBean.returnResult(ourForm.getId());
     }
 
 }

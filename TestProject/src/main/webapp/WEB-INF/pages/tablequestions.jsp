@@ -473,7 +473,9 @@ src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js
     }
     function clearParent() {
         $('#category').val("");
+        $('#categoryid').val(0);
         $('#parent').val("");
+        $('#parentid').val(0);
     }
 </script>
 

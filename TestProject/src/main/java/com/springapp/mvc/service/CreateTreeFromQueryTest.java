@@ -171,7 +171,7 @@ public class CreateTreeFromQueryTest {
 
     @Transactional(readOnly = true)
     public String createList(int categoryID){
-        List<TestsEntity> listTest=testcategoryRepository.getAllTestByCategoryID(categoryID);
+        List<TestsEntity> listTest=testcategoryRepository.getAllTestByCategoryIDFirstPage(categoryID);
         StringBuilder ourBuffer=new StringBuilder(100);
 
         for (TestsEntity ourElement: listTest){

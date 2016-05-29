@@ -19,6 +19,7 @@ public class QuestionsEntity {
     private Collection<TestQuestionsEntity> testQuestionById;
 
     @Id
+    @GeneratedValue
     @Column(name = "ID", nullable = false)
     public int getId() {
         return id;

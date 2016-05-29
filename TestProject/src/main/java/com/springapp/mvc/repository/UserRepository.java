@@ -1,7 +1,6 @@
 package com.springapp.mvc.repository;
 
-import com.springapp.mvc.domain.RulesEntity;
-import com.springapp.mvc.domain.UsersEntity;
+import com.springapp.mvc.domain.*;
 import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,6 +48,10 @@ public class UserRepository {
 
     public RulesEntity findRuleByUserID(int id) {
         return (RulesEntity) session.getCurrentSession().createSQLQuery("Select rules.ID,rules.namerule from users left JOIN rules on users.ID_rule = rules.ID WHERE users.id=:id").addEntity(RulesEntity.class).setInteger("id", id).uniqueResult();
+    }
+
+    public List<FormsEntity> getUsersResult(int iduser){
+        return session.getCurrentSession().createSQLQuery("SELECT * FROM forms left join tests on forms.ID_test=tests.ID left join testcategories on tests.ID_category=testcategories.ID  where ID_user=:id").addEntity(FormsEntity.class).addEntity(TestsEntity.class).addEntity(TestcategoriesEntity.class).setInteger("id",iduser).list();
     }
 
 

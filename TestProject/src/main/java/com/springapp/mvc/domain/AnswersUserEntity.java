@@ -16,6 +16,7 @@ public class AnswersUserEntity {
 
 
     @Id
+    @GeneratedValue
     @Column(name = "ID")
     public int getId() {
         return id;
@@ -56,7 +57,7 @@ public class AnswersUserEntity {
     }
 
     @Basic
-    @Column(name = "textanswer", nullable = false, length = -1)
+    @Column(name = "textanswer")
     public String getTextanswer() {
         return textanswer;
     }

@@ -15,6 +15,7 @@ public class TestQuestionsEntity {
     private QuestionsEntity questionsEntity;
 
     @Id
+    @GeneratedValue
     @Column(name = "ID", nullable = false)
     public int getId() {
         return id;

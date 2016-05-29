@@ -46,7 +46,8 @@
                 <th>Телефон</th>
                 <th>Статус</th>
                 <th style="align-content: center">Права</th>
-                <th>Действия</th>
+                <th>Редактировать</th>
+                <th>Результаты</th>
             </tr>
             </thead>
 
@@ -72,6 +73,13 @@
                                             <a href="${pageContext.request.contextPath}/edituser/${user[0].id}"
                                                class="label btn-info"><i
                                                     class="fa fa-pencil"> Редактировать</i></a></span>
+                    </td>
+
+                    <td align="center">
+                                        <span class="tooltip-area">
+                                            <a href="${pageContext.request.contextPath}/resultuser/${user[0].id}"
+                                               class="label btn-success"><i
+                                                    class="fa fa-folder"> Результаты</i></a></span>
                     </td>
                 </tr>
             </c:forEach>

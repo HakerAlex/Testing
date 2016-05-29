@@ -22,6 +22,7 @@ public class FormsEntity {
     private Collection<AnswersUserEntity> answersUserEntities;
 
     @Id
+    @GeneratedValue
     @Column(name = "ID", nullable = false)
     public int getId() {
         return id;

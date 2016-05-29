@@ -433,7 +433,9 @@
 <script type="text/javascript">
     function clearParent() {
         $('#category').val("");
+        $('#categoryid').val(0);
         $('#parent').val("");
+        $('#parentid').val(0);
     }
     var parent;
     $('#treeview').on('nodeSelected', function (event, data) {

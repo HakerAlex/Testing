@@ -25,9 +25,12 @@ public class TestcategoryRepository {
         return (TestcategoriesEntity) session.getCurrentSession().createSQLQuery("Select * from testcategories where ID=:id").addEntity(TestcategoriesEntity.class).setInteger("id", id).uniqueResult();
     }
 
-
     public List<TestsEntity> getAllTestByCategoryID(int idCategory) {
         return session.getCurrentSession().createSQLQuery("Select * from tests where ID_category=:idcategory").addEntity(TestsEntity.class).setInteger("idcategory", idCategory).list();
+    }
+
+    public List<TestsEntity> getAllTestByCategoryIDFirstPage(int idCategory) {
+        return session.getCurrentSession().createSQLQuery("Select * from tests where firstpage=1 and ID_category=:idcategory").addEntity(TestsEntity.class).setInteger("idcategory", idCategory).list();
     }
 
     public List<TestcategoriesEntity> getAllCategories() {

@@ -192,7 +192,7 @@ public class TestController {
             testRepository.updateTest(ourTest);
         }
 
-        ourTest = testRepository.getTestByTitle(ourTest.getTestname());
+        ourTest = testRepository.getTestByID(ourTest.getId());
 
         StringBuilder json = new StringBuilder(100);
         json.append("{\"code\":\"");

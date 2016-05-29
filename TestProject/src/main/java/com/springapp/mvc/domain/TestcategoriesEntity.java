@@ -39,6 +39,7 @@ public class TestcategoriesEntity {
     }
 
     @Id
+    @GeneratedValue
     @Column(name = "ID", nullable = false)
     public int getId() {
         return id;
