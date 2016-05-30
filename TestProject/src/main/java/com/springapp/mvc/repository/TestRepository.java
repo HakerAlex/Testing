@@ -68,6 +68,22 @@ public class TestRepository {
         return false;
     }
 
+    public boolean checkCountAnswerInQuestion(int idQuestion) {
+        List<AnswersEntity> ourList = session.getCurrentSession().createSQLQuery("SELECT * from answers WHERE ID_question=:idquestion").addEntity(AnswersEntity.class).setInteger("idquestion", idQuestion).list();
+        if (ourList.size() == 0) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean checkCountCorrectAnswerInQuestion(int idQuestion) {
+        List<AnswersEntity> ourList = session.getCurrentSession().createSQLQuery("SELECT * from answers WHERE ID_question=:idquestion and correct=1").addEntity(AnswersEntity.class).setInteger("idquestion", idQuestion).list();
+        if (ourList.size() == 0) {
+            return false;
+        }
+        return true;
+    }
+
     public void deleteTest(TestsEntity test) throws Exception {
         try {
             session.getCurrentSession().delete(test);

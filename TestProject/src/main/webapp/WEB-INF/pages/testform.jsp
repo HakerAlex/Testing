@@ -39,14 +39,14 @@
                     <h4>Фамилия: <span style="color: dodgerblue">${surname}</span> Имя: <span style="color: dodgerblue">${name}</span></h4>
                     <hr class="hr-xs">
                     <h5>Телефон: <span style="color: dodgerblue">${phone}</span> E-mail: <span style="color: dodgerblue">${email}</span> </h5>
-                    <input type="hidden" id="datebegin" value="${datestart}">
+                    <input type="hidden" id="datebegin" value="">
                 </div>
             </div>
             <div class="panel panel-info">
             <input type="hidden" id="testid" value="${testid}">
             <h3>${description}</h3>
             <form>
-               <ul id="ourTest" class="list-group">
+               <ul id="ourTest" class="list-group" style="text-align: center; margin-right: 25px">
                 ${list}
             </ul>
              <c:if test="${count!=0}">
@@ -81,6 +81,18 @@
 
 <script type="text/javascript">
 
+    $(document).ready(function () {
+
+            if ($("#datebegin").val()==''){
+                var date = new Date();
+                var offset = date.getTimezoneOffset() * 60000;
+
+                $('#datebegin').val(date.getTime()-offset);
+            }
+
+        });
+
+
     $( "form" ).submit(function( event ) {
         event.preventDefault();
 
@@ -92,7 +104,8 @@
             data: {
                 ourResult: data,
                 datebegin: $("#datebegin").val(),
-                testid:$("#testid").val()
+                testid:$("#testid").val(),
+                datefinish:new Date().getTime()-(new Date).getTimezoneOffset() * 60000
             },
             success: {
                 function (codeQ) {

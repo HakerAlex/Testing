@@ -90,7 +90,7 @@
                     <h4 class="modal-title">Тест подробно</h4>
                 </div>
                 <div class="modal-body">
-                    <ul id="ourTest" class="list-group" style="text-align: center">
+                    <ul id="ourTest" class="list-group" style="text-align: center; margin-right: 25px">
                     </ul>
                 </div>
 

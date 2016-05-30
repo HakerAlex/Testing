@@ -17,7 +17,7 @@
                              always-use-default-target="true"/>
         <security:logout logout-success-url="/" delete-cookies="JSESSIONID"/>
         <security:session-management invalid-session-url="/">
-            <security:concurrency-control error-if-maximum-exceeded="true"/>
+            <security:concurrency-control error-if-maximum-exceeded="false"/>
         </security:session-management>
     </security:http>
 

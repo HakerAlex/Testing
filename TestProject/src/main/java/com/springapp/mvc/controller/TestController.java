@@ -217,6 +217,14 @@ public class TestController {
             return "Вопрос уже добавлен!";
         }
 
+        if (!testRepository.checkCountAnswerInQuestion(idquestion)) {
+            return "Нет ответов в вопросе!";
+        }
+
+        if (!testRepository.checkCountCorrectAnswerInQuestion(idquestion)) {
+            return "Нет правильных ответов в вопросе!";
+        }
+
         TestQuestionsEntity ourQuestion = new TestQuestionsEntity();
 
         ourQuestion.setIdQuestion(idquestion);

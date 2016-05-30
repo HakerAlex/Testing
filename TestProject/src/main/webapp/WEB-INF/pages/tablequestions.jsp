@@ -44,10 +44,14 @@
             <div class="form-group">
                 <a href="#myModal" data-toggle="modal"
                    class="btn btn-primary btn-search">+</a>
-                <a href="#upModal" data-toggle="modal"
-                   class="btn btn-primary btn-search">Редак.</a>
-                <a href="#del" data-toggle="modal"
-                   class="btn btn-primary btn-danger">Удалить</a>
+                <%--<a href="#upModal" data-toggle="modal"--%>
+                   <%--class="btn btn-primary btn-search">Редак.</a>--%>
+                <%--<a href="#del" data-toggle="modal"--%>
+                <%--class="btn btn-primary btn-danger">Удалить</a>--%>
+
+                <button class="btn btn-primary btn-search" type="submit" onclick="openedit()">Редак.</button>
+                <button class="btn btn-primary btn-danger" type="submit" onclick="opendel()">Удалить</button>
+
             </div>
 
             <div id="treeview" style="color: dodgerblue; text-align:left "></div>
@@ -59,7 +63,8 @@
             <form id="addquestion" class="addquestion" method="post"
                   action="${pageContext.request.contextPath}/addquestion" commandName="addquestion">
                 <input type="hidden" value="" class="form-control" id="categoryforquestion" name="categoryforquestion">
-                <input type="hidden" value="" class="form-control" id="categoryforquestionid" name="categoryforquestionid">
+                <input type="hidden" value="" class="form-control" id="categoryforquestionid"
+                       name="categoryforquestionid">
                 <button type="button" class="btn btn-primary btn-search" id="addnewquestion">Добавить вопрос</button>
                 <%--<button class="btn btn-primary btn-search" type="submit">Добавить вопрос</button>--%>
             </form>
@@ -198,7 +203,7 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/jquery.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/bootstrap.min.js"></script>
 <script type="text/javascript"
-src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js"></script>
+        src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js"></script>
 <script type="text/javascript"
         src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-treeview.js"></script>
 
@@ -220,151 +225,169 @@ src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $("#addnewquestion").click(function () {
+                $("#addnewquestion").click(function () {
 
-            if ($('#categoryforquestion').val()=='') {
+                    if ($('#categoryforquestion').val() == '') {
 
-                $.confirm({
-                    title: 'Внимание',
-                    titleIcon: 'glyphicon glyphicon-warning-sign',
-                    template: 'warning',
-                    templateOk: 'warning',
-                    message: "Выберите категорию для добавления вопроса.",
-                    labelOk: 'ОК',
-                    buttonCancel: false,
-                    onOk: function() {
+                        $.confirm({
+                            title: 'Внимание',
+                            titleIcon: 'glyphicon glyphicon-warning-sign',
+                            template: 'warning',
+                            templateOk: 'warning',
+                            message: "Выберите категорию для добавления вопроса.",
+                            labelOk: 'ОК',
+                            buttonCancel: false,
+                            onOk: function () {
+                            }
+                        });
+
+                    } else {
+                        $('#addquestion').submit();
                     }
                 });
 
-            }else {
-                $('#addquestion').submit();
-            }
-          });
+                $("#deletecategory").click(function () {
 
-        $("#deletecategory").click(function () {
-            $.ajax({
-                type: "POST",
-                url: "${pageContext.request.contextPath}/delcategory",
-                data: {
-                    namecategory: $('#delcategoryid').val()
-                }
-            }).done(function (msg) {
-                if (msg != "") {
+                    if ($('#delcategoryid').val() == "") {
+                        $.confirm({
+                            title: 'Внимание',
+                            titleIcon: 'glyphicon glyphicon-warning-sign',
+                            template: 'warning',
+                            templateOk: 'warning',
+                            message: "Выберите категорию для удаления.",
+                            labelOk: 'ОК',
+                            buttonCancel: false,
+                            onOk: function () {
+                            }
+                        });
+                    }
 
-                    $.confirm({
-                        title: 'Внимание',
-                        titleIcon: 'glyphicon glyphicon-warning-sign',
-                        template: 'warning',
-                        templateOk: 'warning',
-                        message: msg,
-                        labelOk: 'ОК',
-                        buttonCancel: false,
-                        onOk: function() {
-                             }
-                    });
+                    else {
 
-                }
-                else {
+                        $.ajax({
+                            type: "POST",
+                            url: "${pageContext.request.contextPath}/delcategory",
+                            data: {
+                                namecategory: $('#delcategoryid').val()
+                            }
+                        }).done(function (msg) {
+                            if (msg != "") {
 
-                    $.confirm({
-                        title: 'Информация',
-                        titleIcon: 'glyphicon glyphicon-info-sign',
-                        template: 'info',
-                        templateOk: 'info',
-                        message: 'Категория удалена.',
-                        labelOk: 'ОК',
-                        buttonCancel: false,
-                        onOk: function() {
-                            location.reload();
+                                $.confirm({
+                                    title: 'Внимание',
+                                    titleIcon: 'glyphicon glyphicon-warning-sign',
+                                    template: 'warning',
+                                    templateOk: 'warning',
+                                    message: msg,
+                                    labelOk: 'ОК',
+                                    buttonCancel: false,
+                                    onOk: function () {
+                                    }
+                                });
+
+                            }
+                            else {
+
+                                $.confirm({
+                                    title: 'Информация',
+                                    titleIcon: 'glyphicon glyphicon-info-sign',
+                                    template: 'info',
+                                    templateOk: 'info',
+                                    message: 'Категория удалена.',
+                                    labelOk: 'ОК',
+                                    buttonCancel: false,
+                                    onOk: function () {
+                                        location.reload();
+                                    }
+                                });
+
+                            }
+                        });
+                    }
+                });
+
+                $("#addcategory").click(function () {
+                    if ($('#namecategory').val() != '') {
+                        $.ajax({
+                            type: "POST",
+                            url: "${pageContext.request.contextPath}/addcategory",
+                            data: {
+                                namecategory: $('#namecategory').val(),
+                                parent: $('#categoryid').val()
+                            }
+                        }).done(function (tree) {
+                            $.confirm({
+                                title: 'Информация',
+                                titleIcon: 'glyphicon glyphicon-info-sign',
+                                template: 'info',
+                                templateOk: 'info',
+                                message: 'Категория добавлена.',
+                                labelOk: 'ОК',
+                                buttonCancel: false,
+                                onOk: function () {
+                                    location.reload();
+                                }
+                            });
+                        });
+                    }
+                    else {
+                        $.confirm({
+                            title: 'Внимание',
+                            titleIcon: 'glyphicon glyphicon-warning-sign',
+                            template: 'warning',
+                            templateOk: 'warning',
+                            message: 'Нельзя создавать пустую категорию.',
+                            labelOk: 'ОК',
+                            buttonCancel: false,
+                            onOk: function () {
+                            }
+                        });
+                    }
+                });
+
+                $("#updatecategory").click(function () {
+
+                            if ($('#upcategory').val() != '') {
+                                $.ajax({
+                                    type: "POST",
+                                    url: "${pageContext.request.contextPath}/updatecategory",
+                                    data: {
+                                        namecategory: $('#upcategory').val(),
+                                        oldcategory: $('#oldcategory').val(),
+                                        parent: $('#parentid').val()
+                                    }
+                                }).done(function (tree) {
+
+                                    $.confirm({
+                                        title: 'Информация',
+                                        titleIcon: 'glyphicon glyphicon-info-sign',
+                                        template: 'info',
+                                        templateOk: 'info',
+                                        message: 'Категория обновлена.',
+                                        labelOk: 'ОК',
+                                        buttonCancel: false,
+                                        onOk: function () {
+                                            location.reload();
+                                        }
+                                    });
+                                });
+                            }
+                            else {
+                                $.confirm({
+                                    title: 'Внимание',
+                                    titleIcon: 'glyphicon glyphicon-warning-sign',
+                                    template: 'warning',
+                                    templateOk: 'warning',
+                                    message: 'Нельзя исправлять на пустую категорию.',
+                                    labelOk: 'ОК',
+                                    buttonCancel: false,
+                                    onOk: function () {
+                                    }
+                                });
+                            }
                         }
-                    });
-
-                }
-            });
-        });
-
-        $("#addcategory").click(function () {
-            if ($('#namecategory').val()!=''){
-            $.ajax({
-                type: "POST",
-                url: "${pageContext.request.contextPath}/addcategory",
-                data: {
-                    namecategory: $('#namecategory').val(),
-                    parent: $('#categoryid').val()
-                }
-            }).done(function (tree) {
-                $.confirm({
-                    title: 'Информация',
-                    titleIcon: 'glyphicon glyphicon-info-sign',
-                    template: 'info',
-                    templateOk: 'info',
-                    message: 'Категория добавлена.',
-                    labelOk: 'ОК',
-                    buttonCancel: false,
-                    onOk: function() {
-                        location.reload();
-                    }
-                });
-            });
-        }
-        else{
-            $.confirm({
-                title: 'Внимание',
-                titleIcon: 'glyphicon glyphicon-warning-sign',
-                template: 'warning',
-                templateOk: 'warning',
-                message: 'Нельзя создавать пустую категорию.',
-                labelOk: 'ОК',
-                buttonCancel: false,
-                onOk: function() {
-                }
-            });
-        }
-    });
-
-        $("#updatecategory").click(function () {
-
-            if ($('#upcategory').val()!=''){
-                $.ajax({
-                    type: "POST",
-                    url: "${pageContext.request.contextPath}/updatecategory",
-                    data: {
-                        namecategory: $('#upcategory').val(),
-                        oldcategory: $('#oldcategory').val(),
-                        parent: $('#parentid').val()
-                    }
-                }).done(function (tree) {
-
-                    $.confirm({
-                        title: 'Информация',
-                        titleIcon: 'glyphicon glyphicon-info-sign',
-                        template: 'info',
-                        templateOk: 'info',
-                        message: 'Категория обновлена.',
-                        labelOk: 'ОК',
-                        buttonCancel: false,
-                        onOk: function() {
-                            location.reload();
-                        }
-                    });
-                });
+                )
             }
-            else {
-                $.confirm({
-                    title: 'Внимание',
-                    titleIcon: 'glyphicon glyphicon-warning-sign',
-                    template: 'warning',
-                    templateOk: 'warning',
-                    message: 'Нельзя исправлять на пустую категорию.',
-                    labelOk: 'ОК',
-                    buttonCancel: false,
-                    onOk: function() {
-                    }
-                });
-            }
-        }
-    )
-    }
     );
 </script>
 
@@ -410,12 +433,53 @@ src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js
 
     });
 
+
+    function opendel() {
+        if ($('#delcategoryid').val() == "") {
+            $.confirm({
+                title: 'Внимание',
+                titleIcon: 'glyphicon glyphicon-warning-sign',
+                template: 'warning',
+                templateOk: 'warning',
+                message: 'Выберите категорию!',
+                labelOk: 'ОК',
+                buttonCancel: false,
+                onOk: function () {
+                }
+            });
+        } else {
+                $("#del").modal('show');
+        }
+
+    }
+
+    function openedit() {
+        if ($('#upcategory').val() == "") {
+            $.confirm({
+                title: 'Внимание',
+                titleIcon: 'glyphicon glyphicon-warning-sign',
+                template: 'warning',
+                templateOk: 'warning',
+                message: 'Выберите категорию!',
+                labelOk: 'ОК',
+                buttonCancel: false,
+                onOk: function () {
+                }
+            });
+        } else {
+            $("#upModal").modal('show');
+        }
+
+    }
+
+
     function fundelquestion(idquestion) {
+
         $.confirm({
             template: 'primary',
             templateOk: 'primary',
             message: 'Вы уверены что хотите удалить вопрос?',
-            onOk: function() {
+            onOk: function () {
                 $.ajax({
                     type: "POST",
                     url: "${pageContext.request.contextPath}/delquestion",
@@ -445,7 +509,7 @@ src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js
                             message: 'Нельзя удалить вопрос есть связанные элементы!',
                             labelOk: 'ОК',
                             buttonCancel: false,
-                            onOk: function() {
+                            onOk: function () {
                             }
                         });
 
@@ -459,7 +523,7 @@ src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js
                             message: 'Вопрос удален.',
                             labelOk: 'ОК',
                             buttonCancel: false,
-                            onOk: function() {
+                            onOk: function () {
                                 $("#question").html(element);
                             }
                         });
@@ -467,7 +531,7 @@ src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js
                     }
                 });
             },
-            onCancel: function() {
+            onCancel: function () {
             }
         });
     }
@@ -478,7 +542,6 @@ src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js
         $('#parentid').val(0);
     }
 </script>
-
 
 
 </body>

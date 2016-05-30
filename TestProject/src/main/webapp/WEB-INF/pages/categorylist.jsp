@@ -122,8 +122,16 @@
     function opentest(codetest){
         if ($('#activeuser').val()=='active')
         {
-            $('#testnumber').val(codetest);
-            $('#opentest').submit();
+            $.confirm({
+                template: 'primary',
+                templateOk: 'primary',
+                message: 'Вы уверены что хотите пройти тест?',
+                onOk: function() {
+                    $('#testnumber').val(codetest);
+                    $('#opentest').submit();
+                }
+            });
+
         }
         else{
             $.confirm({

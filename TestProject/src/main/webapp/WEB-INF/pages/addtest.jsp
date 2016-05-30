@@ -265,7 +265,7 @@
             }
         }).done(function (element) {
 
-                    if (element != "Вопрос уже добавлен!") {
+                    if (element != "Вопрос уже добавлен!" && element != "Нет ответов в вопросе!" && element != "Нет правильных ответов в вопросе!") {
 
                         $.notify({
                             icon: 'glyphicon glyphicon-info-sign',

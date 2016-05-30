@@ -180,7 +180,7 @@ public class FirstpageController {
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/writetestuser", method = RequestMethod.POST, produces = {"text/html; charset=UTF-8"})
     @ResponseBody
-    public String writeTestUser(@RequestParam("ourResult") String ourResult, @RequestParam("datebegin") long date, @RequestParam("testid") int testid) throws Exception {
+    public String writeTestUser(@RequestParam("ourResult") String ourResult,@RequestParam("datefinish") long datef, @RequestParam("datebegin") long date, @RequestParam("testid") int testid) throws Exception {
 
         JSONParser parser = new JSONParser();
 
@@ -193,11 +193,8 @@ public class FirstpageController {
         FormsEntity ourForm = new FormsEntity();
         ourForm.setIdUser(ourUser.getId());
 
-        Calendar calendar = Calendar.getInstance();
-        long now = calendar.getTimeInMillis();
-
         ourForm.setDatestart(new Timestamp(date));
-        ourForm.setDatefinish(new Timestamp(now));
+        ourForm.setDatefinish(new Timestamp(datef));
         ourForm.setIdTest(testid);
         ourForm.setCorrectQuestion(0);
         ourForm.setQuantityQuestion(0);

@@ -46,6 +46,7 @@
             <li>
                 <a href="#">Общая</a>
                 <ul>
+                    <%--<li><a href="#key">Открыть по ключу</a></li>--%>
                     <li><a href="page-about.html">О нас</a></li>
                     <li><a href="page-contact.html">Контакты</a></li>
                     <li><a href="page-faq.html">FAQ</a></li>

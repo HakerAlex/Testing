@@ -57,13 +57,12 @@
                 </div>
 
                 <div class="btn-search">
-                    <button class="btn btn-primary" type="submit"id="searchbutton">Поиск теста</button>
+                    <button class="btn btn-primary" type="submit" id="searchbutton">Поиск теста</button>
                 </div>
             </form>
         </div>
 
     </div>
-
 
 
 </header>
@@ -81,7 +80,7 @@
                 <h2>Категории</h2>
             </header>
             <div class="category-grid">
-            <c:forEach items="${categories}" var="categ">
+                <c:forEach items="${categories}" var="categ">
 
                     <a href="${pageContext.request.contextPath}/open/${categ.id}">
                         <i><img src="${categ.picture}" class="img-circle"></i>
@@ -89,7 +88,7 @@
                         <p>${categ.description}</p>
                     </a>
 
-            </c:forEach>
+                </c:forEach>
             </div>
 
         </div>
@@ -105,8 +104,8 @@
                     <h4 class="modal-title">Результаты поиска</h4>
                 </div>
                 <div class="modal-body">
-                        <div class="list-group" id="listtest">
-                        </div>
+                    <div class="list-group" id="listtest">
+                    </div>
                 </div>
 
                 <div class="modal-footer">
@@ -115,6 +114,33 @@
             </div>
         </div>
     </div>
+
+
+    <div class="modal fade" id="key" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Введите ключ теста</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="ti-key"></i></span>
+                            <input type="text" id="idkey" value="" class="form-control" name="idkey"
+                                   placeholder="Значение" disabled>
+                        </div>
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal" id="deletecategory">Удалить
+                    </button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 
     <form id="opentest" class="opentest" method="post"
           action="${pageContext.request.contextPath}/opentest">
@@ -130,42 +156,50 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/bootstrap.min.js"></script>
 <script type="text/javascript"
         src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js"></script>
+
 <script type="text/javascript">
     $(document).ready(function () {
-    $("#searchbutton").click(function( event ) {
-        event.preventDefault();
+        $("#searchbutton").click(function (event) {
+            event.preventDefault();
 
-        $.ajax({
-            type: "POST",
-            url: "${pageContext.request.contextPath}/search",
-            data: {
-                category: $("#category").val(),
-                search:$("#key").val()
-            },
-            success: {
-                function (codeQ) {
+            $.ajax({
+                type: "POST",
+                url: "${pageContext.request.contextPath}/search",
+                data: {
+                    category: $("#category").val(),
+                    search: $("#key").val()
+                },
+                success: {
+                    function (codeQ) {
+                    }
+                },
+                error: {
+                    function (codeQ) {
+                    }
                 }
-            },
-            error: {
-                function (codeQ) {
-                }
-            }
-        }).done(function (element) {
-            $("#listtest").html(element);
-            $("#myModal").modal('show');
+            }).done(function (element) {
+                $("#listtest").html(element);
+                $("#myModal").modal('show');
+
+            });
 
         });
-
-    });
     });
 
-    function opentest(codetest){
-        if ($('#activeuser').val()=='active')
-        {
-            $('#testnumber').val(codetest);
-            $('#opentest').submit();
+    function opentest(codetest) {
+        if ($('#activeuser').val() == 'active') {
+
+            $.confirm({
+                template: 'primary',
+                templateOk: 'primary',
+                message: 'Вы уверены что хотите пройти тест?',
+                onOk: function() {
+                    $('#testnumber').val(codetest);
+                    $('#opentest').submit();
         }
-        else{
+            });
+        }
+        else {
             $.confirm({
                         title: 'Информация',
                         titleIcon: 'glyphicon glyphicon-info-sign',

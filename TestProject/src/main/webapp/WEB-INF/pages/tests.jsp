@@ -44,10 +44,13 @@
             <div class="form-group">
                 <a href="#myModal" data-toggle="modal"
                    class="btn btn-primary btn-search">+</a>
-                <a href="#upModal" data-toggle="modal"
-                   class="btn btn-primary btn-search">Редак.</a>
-                <a href="#del" data-toggle="modal"
-                   class="btn btn-primary btn-danger">Удалить</a>
+                <%--<a href="#upModal" data-toggle="modal"--%>
+                   <%--class="btn btn-primary btn-search">Редак.</a>--%>
+                <%--<a href="#del" data-toggle="modal"--%>
+                   <%--class="btn btn-primary btn-danger">Удалить</a>--%>
+
+                <button class="btn btn-primary btn-search" type="submit" onclick="openedit()">Редак.</button>
+                <button class="btn btn-primary btn-danger" type="submit" onclick="opendel()">Удалить</button>
             </div>
 
             <div id="treeview" style="color: dodgerblue; text-align:left "></div>
@@ -275,6 +278,44 @@
         $("#uploadPreview").hide();
     }
 
+
+    function opendel() {
+        if ($('#delcategoryid').val() == "") {
+            $.confirm({
+                title: 'Внимание',
+                titleIcon: 'glyphicon glyphicon-warning-sign',
+                template: 'warning',
+                templateOk: 'warning',
+                message: 'Выберите категорию!',
+                labelOk: 'ОК',
+                buttonCancel: false,
+                onOk: function () {
+                }
+            });
+        } else {
+            $("#del").modal('show');
+        }
+
+    }
+
+    function openedit() {
+        if ($('#upcategory').val() == "") {
+            $.confirm({
+                title: 'Внимание',
+                titleIcon: 'glyphicon glyphicon-warning-sign',
+                template: 'warning',
+                templateOk: 'warning',
+                message: 'Выберите категорию!',
+                labelOk: 'ОК',
+                buttonCancel: false,
+                onOk: function () {
+                }
+            });
+        } else {
+            $("#upModal").modal('show');
+        }
+
+    }
 </script>
 
 
