@@ -116,7 +116,7 @@
     </div>
 
 
-    <div class="modal fade" id="key" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="keyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -154,11 +154,15 @@
 
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/jquery.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/app.min.js"></script>
 <script type="text/javascript"
         src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js"></script>
 
 <script type="text/javascript">
     $(document).ready(function () {
+
+        $(".category-grid").matchHeight()
+
         $("#searchbutton").click(function (event) {
             event.preventDefault();
 
