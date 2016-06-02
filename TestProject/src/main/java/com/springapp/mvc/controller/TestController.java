@@ -342,4 +342,29 @@ public class TestController {
         return "addtest";
     }
 
+
+
+    @PreAuthorize("isAuthenticated()")
+    @RequestMapping(value = "/checktestfound", method = RequestMethod.POST)
+    @ResponseBody
+    public String checkTestFound(@RequestParam("key") String testnumber, Model model) {
+
+      TestsEntity ourTest=testRepository.getTestByPath(testnumber);
+        if (ourTest==null) {
+            return "error";
+        }
+        return "ok";
+    }
+
+    @PreAuthorize("hasRole('admin')")
+    @RequestMapping(value = "/getchecktestcategory", method = RequestMethod.POST, produces = {"text/plain; charset=UTF-8"})
+    @ResponseBody
+    public String getCheckTestCategory(@RequestParam("categorycheck") String check, @RequestParam("ourcategory") int ourcategory) {
+
+        String ourCheckString=treeTestBean.findChildNode(ourcategory);
+        if (ourCheckString.indexOf("-"+check+"-")>-1){
+            return "error";
+        }
+        return "ok";
+    }
 }

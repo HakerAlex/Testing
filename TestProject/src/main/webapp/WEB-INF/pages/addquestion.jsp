@@ -37,6 +37,8 @@
     <div class="container">
         <div class="col-xs-6">
             <h3 class="text-center" style="color: white">Вопрос</h3>
+            <button type="button" class="btn btn-primary btn-success" id="newquestion">Создать новый вопрос</button>
+            <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 5px">
             <div class="input-group">
                 <span class="input-group-addon"><i class="ti-folder"></i></span>
                 <input type="text" value="${category}" class="form-control" id="category" name="category" disabled>
@@ -486,7 +488,7 @@
                             }
                         });
                     }else {
-                        document.getElementById('code').value = codeQ;
+                        $('#code').val(codeQ);
                         $.confirm({
                             title: 'Информация',
                             titleIcon: 'glyphicon glyphicon-info-sign',
@@ -608,7 +610,7 @@
     }
 
     function funeditanswer(idanswer) {
-        document.getElementById('answerid').value=idanswer;
+        $('#answerid').val(idanswer);
         $.ajax({
             type: "POST",
             url: "${pageContext.request.contextPath}/editanswer",

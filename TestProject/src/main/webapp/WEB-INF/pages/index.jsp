@@ -60,6 +60,11 @@
                     <button class="btn btn-primary" type="submit" id="searchbutton">Поиск теста</button>
                 </div>
             </form>
+            <div class="login-links">
+                <p class="text-center">Есть ключ теста? <a class="txt-brand"
+                                                            href="javascript:openkey()"><strong>Открыть с помощью ключа</strong></a>
+                </p>
+            </div>
         </div>
 
     </div>
@@ -128,14 +133,14 @@
                         <div class="input-group">
                             <span class="input-group-addon"><i class="ti-key"></i></span>
                             <input type="text" id="idkey" value="" class="form-control" name="idkey"
-                                   placeholder="Значение" disabled>
+                                   placeholder="Значение">
                         </div>
 
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-dismiss="modal">Отмена</button>
-                    <button type="button" class="btn btn-danger" data-dismiss="modal" id="deletecategory">Удалить
+                    <button type="button" class="btn btn-success" data-dismiss="modal" id="opentestbykey">Открыть
                     </button>
                 </div>
             </div><!-- /.modal-content -->
@@ -160,8 +165,6 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
-
-        $(".category-grid").matchHeight()
 
         $("#searchbutton").click(function (event) {
             event.preventDefault();
@@ -188,6 +191,73 @@
             });
 
         });
+
+
+        $("#opentestbykey").click(function (event) {
+            event.preventDefault();
+
+
+            if ($('#idkey').val().trim()=="")
+            {
+                $.confirm({
+                            title: 'Информация',
+                            titleIcon: 'glyphicon glyphicon-info-sign',
+                            template: 'info',
+                            templateOk: 'info',
+                            message: 'Ключ не введен поиск производиться не будет!',
+                            labelOk: 'ОК',
+                            buttonCancel: false,
+                            onOk: function () {
+                            }
+                        }
+                );
+                return;
+            }
+
+                    $.ajax({
+                        type: "POST",
+                        url: "${pageContext.request.contextPath}/checktestfound",
+                        data: {
+                            key: $('#idkey').val()
+                        },
+                        success: {
+                            function (codeQ) {
+                            }
+                        },
+                        error: {
+                            function (codeQ) {
+                            }
+                        }
+                    }).done(function (element) {
+
+                        if (element=='error'){
+                            $.confirm({
+                                        title: 'Информация',
+                                        titleIcon: 'glyphicon glyphicon-info-sign',
+                                        template: 'info',
+                                        templateOk: 'info',
+                                        message: 'К сожалению тест по ключу не найден!',
+                                        labelOk: 'ОК',
+                                        buttonCancel: false,
+                                        onOk: function () {
+                                        }
+                                    }
+                            )
+                        }
+                        else {
+                            $.confirm({
+                                template: 'primary',
+                                templateOk: 'primary',
+                                message: 'Вы уверены что хотите пройти тест?',
+                                onOk: function() {
+                            $('#testnumber').val($('#idkey').val());
+                            $('#opentest').submit();
+                        }
+
+                    });
+                }
+            });
+        });
     });
 
     function opentest(codetest) {
@@ -200,8 +270,30 @@
                 onOk: function() {
                     $('#testnumber').val(codetest);
                     $('#opentest').submit();
-        }
+                }
             });
+        }
+        else {
+            $.confirm({
+                        title: 'Информация',
+                        titleIcon: 'glyphicon glyphicon-info-sign',
+                        template: 'info',
+                        templateOk: 'info',
+                        message: 'Необходимо войти в систему для прохождения тестов!!!',
+                        labelOk: 'ОК',
+                        buttonCancel: false,
+                        onOk: function () {
+                        }
+                    }
+            )
+        }
+    }
+
+    function openkey() {
+        if ($('#activeuser').val() == 'active') {
+
+            $('#keyModal').modal('show');
+
         }
         else {
             $.confirm({

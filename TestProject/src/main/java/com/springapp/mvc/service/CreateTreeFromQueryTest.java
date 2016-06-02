@@ -187,5 +187,28 @@ public class CreateTreeFromQueryTest {
     }
 
 
+    @Transactional(readOnly = true)
+    private StringBuilder recursionFind(TestcategoriesEntity ourElement, StringBuilder ourTree) {
+        List<TestcategoriesEntity> ourList = testcategoryRepository.getCategoriesByParentID(ourElement.getId());
+        for (TestcategoriesEntity ourElement1 : ourList) {
+            ourTree.append("-");
+            ourTree.append(ourElement1.getId());
+            recursionFind(ourElement1, ourTree);
+        }
+        return ourTree;
+    }
+
+    @Transactional(readOnly = true)
+    public String findChildNode(int idCategory){
+        TestcategoriesEntity ourElement = testcategoryRepository.getCategoryByID(idCategory);
+
+        StringBuilder ourTree = new StringBuilder(200);
+        ourTree.append("-");
+        ourTree.append(ourElement.getId());
+        recursionFind(ourElement, ourTree);
+        ourTree.append("-");
+        return ourTree.toString();
+    }
+
 }
 

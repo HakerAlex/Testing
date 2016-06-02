@@ -195,8 +195,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" onclick="clearParent()">Очистить родителя
-                    </button>
+                    <button type="button" class="btn btn-primary" onclick="openParent()">Изменить родителя</button>
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
                     <button type="button" class="btn btn-primary" data-dismiss="modal" id="updatecategory">
                         Изменить
@@ -238,6 +237,30 @@
     </div><!-- /.modal -->
 
 
+    <div class="modal fade" id="treeparent" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Изменить родителя</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <button class="btn btn-primary btn-search" type="submit" onclick="expandparent()" style="margin-left: 20px">Развернуть</button>
+                        <button class="btn btn-primary btn-search" type="submit" onclick="collapseparent()">Свернуть</button>
+                        <button class="btn btn-primary btn-danger" type="submit" onclick="clearParent()">Очистить родителя</button>
+                        <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 5px">
+                    </div>
+
+                    <div id="treeforparent" style="color: dodgerblue; text-align:left; margin-right: 20px "></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Отмена</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
 </main>
 <!-- END Main container -->
 <!-- Back to top button -->
@@ -260,12 +283,19 @@
         return ${tree};
     }
     $('#treeview').treeview({data: getTree()});
-
+    $('#treeforparent').treeview({data: getTree()});
     function expand() {
         $('#treeview').treeview('expandAll', {levels: 100, silent: true});
     }
     function collapse() {
         $('#treeview').treeview('collapseAll', {levels: 100, silent: true});
+    }
+
+    function expandparent() {
+        $('#treeforparent').treeview('expandAll', {levels: 100, silent: true});
+    }
+    function collapseparent() {
+        $('#treeforparent').treeview('collapseAll', {levels: 100, silent: true});
     }
 
     function clearElements() {
@@ -278,6 +308,9 @@
         $("#uploadPreview").hide();
     }
 
+    function openParent() {
+        $("#treeparent").modal('show');
+    }
 
     function opendel() {
         if ($('#delcategoryid').val() == "") {
@@ -312,6 +345,20 @@
                 }
             });
         } else {
+
+            $.ajax({
+                type: "POST",
+                url: "${pageContext.request.contextPath}/getparenttest",
+                data: {
+                    category: $('#oldcategoryid').val()
+                }
+            }).done(function (element) {
+                pardesc = JSON.parse(element);
+                $('#parent').val(pardesc.parent);
+                $('#parentid').val(pardesc.parentid);
+                $('#descr').val(pardesc.desc);
+            });
+
             $("#upModal").modal('show');
         }
 
@@ -477,8 +524,49 @@
         $('#categoryid').val(0);
         $('#parent').val("");
         $('#parentid').val(0);
+        $('#treeparent').modal('hide');
     }
     var parent;
+
+    $('#treeforparent').on('nodeSelected', function (event, data) {
+        $.ajax({
+            type: "POST",
+            url: "${pageContext.request.contextPath}/getchecktestcategory",
+            data: {
+                categorycheck: data.href,
+                ourcategory:$('#oldcategoryid').val()
+            }
+        }).done(function (element) {
+            if (element=='ok') {
+                $.confirm({
+                    template: 'primary',
+                    templateOk: 'primary',
+                    message: 'Вы уверены что хотите изменить родителя?',
+                    onOk: function() {
+                        $('#parent').val(data.text);
+                        $('#parentid').val(data.href);
+                        $("#treeparent").modal('hide');
+                    }
+
+                });
+
+            } else{
+                $.confirm({
+                    title: 'Внимание',
+                    titleIcon: 'glyphicon glyphicon-warning-sign',
+                    template: 'warning',
+                    templateOk: 'warning',
+                    message: 'Нельзя выбирать вложенную категорию',
+                    labelOk: 'ОК',
+                    buttonCancel: false,
+                    onOk: function () {
+                    }
+                });
+            }
+        });
+    });
+
+
     $('#treeview').on('nodeSelected', function (event, data) {
 
         $('#upcategory').val(data.text);

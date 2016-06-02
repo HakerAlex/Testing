@@ -160,4 +160,20 @@ public class CategoryController {
     }
 
 
+
+    @PreAuthorize("hasRole('admin')")
+    @RequestMapping(value = "/getcheckcategorytest", method = RequestMethod.POST, produces = {"text/plain; charset=UTF-8"})
+    @ResponseBody
+    public String getCheckCategory(@RequestParam("categorycheck") String check, @RequestParam("ourcategory") int ourcategory) {
+
+        String ourCheckString=treeBean.findChildNode(ourcategory);
+        if (ourCheckString.indexOf("-"+check+"-")>-1){
+            return "error";
+        }
+    return "ok";
+    }
+
+
+
+
 }
