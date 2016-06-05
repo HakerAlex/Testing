@@ -251,6 +251,7 @@ public class QuestionController {
         model.addAttribute("questiontext", ourQuestion.getQuestion());
         model.addAttribute("questiontype", ourQuestion.getTypeQuestion());
         model.addAttribute("table",createTable(id,""));
+        model.addAttribute("tree",treeBean.createTree());
 
         return "addquestion";
     }
@@ -266,7 +267,7 @@ public class QuestionController {
         model.addAttribute("questiontext", ourQuestion.getQuestion());
         model.addAttribute("questiontype", ourQuestion.getTypeQuestion());
         model.addAttribute("table",createTable(id,context));
-
+        model.addAttribute("tree",treeBean.createTree());
         return "addquestion";
     }
 

@@ -37,12 +37,14 @@
     <div class="container">
         <div class="col-xs-6">
             <h3 class="text-center" style="color: white">Вопрос</h3>
-            <button type="button" class="btn btn-primary btn-success" id="newquestion">Создать новый вопрос</button>
+            <button type="button" class="btn btn-primary btn-success" id="addnewquestion">Создать новый вопрос</button>
             <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 5px">
             <div class="input-group">
                 <span class="input-group-addon"><i class="ti-folder"></i></span>
                 <input type="text" value="${category}" class="form-control" id="category" name="category" disabled>
+                <span class="input-group-addon"><a href="javascript:changedirectory()">...</a></span>
                 <input type="hidden" value="${categoryid}" id="categoryid" name="categoryid" disabled>
+
             </div>
             <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 5px">
             <div class="input-group">
@@ -96,6 +98,13 @@
                 </c:if>
 
             </div>
+
+            <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 5px">
+            <form id="formpicture">
+                <input id="addpic" type="file" accept="image/*" title="Добавить картинку"
+                       name="image" data-filename-placement="inside"/>
+            </form>
+
 
             <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 5px">
             <div class="input-group">
@@ -154,9 +163,14 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
-                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="writeanswer">Записать
-                    </button>
+                    <form id="modalpicture">
+                        <input id="addpicture" type="file" accept="image/*" title="Добавить картинку"
+                               name="image" data-filename-placement="inside"/>
+
+                        <button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
+                        <button type="button" class="btn btn-primary" data-dismiss="modal" id="writeanswer">Записать
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
@@ -193,6 +207,33 @@
     </div>
 
 
+    <div class="modal fade" id="treeparent" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Изменить категорию</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <button class="btn btn-primary btn-search" type="submit" onclick="expandparent()"
+                                style="margin-left: 20px">Развернуть
+                        </button>
+                        <button class="btn btn-primary btn-search" type="submit" onclick="collapseparent()">Свернуть
+                        </button>
+                        <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 5px">
+                    </div>
+
+                    <div id="treeforparent" style="color: dodgerblue; text-align:left; margin-right: 20px "></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-dismiss="modal">Отмена</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
 </main>
 
 <!-- END Main container -->
@@ -206,7 +247,51 @@
         src="${pageContext.request.contextPath}/resources/assets/js/ckeditor/ckeditor.js"></script>
 
 <script type="text/javascript"
+        src="${pageContext.request.contextPath}/resources/assets/js/bootstrap.file-input.js"></script>
+
+<script type="text/javascript"
         src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js"></script>
+
+<script type="text/javascript"
+        src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-treeview.js"></script>
+
+
+<script type="text/javascript">
+
+    $('input[type=file]').bootstrapFileInput();
+
+    function getTree() {
+        return ${tree};
+    }
+    $('#treeforparent').treeview({data: getTree()});
+
+    function expandparent() {
+        $('#treeforparent').treeview('expandAll', {levels: 100, silent: true});
+    }
+    function collapseparent() {
+        $('#treeforparent').treeview('collapseAll', {levels: 100, silent: true});
+    }
+
+    function changedirectory() {
+        $('#treeparent').modal('show');
+    }
+
+    var parent;
+    $('#treeforparent').on('nodeSelected', function (event, data) {
+        $.confirm({
+            template: 'primary',
+            templateOk: 'primary',
+            message: 'Вы уверены что хотите изменить категорию?',
+            onOk: function () {
+                $('#category').val(data.text);
+                $('#categoryid').val(data.href);
+                $("#treeparent").modal('hide');
+            }
+        });
+    });
+
+</script>
+
 
 <script type="text/javascript">
     // Call CkEditor
@@ -244,6 +329,42 @@
 
 <script type="text/javascript">
     $(document).ready(function () {
+
+        function clearForNewQuestion(){
+            $("input[name='typequestion']:checked").val(1);
+            CKEDITOR.instances.editorAn.setData('');
+            CKEDITOR.instances.editorCk.setData('');
+            $("#code").val('');
+            $("#answers").html('');
+        }
+
+
+        $("#addnewquestion").click(function () {
+
+            $.confirm({
+                template: 'primary',
+                templateOk: 'primary',
+                message: 'Вы уверены что хотите ввести новый вопрос?',
+                onOk: function () {
+                    $.confirm({
+                        template: 'primary',
+                        templateOk: 'primary',
+                        message: 'Записать в базу текущий вопрос?',
+                        onOk: function () {
+                            $("#writequestion").click();
+                            clearForNewQuestion();
+                        },
+                        onCancel: function () {
+                            clearForNewQuestion();
+                        }
+                    });
+                }
+            });
+
+        });
+
+
+
         $("#addanswer").click(function () {
 
             if ($('#code').val().trim() == '') {
@@ -353,7 +474,7 @@
                     });
                 }
             }
-        })
+        });
 
 
         $("#writeanswer").click(function () {
@@ -487,7 +608,7 @@
                             onOk: function () {
                             }
                         });
-                    }else {
+                    } else {
                         $('#code').val(codeQ);
                         $.confirm({
                             title: 'Информация',
@@ -538,13 +659,45 @@
         });
 
 
+        $("#addpicture").change(function () {
+            if (typeof  jcrop_api != 'undefined') {
+                jcrop_api.destroy();
+            }
+            var oFReader = new FileReader();
+            oFReader.readAsDataURL(document.getElementById('addpicture').files[0]);
+            oFReader.onload = function (oFREvent) {
+                $('#addpicture').siblings('span').html('Добавить картинку').attr('title', 'Добавить картинку').show();
+                document.getElementById('modalpicture').reset();
+                CKEDITOR.instances.editorAn.setData(CKEDITOR.instances.editorAn.getData()+' <img src="'+oFREvent.target.result+'" />');
+            };
+
+        });
+
+
+        $("#addpic").change(function () {
+            if (typeof  jcrop_api != 'undefined') {
+                jcrop_api.destroy();
+            }
+            var oFReader = new FileReader();
+            oFReader.readAsDataURL(document.getElementById('addpic').files[0]);
+            oFReader.onload = function (oFREvent) {
+                $('#addpic').siblings('span').html('Добавить картинку').attr('title', 'Добавить картинку').show();
+                document.getElementById('formpicture').reset();
+                CKEDITOR.instances.editorCk.setData(CKEDITOR.instances.editorCk.getData()+' <img src="'+oFREvent.target.result+'" />');
+            };
+
+        });
+
+
     });
+
 </script>
+
 
 <script type="text/javascript" charset="utf-8">
 
     function strip(html) {
-        return html.replace(/</g,"").replace(/>/g,"");
+        return html.replace(/</g, "").replace(/>/g, "");
     }
 
     function fundelanswer(idanswer, idquestion) {

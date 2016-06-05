@@ -100,6 +100,7 @@ public class CategoryController {
         model.addAttribute("code", "");
         model.addAttribute("questiontext", "");
         model.addAttribute("questiontype", 1);
+        model.addAttribute("tree",treeBean.createTree());
         return "addquestion";
     }
 
