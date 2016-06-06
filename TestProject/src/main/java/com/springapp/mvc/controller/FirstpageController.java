@@ -242,4 +242,11 @@ public class FirstpageController {
         return createListTestBean.returnResult(ourForm.getId());
     }
 
+
+    @PreAuthorize("hasRole('admin')")
+    @RequestMapping(value = "/statistics", method = RequestMethod.GET)
+    public String getStatistics(Model model) {
+        return "statistics";
+    }
+
 }

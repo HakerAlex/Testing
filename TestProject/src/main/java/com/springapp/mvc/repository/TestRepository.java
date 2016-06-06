@@ -170,8 +170,8 @@ public class TestRepository {
 
         sql.append("SELECT \n");
         sql.append("    questions.question,\n");
-        sql.append("    IF(cor = usercorrect, 1, 0) AS correct,\n");
-        sql.append("    IF(cor <> usercorrect, 1, 0) AS uncorrect\n");
+        sql.append("    IF(cor = usercorrect and cor<>0, 1, 0) AS correct,\n");
+        sql.append("    IF(cor <> usercorrect or cor=0, 1, 0) AS uncorrect\n");
         sql.append("FROM\n");
         sql.append("    (SELECT \n");
         sql.append("        ID,\n");
