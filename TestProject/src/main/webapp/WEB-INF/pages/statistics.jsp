@@ -37,55 +37,8 @@
 
 
     <div class="container">
-        <table id="users" class="table" cellspacing="0" width="100%">
-            <thead>
-            <tr>
-                <th>Фамилия</th>
-                <th>Имя</th>
-                <th>E-mail</th>
-                <th>Телефон</th>
-                <th>Тест</th>
-                <th>Кол-во вопросов</th>
-                <th>Кол-во правильных</th>
-                <th>Кол-во неправильных</th>
-                <th>Дата прохождения</th>
-
-            </tr>
-            </thead>
-
-            <tbody>
-            <c:forEach items="${users}" var="user">
-                <tr>
-                    <td>${user[0].surname}</td>
-                    <td>${user[0].name}</td>
-                    <td>${user[0].email}</td>
-                    <td>${user[0].phone}</td>
-                    <td align="middle">
-                        <c:if test="${user[0].status==1}">
-                            <span class="label bg-success" style="background: #00cc00">Активный</span>
-                        </c:if>
-                        <c:if test="${user[0].status==0}">
-                            <span class="label bg-danger" style="background: #bb0000">Отключен</span>
-                        </c:if>
-                    </td>
-                    <td align="middle">${user[1].namerule}</td>
-
-                    <td align="center">
-                                        <span class="tooltip-area">
-                                            <a href="${pageContext.request.contextPath}/edituser/${user[0].id}"
-                                               class="label btn-info"><i
-                                                    class="fa fa-pencil"> Редактировать</i></a></span>
-                    </td>
-
-                    <td align="center">
-                                        <span class="tooltip-area">
-                                            <a href="${pageContext.request.contextPath}/resultuser/${user[0].id}"
-                                               class="label btn-success"><i
-                                                    class="fa fa-folder"> Результаты</i></a></span>
-                    </td>
-                </tr>
-            </c:forEach>
-            </tbody>
+        <table id="table" class="table" cellspacing="0" width="100%">
+            ${table}
         </table>
     </div>
 
@@ -131,7 +84,7 @@
 
                 "sInfoEmpty": "Показано с 0 по 0 из 0 записей",
 
-                "sInfoFiltered": "(filtered from _MAX_ total records)",
+                "sInfoFiltered": "(отфильтровано из _MAX_ записей)",
 
                 "oPaginate": {
 
@@ -152,7 +105,7 @@
 
         };
 
-        $('#users').dataTable(default_options);
+        $('#table').dataTable(default_options);
         $('table[data-provide="data-table"]').dataTable();
     });
 </script>

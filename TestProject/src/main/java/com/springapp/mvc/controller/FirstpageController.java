@@ -169,10 +169,6 @@ public class FirstpageController {
             model.addAttribute("list", createListTestBean.createListTest(testnumber));
             model.addAttribute("count", testRepository.getCountQuestionByTestID(ourTest.getId()));
         }
-
-
-
-
         return "testform";
     }
 
@@ -246,6 +242,8 @@ public class FirstpageController {
     @PreAuthorize("hasRole('admin')")
     @RequestMapping(value = "/statistics", method = RequestMethod.GET)
     public String getStatistics(Model model) {
+        List ourList=testRepository.getAllResults();
+        model.addAttribute("table",createListTestBean.returnStatisticTable(ourList));
         return "statistics";
     }
 

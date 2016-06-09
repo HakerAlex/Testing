@@ -14,7 +14,7 @@
     <div class="container">
         <div class="row">
             <div class="col-md-8 col-sm-6 col-xs-12">
-                <p class="copyright-text">Все права принадлежат &copy; 2016 Команде Симпатичных Профессионалов.</p>
+                <p class="copyright-text">Все права принадлежат Команде Симпатичных Профессионалов. &copy; 2016 </p>
             </div>
 
 

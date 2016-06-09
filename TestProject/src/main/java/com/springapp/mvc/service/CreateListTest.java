@@ -5,7 +5,6 @@ import com.springapp.mvc.domain.FormsEntity;
 import com.springapp.mvc.domain.QuestionsEntity;
 import com.springapp.mvc.repository.QuestionRepository;
 import com.springapp.mvc.repository.TestRepository;
-import org.hibernate.mapping.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -31,7 +30,7 @@ public class CreateListTest {
         int flag = 0;
         for (QuestionsEntity ourQuen : ourQuestions) {
 
-            if (ourQuen==null){
+            if (ourQuen == null) {
                 ourBuffer.append("<li class=\"list-group-item list-group-item-danger\">");
                 ourBuffer.append("<span class=\"glyphicon glyphicon-star\"></span>");
                 ourBuffer.append("<h4 class=\"list-group-item-heading\">");
@@ -68,7 +67,7 @@ public class CreateListTest {
 
             List<AnswersEntity> ourAnswers = questionRepository.getAnswersByQuestion(ourQuen.getId());
 
-            int i=0;
+            int i = 0;
             for (AnswersEntity ourAnswer : ourAnswers) {
                 if (ourQuen.getTypeQuestion() < 3) {
                     i++;
@@ -143,9 +142,9 @@ public class CreateListTest {
         return ourBuffer.toString();
     }
 
-    public String returnResult(int idForm){
+    public String returnResult(int idForm) {
 
-        StringBuilder ourBuffer=new StringBuilder(100);
+        StringBuilder ourBuffer = new StringBuilder(100);
 
         ourBuffer.append("<li class=\"list-group-item list-group-item-info\">");
         ourBuffer.append("<span class=\"glyphicon glyphicon-star\"></span>");
@@ -161,19 +160,18 @@ public class CreateListTest {
         ourBuffer.append("</tr> ");
         ourBuffer.append("</thead> ");
 
-        List result=testRepository.getResult(idForm);
+        List result = testRepository.getResult(idForm);
         ourBuffer.append("<tbody> ");
-        int cor=0,uncor=0;
-        for(Object object : result)
-        {
+        int cor = 0, uncor = 0;
+        for (Object object : result) {
             ourBuffer.append("<tr>");
-            Map row = (Map)object;
+            Map row = (Map) object;
             ourBuffer.append("<td>");
             ourBuffer.append(row.get("question"));
             ourBuffer.append("</td>");
 
             ourBuffer.append("<td>");
-            if (row.get("correct").toString().equals("1")){
+            if (row.get("correct").toString().equals("1")) {
                 ourBuffer.append(" <span class=\"label bg-success\" style=\"background: #00cc00\">");
                 ourBuffer.append("Правильно");
                 ourBuffer.append(" </span>");
@@ -182,7 +180,7 @@ public class CreateListTest {
             ourBuffer.append("</td>");
 
             ourBuffer.append("<td>");
-            if (row.get("uncorrect").toString().equals("1")){
+            if (row.get("uncorrect").toString().equals("1")) {
                 ourBuffer.append(" <span class=\"label bg-danger\" style=\"background: red\"> ");
                 ourBuffer.append("Неправильно");
                 ourBuffer.append(" </span>");
@@ -208,8 +206,8 @@ public class CreateListTest {
         ourBuffer.append("</table> ");
         ourBuffer.append("</li> ");
 
-        FormsEntity ourForm=testRepository.getFormByID(idForm);
-        ourForm.setQuantityQuestion(cor+uncor);
+        FormsEntity ourForm = testRepository.getFormByID(idForm);
+        ourForm.setQuantityQuestion(cor + uncor);
         ourForm.setCorrectQuestion(cor);
         try {
             testRepository.updateForm(ourForm);
@@ -221,16 +219,15 @@ public class CreateListTest {
 
     }
 
-    public String returnSearchList(int categoryid, String keySearch){
+    public String returnSearchList(int categoryid, String keySearch) {
 
-        List ourSearch=testRepository.getListTestByKey(categoryid,keySearch);
+        List ourSearch = testRepository.getListTestByKey(categoryid, keySearch);
 
 
-        StringBuilder ourBuffer=new StringBuilder(100);
+        StringBuilder ourBuffer = new StringBuilder(100);
 
-        for(Object object : ourSearch)
-        {
-            Map row = (Map)object;
+        for (Object object : ourSearch) {
+            Map row = (Map) object;
             ourBuffer.append("<a href=\"javascript:opentest('");
             ourBuffer.append(row.get("pathtotest"));
             ourBuffer.append("')\" class=\"list-group-item\" style=\"text-align: left\">");
@@ -241,6 +238,119 @@ public class CreateListTest {
 
         return ourBuffer.toString();
 
+    }
+
+
+    public String returnStatisticTable(List listResult) {
+        Integer countColumn=0;
+
+        if (listResult.size()>0){
+            Object object =listResult.get(0);
+            Map row = (Map) object;
+            countColumn=new Integer(row.get("QuantityForm").toString());
+        }
+        StringBuilder ourStatistic = new StringBuilder(1000);
+        ourStatistic.append("<thead>\n");
+        ourStatistic.append("    <tr>\n");
+        ourStatistic.append("<th>Фамилия</th>\n");
+        ourStatistic.append("<th>Имя</th>\n");
+        ourStatistic.append("<th>E-mail</th>\n");
+        ourStatistic.append("<th>Телефон</th>\n");
+        ourStatistic.append("<th>Тест</th>\n");
+        ourStatistic.append("<th>Общее</th>\n");
+        ourStatistic.append("<th>Прав.</th>\n");
+        ourStatistic.append("<th>Неправ.</th>\n");
+        ourStatistic.append("<th>Дата начала</th>\n");
+        ourStatistic.append("<th>Дата окончания</th>\n");
+        for (int i=0;i<countColumn;i++){
+            ourStatistic.append("<th>");
+            ourStatistic.append(i+1);
+            ourStatistic.append("</th>\n");
+        }
+        ourStatistic.append("</tr>\n");
+        ourStatistic.append("</thead>\n");
+        ourStatistic.append("<tbody>\n");
+        for (Object object : listResult) {
+            ourStatistic.append("<tr>\n");
+            Map row = (Map) object;
+            ourStatistic.append("<td>");
+            ourStatistic.append(row.get("surname").toString());
+            ourStatistic.append("</td>\n");
+            ourStatistic.append("<td>");
+            ourStatistic.append(row.get("name").toString());
+            ourStatistic.append("</td>\n");
+            ourStatistic.append("<td>");
+            ourStatistic.append(row.get("email").toString());
+            ourStatistic.append("</td>\n");
+            ourStatistic.append("<td>");
+            ourStatistic.append(row.get("phone").toString());
+            ourStatistic.append("</td>\n");
+            ourStatistic.append("<td>");
+            ourStatistic.append(row.get("testname").toString());
+            ourStatistic.append("</td>\n");
+            ourStatistic.append("<td>");
+            ourStatistic.append(row.get("quantity_question").toString());
+            ourStatistic.append("</td>\n");
+            ourStatistic.append("<td>");
+            ourStatistic.append(row.get("correct_question").toString());
+            ourStatistic.append("</td>\n");
+            ourStatistic.append("<td>");
+            ourStatistic.append(row.get("uncorrect").toString());
+            ourStatistic.append("</td>\n");
+            ourStatistic.append("<td>");
+            ourStatistic.append(row.get("datestart").toString());
+            ourStatistic.append("</td>\n");
+            ourStatistic.append("<td>");
+            ourStatistic.append(row.get("datefinish").toString());
+            ourStatistic.append("</td>\n");
+
+            String[] codeQuestion = row.get("all_ID").toString().split(":");
+            String[] correctQuestion = row.get("correct").toString().split(":");
+            for (int j=0;j<codeQuestion.length;j++){
+
+                ourStatistic.append("<td>");
+
+                if (correctQuestion[j].equals("1")) {
+                    ourStatistic.append(" <span class=\"label bg-success\" style=\"background: #00cc00\">");
+                    ourStatistic.append("<a href='javascript:openquestionuser(");
+                    ourStatistic.append(codeQuestion[j]);
+                    ourStatistic.append(",");
+                    ourStatistic.append(row.get("ID").toString());
+                    ourStatistic.append(")'>");
+                    ourStatistic.append("Прав.");
+                    ourStatistic.append("</a>");
+                    ourStatistic.append(" </span>");
+                }else
+                {
+                    ourStatistic.append(" <span class=\"label bg-danger\" style=\"background: red\"> ");
+                    ourStatistic.append("<a href='javascript:openquestionuser(");
+                    ourStatistic.append(codeQuestion[j]);
+                    ourStatistic.append(",");
+                    ourStatistic.append(row.get("ID").toString());
+                    ourStatistic.append(")'>");
+                    ourStatistic.append("Неправ.");
+                    ourStatistic.append("</a>");
+                    ourStatistic.append(" </span>");
+                }
+
+
+                ourStatistic.append("</td>\n");
+
+            }
+
+            if (codeQuestion.length<countColumn){
+                for (int i=codeQuestion.length; i<=countColumn;i++)
+                {
+                ourStatistic.append("<td>");
+                ourStatistic.append("</td>\n");
+                }
+            }
+
+            ourStatistic.append("</tr>");
+
+        }
+        ourStatistic.append("<tbody> ");
+        return ourStatistic.toString();
     }
 
 }
