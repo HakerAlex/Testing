@@ -352,7 +352,8 @@
                         message: 'Записать в базу текущий вопрос?',
                         onOk: function () {
                             $("#writequestion").click();
-                            clearForNewQuestion();
+                            setTimeout(function(){clearForNewQuestion()},2000);
+
                         },
                         onCancel: function () {
                             clearForNewQuestion();
