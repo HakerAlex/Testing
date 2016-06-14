@@ -62,7 +62,7 @@
                     <div class="bs-example">
                         <div class="alert alert-danger">
                             <a href="#" class="close" data-dismiss="alert">&times;</a>
-                            <strong>Ошибка</strong> Проверьте учетные данные!! Возможно пользователь уже в системе.
+                            <strong>Ошибка</strong> Проверьте учетные данные!!
                         </div>
                     </div>
                 </c:if>

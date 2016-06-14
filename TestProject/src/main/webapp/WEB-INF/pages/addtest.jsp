@@ -39,8 +39,10 @@
 
 
             <div class="panel panel-info" style="background: transparent">
-                <div class="panel-heading">Справочная информация</div>
+                <div class="panel-heading"><a class="label btn-success" href="javascript:openinfo()">Дополнительная
+                    информация по тесту</a></div>
                 <br>
+
                 <div class="form-group">
                     <div class="input-group">
                         <span class="input-group-addon"><i class="ti-folder"></i></span>
@@ -48,40 +50,9 @@
                                name="categoryfortestid">
                         <input type="text" value="${categoryfortest}" class="form-control" id="categoryfortest"
                                name="categoryfortest" placeholder="Категория" disabled>
+                        <span class="input-group-addon"><a href="javascript:changedirectory()">...</a></span>
                     </div>
                 </div>
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="ti-key"></i></span>
-                        <input type="text" value="${code}" class="form-control" id="code"
-                               name="code" placeholder="Код теста" disabled>
-                    </div>
-                </div>
-
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="ti-info"></i></span>
-                        <input type="text" class="form-control" id="href"
-                               name="href" value="${href}" placeholder="Ссылка на тест" title="Прямая ссылка на тест"
-                               disabled>
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <div class="input-group">
-                        <span class="input-group-addon"><i class="ti-user"></i></span>
-                        <input type="text" class="form-control" id="author"
-                               name="author" value="${author}" placeholder="Автор" title="Автор теста" disabled>
-                    </div>
-                </div>
-            </div>
-
-
-            <div class="panel panel-info" style="background: transparent">
-                <div class="panel-heading">Информация по тесту</div>
-                <br>
 
                 <div class="form-group">
                     <div class="input-group">
@@ -140,10 +111,12 @@
 
             </div>
 
+
         </div>
 
 
         <div class="col-lg-8">
+            <button type="button" class="btn btn-success" id="addnewtest">Добавить новый тест</button>
             <button type="button" class="btn btn-primary btn-search" id="addquestions">Добавить вопросы</button>
             <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 15px">
             <table id="test" class="table" data-provide="data-table" cellspacing="0" width="100%">
@@ -209,6 +182,83 @@
     </div>
 
 
+    <div class="modal fade" id="myModalInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title"> Общая информация</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="panel panel-info" style="background: transparent">
+                        <div class="panel-heading">Справочная информация</div>
+                        <br>
+
+
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="ti-key"></i></span>
+                                <input type="text" value="${code}" class="form-control" id="code"
+                                       name="code" placeholder="Код теста" disabled>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="ti-info"></i></span>
+                                <input type="text" class="form-control" id="href"
+                                       name="href" value="${href}" placeholder="Ссылка на тест"
+                                       title="Прямая ссылка на тест"
+                                       disabled>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="ti-user"></i></span>
+                                <input type="text" class="form-control" id="author"
+                                       name="author" value="${author}" placeholder="Автор" title="Автор теста" disabled>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Закрыть</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="treeparent" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Изменить категорию</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <button class="btn btn-primary btn-search" type="submit" onclick="expandparent()"
+                                style="margin-left: 20px">Развернуть
+                        </button>
+                        <button class="btn btn-primary btn-search" type="submit" onclick="collapseparent()">Свернуть
+                        </button>
+                        <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 5px">
+                    </div>
+
+                    <div id="treeforparent" style="color: dodgerblue; text-align:left; margin-right: 20px "></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Отмена</button>
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
 </main>
 
 
@@ -229,7 +279,13 @@
     function getTree() {
         return ${tree};
     }
+
+    function getTreeTest() {
+        return ${treetest};
+    }
+
     $('#treeview').treeview({data: getTree()});
+    $('#treeforparent').treeview({data: getTreeTest()});
 
     function expand() {
         $('#treeview').treeview('expandAll', {levels: 100, silent: true});
@@ -238,7 +294,6 @@
         $('#treeview').treeview('collapseAll', {levels: 100, silent: true});
     }
 
-    var parent;
     $('#treeview').on('nodeSelected', function (event, data) {
 
         $.ajax({
@@ -255,6 +310,30 @@
 
     });
 
+
+    function expandparent() {
+        $('#treeforparent').treeview('expandAll', {levels: 100, silent: true});
+    }
+    function collapseparent() {
+        $('#treeforparent').treeview('collapseAll', {levels: 100, silent: true});
+    }
+
+    $('#treeforparent').on('nodeSelected', function (event, data) {
+        $.confirm({
+            template: 'primary',
+            templateOk: 'primary',
+            message: 'Вы уверены что хотите изменить категорию?',
+            onOk: function () {
+                $('#categoryfortest').val(data.text);
+                $('#categoryfortestid').val(data.href);
+                $("#treeparent").modal('hide');
+            }
+        });
+    });
+
+    function changedirectory() {
+        $('#treeparent').modal('show');
+    }
     function funaddquestion(id) {
         $.ajax({
             type: "POST",
@@ -421,6 +500,73 @@
                 })
             }
         });
+
+
+        $("#addnewtest").click(function () {
+
+            $.confirm({
+                template: 'primary',
+                templateOk: 'primary',
+                message: 'Вы уверены что хотите ввести новый тест?',
+                onOk: function () {
+                    $.confirm({
+                        template: 'primary',
+                        templateOk: 'primary',
+                        message: 'Записать в базу текущий вопрос?',
+                        onOk: function () {
+                            if ($('#title').val() == "") {
+                                $.confirm({
+                                            title: 'Информация',
+                                            titleIcon: 'glyphicon glyphicon-info-sign',
+                                            template: 'info',
+                                            templateOk: 'info',
+                                            message: 'Напишите название теста',
+                                            labelOk: 'ОК',
+                                            buttonCancel: false,
+                                            onOk: function () {
+                                            }
+                                        }
+                                )
+                            }
+                           else {
+
+                                $.ajax({
+                                    type: "POST",
+                                    url: "${pageContext.request.contextPath}/writetest",
+                                    data: {
+                                        category: $('#categoryfortestid').val(),
+                                        context: "${pageContext.request.contextPath}",
+                                        title: $('#title').val(),
+                                        dateopen: $('#dateopen').val(),
+                                        dateclose: $('#dateclose').val(),
+                                        code: $('#code').val(),
+                                        access: $("input[name='access']:checked").val(),
+                                        success: {
+                                            function (codeQ) {
+                                            }
+                                        },
+                                        error: {
+                                            function (codeQ) {
+                                            }
+                                        }
+                                    }
+                                }).done(function (element) {
+                                    clearForNewTest();
+                                })
+                            }
+
+                        },
+                        onCancel: function () {
+                            clearForNewTest();
+                        }
+                    });
+                }
+            });
+
+
+        });
+
+
         $("#addquestions").click(function () {
 
             if ($('#code').val().trim() == '') {
@@ -443,8 +589,43 @@
         })
 
     });
+
+
+    function clearForNewTest(){
+        $("input[name='access']:checked").val(1);
+
+        $("#title").val('');
+        $("#dateopen").val('');
+        $("#dateclose").val('');
+        $("#code").val('');
+        $("#href").val('');
+        $("#author").val('');
+    }
+
+    function openinfo() {
+
+        if ($('#code').val().trim() == '') {
+            $.confirm({
+                        title: 'Информация',
+                        titleIcon: 'glyphicon glyphicon-info-sign',
+                        template: 'info',
+                        templateOk: 'info',
+                        message: 'Необходимо записать тест, перед просмотром дополнительной информации',
+                        labelOk: 'ОК',
+                        buttonCancel: false,
+                        onOk: function () {
+                        }
+                    }
+            )
+        }
+        else {
+            $("#myModalInfo").modal('show');
+        }
+    }
 </script>
+
 </body>
+<%@ include file="../pages/template/templatefoot.jsp" %>
 </html>
 
 

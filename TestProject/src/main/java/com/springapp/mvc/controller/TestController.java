@@ -313,6 +313,7 @@ public class TestController {
         model.addAttribute("categoryfortest", category);
         model.addAttribute("categoryfortestid", categoryid);
         model.addAttribute("tree", treeBean.createTree());
+        model.addAttribute("treetest", treeTestBean.createTree(0));
         model.addAttribute("type", 1);
         model.addAttribute("table", treeTestBean.getQuestionsByTestID(0));
         return "addtest";
@@ -331,6 +332,7 @@ public class TestController {
         model.addAttribute("categoryfortest", ourTest.getCategoryById().getCategory());
         model.addAttribute("categoryfortestid", ourTest.getCategoryById().getId());
         model.addAttribute("tree", treeBean.createTree());
+        model.addAttribute("treetest", treeTestBean.createTree(0));
         model.addAttribute("code", ourTest.getId());
         model.addAttribute("href", ourTest.getPathtotest());
         model.addAttribute("author", author.toString());
