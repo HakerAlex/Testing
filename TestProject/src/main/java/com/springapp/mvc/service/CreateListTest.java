@@ -269,6 +269,28 @@ public class CreateListTest {
         }
         ourStatistic.append("</tr>\n");
         ourStatistic.append("</thead>\n");
+
+        ourStatistic.append("<tfoot>\n");
+        ourStatistic.append("    <tr >\n");
+        ourStatistic.append("<th>Фамилия</th>\n");
+        ourStatistic.append("<th>Имя</th>\n");
+        ourStatistic.append("<th>E-mail</th>\n");
+        ourStatistic.append("<th>Телефон</th>\n");
+        ourStatistic.append("<th>Тест</th>\n");
+        ourStatistic.append("<th>Общее</th>\n");
+        ourStatistic.append("<th>Прав.</th>\n");
+        ourStatistic.append("<th>Неправ.</th>\n");
+        ourStatistic.append("<th>Дата начала</th>\n");
+        ourStatistic.append("<th>Дата окончания</th>\n");
+        for (int i=0;i<countColumn;i++){
+            ourStatistic.append("<th>");
+            ourStatistic.append(i+1);
+            ourStatistic.append("</th>\n");
+        }
+        ourStatistic.append("</tr>\n");
+        ourStatistic.append("</tfoot>\n");
+
+
         ourStatistic.append("<tbody>\n");
         for (Object object : listResult) {
             ourStatistic.append("<tr>\n");
@@ -286,15 +308,19 @@ public class CreateListTest {
             ourStatistic.append(row.get("phone").toString());
             ourStatistic.append("</td>\n");
             ourStatistic.append("<td>");
+            ourStatistic.append("<a href='javascript:getUserResult(");
+            ourStatistic.append(row.get("ID").toString());
+            ourStatistic.append(")'>");
             ourStatistic.append(row.get("testname").toString());
+            ourStatistic.append("</a>");
             ourStatistic.append("</td>\n");
-            ourStatistic.append("<td>");
+            ourStatistic.append("<td style='text-align: center'>");
             ourStatistic.append(row.get("quantity_question").toString());
             ourStatistic.append("</td>\n");
-            ourStatistic.append("<td>");
+            ourStatistic.append("<td  style='text-align: center'>");
             ourStatistic.append(row.get("correct_question").toString());
             ourStatistic.append("</td>\n");
-            ourStatistic.append("<td>");
+            ourStatistic.append("<td  style='text-align: center'>");
             ourStatistic.append(row.get("uncorrect").toString());
             ourStatistic.append("</td>\n");
             ourStatistic.append("<td>");
@@ -312,28 +338,14 @@ public class CreateListTest {
 
                 if (correctQuestion[j].equals("1")) {
                     ourStatistic.append(" <span class=\"label bg-success\" style=\"background: #00cc00\">");
-                    ourStatistic.append("<a href='javascript:openquestionuser(");
-                    ourStatistic.append(codeQuestion[j]);
-                    ourStatistic.append(",");
-                    ourStatistic.append(row.get("ID").toString());
-                    ourStatistic.append(")'>");
                     ourStatistic.append("Прав.");
-                    ourStatistic.append("</a>");
                     ourStatistic.append(" </span>");
                 }else
                 {
                     ourStatistic.append(" <span class=\"label bg-danger\" style=\"background: red\"> ");
-                    ourStatistic.append("<a href='javascript:openquestionuser(");
-                    ourStatistic.append(codeQuestion[j]);
-                    ourStatistic.append(",");
-                    ourStatistic.append(row.get("ID").toString());
-                    ourStatistic.append(")'>");
                     ourStatistic.append("Неправ.");
-                    ourStatistic.append("</a>");
                     ourStatistic.append(" </span>");
                 }
-
-
                 ourStatistic.append("</td>\n");
 
             }

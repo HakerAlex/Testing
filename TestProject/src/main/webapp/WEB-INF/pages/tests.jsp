@@ -813,6 +813,7 @@
     });
 
 </script>
+<%@ include file="../pages/template/templatefoot.jsp" %>
 </body>
 </html>
 

@@ -15,7 +15,10 @@
 
     <link href="${pageContext.request.contextPath}/resources/assets/css/bootstrap-theme.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/resources/assets/css/bootstrap.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/buttons/1.2.1/css/buttons.dataTables.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/resources/assets/css/table.css" rel="stylesheet">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/t/zf-5.5.2/jq-2.2.0,dt-1.10.11,b-1.1.2,b-colvis-1.1.2,b-html5-1.1.2/datatables.min.css"/>
     <%--<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/t/zf-5.5.2/jq-2.2.0,dt-1.10.11,b-1.1.2,b-colvis-1.1.2,b-html5-1.1.2/datatables.min.css"/>--%>
     <!-- Fonts -->
     <link href='http://fonts.googleapis.com/css?family=Oswald:100,300,400,500,600,800%7COpen+Sans:300,400,500,600,700,800%7CMontserrat:400,700'
@@ -38,22 +41,32 @@
 
     <div class="container">
 
-        <input type="button" class="button btn-success" onclick="tableToExcel('tests', 'Statistics')"
-               value="Экспорт в Excel">
-
-        <table id="tests" class="table">
+        <table id="tests" class="display nowrap">
             <thead>
             <tr>
                 <th>Категория</th>
                 <th>Название</th>
                 <th>Дата начала</th>
                 <th>Дата окончания</th>
-                <th>Всего вопросов</th>
-                <th>Правильных</th>
-                <th>Неправильных</th>
+                <th>Общее</th>
+                <th>Прав.</th>
+                <th>Неправ.</th>
                 <th>Подробно</th>
             </tr>
             </thead>
+
+            <tfoot>
+            <tr>
+                <th>Категория</th>
+                <th>Название</th>
+                <th>Дата начала</th>
+                <th>Дата окончания</th>
+                <th>Общее</th>
+                <th>Прав.</th>
+                <th>Неправ.</th>
+                <th>Подробно</th>
+            </tr>
+            </tfoot>
 
             <tbody>
             <c:forEach items="${table}" var="row">
@@ -62,9 +75,9 @@
                     <td>${row[1].testname}</td>
                     <td>${row[0].datestart}</td>
                     <td>${row[0].datefinish}</td>
-                    <td>${row[0].quantityQuestion}</td>
-                    <td>${row[0].correctQuestion}</td>
-                    <td>${row[0].quantityQuestion-row[0].correctQuestion}</td>
+                    <td style="text-align: center">${row[0].quantityQuestion}</td>
+                    <td style="text-align: center">${row[0].correctQuestion}</td>
+                    <td style="text-align: center">${row[0].quantityQuestion-row[0].correctQuestion}</td>
 
                     <td align="center">
                                         <span class="tooltip-area">
@@ -104,15 +117,31 @@
 
 <!-- END Main container -->
 <!-- Back to top button -->
-<%@ include file="../pages/template/templatefoot.jsp" %>
+
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/jquery.min.js"></script>
+
+<script type="text/javascript"
+        src="${pageContext.request.contextPath}/resources/assets/js/dataTables.bootstrap.min.js"></script>
 <script type="text/javascript"
         src="${pageContext.request.contextPath}/resources/assets/js/datatables.min.js"></script>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/bootstrap.min.js"></script>
+
 <script type="text/javascript"
-        src="${pageContext.request.contextPath}/resources/assets/js/bootstrap-confirm.js"></script>
+        src="https://cdn.datatables.net/buttons/1.2.1/js/dataTables.buttons.min.js"></script>
 
+<script type="text/javascript"
+        src="https://cdn.datatables.net/buttons/1.2.1/js/buttons.flash.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
 
+<script type="text/javascript"
+        src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+<script type="text/javascript"
+        src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+<script type="text/javascript"
+        src="https://cdn.datatables.net/buttons/1.2.1/js/buttons.html5.min.js"></script>
+<script type="text/javascript"
+        src="https://cdn.datatables.net/buttons/1.2.1/js/buttons.print.min.js"></script>
 
 <script type="text/javascript">
 
@@ -142,12 +171,22 @@
     }
 
     $(document).ready(function () {
+        $('#tests tfoot th').each( function () {
+            var title = $(this).text();
+            if (title=='Дата начала'||title=='Дата окончания'){
+                $(this).html( '<input type="date"/>' );
+            }else if (title=='Подробно'){$(this).html( '<label/>' )}
 
+            else if (isNaN(title))
+            {$(this).html( '<input type="text" placeholder="'+title+'" />' );}
+
+            else $(this).html( '<label/>' );
+        } );
 
         var default_options = {
-            "sScrollY": 400,
+            "scrollX": true,
 
-            "sScrollX": "100%",
+            "scrollY": 400,
 
             "sScrollXInner": "100%",
 
@@ -167,7 +206,7 @@
 
                 "sInfoEmpty": "Показано с 0 по 0 из 0 записей",
 
-                "sInfoFiltered": "(filtered from _MAX_ total records)",
+                "sInfoFiltered": "(отфильтровано из _MAX_ записей)",
 
                 "oPaginate": {
 
@@ -183,38 +222,38 @@
 
             },
 
-            "bProcessing": true
+            "bProcessing": true,
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel'
+            ],
+            lengthChange: false,
+            "initComplete": function () {
+                this.api().columns().every( function () {
+                    var that = this;
+
+                    $( 'input', this.footer() ).on( 'keyup change', function () {
+                        if ( that.search() !== this.value ) {
+                            that
+                                    .search( this.value )
+                                    .draw();
+                        }
+                    } );
+                } );
+            }
 
 
         };
 
         $('#tests').dataTable(default_options);
-        $('table[data-provide="data-table"]').dataTable();
+//        $('table[data-provide="data-table"]').dataTable();
 
 
     });
 </script>
 
-<script type="text/javascript">
-    var tableToExcel = (function () {
-        var uri = 'data:application/vnd.ms-excel;base64,'
-                , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--><meta http-equiv="content-type" content="text/plain; charset=UTF-8"/></head><body><table>{table}</table></body></html>'
-                , base64 = function (s) {
-            return window.btoa(unescape(encodeURIComponent(s)))
-        }
-                , format = function (s, c) {
-            return s.replace(/{(\w+)}/g, function (m, p) {
-                return c[p];
-            })
-        };
-        return function (table, name) {
-            if (!table.nodeType) table = document.getElementById(table);
-            var ctx = {worksheet: name || 'Worksheet', table: table.innerHTML};
-            window.location.href = uri + base64(format(template, ctx))
-        }
-    })();
-</script>
 
+<%@ include file="../pages/template/templatefoot.jsp" %>
 </body>
 </html>
 

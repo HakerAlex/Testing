@@ -247,4 +247,14 @@ public class FirstpageController {
         return "statistics";
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @RequestMapping(value = "/profile", method = RequestMethod.GET)
+    public String getProfile(Model model) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UsersEntity ourUser = userRepository.findUserByEmail(user.getUsername());
+        model.addAttribute("user",ourUser);
+        model.addAttribute("table", userRepository.getUsersResult(ourUser.getId()));
+        return "profile";
+    }
+
 }

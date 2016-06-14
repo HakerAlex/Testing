@@ -8,6 +8,8 @@ import com.springapp.mvc.service.CreateListTest;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -159,5 +161,42 @@ public class UserController {
          return createListTestBean.returnResult(testid);
     }
 
+
+
+
+    @PreAuthorize("isAuthenticated()")
+    @RequestMapping(value = "/edituserprofile", method = RequestMethod.POST, produces = {"text/plain; charset=UTF-8"})
+    @ResponseBody
+    public String editUserprofile( @RequestParam("name") String name, @RequestParam("surname") String surname, @RequestParam("phone") String phone, @RequestParam("email") String email, @RequestParam("password") String password) {
+        User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        UsersEntity ourUser = userRepository.findUserByEmail(user.getUsername());
+        ourUser.setPhone(phone);
+        ourUser.setName(name);
+        ourUser.setSurname(surname);
+        ourUser.setEmail(email);
+
+        if (!ourUser.getPassword().equals(password)) {
+            ourUser.setPassword(DigestUtils.sha256Hex(password));
+        }
+
+
+        try {
+            userRepository.updateUser(ourUser);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        StringBuilder json = new StringBuilder(100);
+        json.append("{\"name\":\"");
+        json.append(ourUser.getName());
+        json.append("\",\"surname\":\"");
+        json.append(ourUser.getSurname());
+        json.append("\",\"phone\":\"");
+        json.append(ourUser.getPhone());
+        json.append("\",\"email\":\"");
+        json.append(ourUser.getEmail());
+        json.append("\"}");
+        return json.toString();
+    }
 
 }

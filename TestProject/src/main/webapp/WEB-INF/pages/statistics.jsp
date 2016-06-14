@@ -15,8 +15,10 @@
 
     <link href="${pageContext.request.contextPath}/resources/assets/css/bootstrap-theme.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/resources/assets/css/bootstrap.css" rel="stylesheet">
+    <link href="https://cdn.datatables.net/buttons/1.2.1/css/buttons.dataTables.min.css" rel="stylesheet">
     <link href="${pageContext.request.contextPath}/resources/assets/css/table.css" rel="stylesheet">
-    <%--<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/t/zf-5.5.2/jq-2.2.0,dt-1.10.11,b-1.1.2,b-colvis-1.1.2,b-html5-1.1.2/datatables.min.css"/>--%>
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/t/zf-5.5.2/jq-2.2.0,dt-1.10.11,b-1.1.2,b-colvis-1.1.2,b-html5-1.1.2/datatables.min.css"/>
     <!-- Fonts -->
     <link href='http://fonts.googleapis.com/css?family=Oswald:100,300,400,500,600,800%7COpen+Sans:300,400,500,600,700,800%7CMontserrat:400,700'
           rel='stylesheet' type='text/css'>
@@ -37,7 +39,7 @@
 
 
     <div class="container">
-        <table id="table" class="table" cellspacing="0" width="100%">
+        <table id="table" class="display nowrap"  cellspacing="0" width="100%">
             ${table}
         </table>
     </div>
@@ -46,30 +48,106 @@
 <!-- END Site header -->
 
 
+<main>
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Тест подробно</h4>
+                </div>
+                <div class="modal-body">
+                    <ul id="ourTest" class="list-group" style="text-align: center; margin-right: 25px">
+                    </ul>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Закрыть</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+
 <!-- END Main container -->
 <!-- Back to top button -->
 <%--<%@ include file="../pages/template/templatefoot.jsp" %>--%>
 <script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/jquery.min.js"></script>
-<script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/bootstrap.min.js"></script>
+
 <script type="text/javascript"
         src="${pageContext.request.contextPath}/resources/assets/js/dataTables.bootstrap.min.js"></script>
 <script type="text/javascript"
         src="${pageContext.request.contextPath}/resources/assets/js/datatables.min.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath}/resources/assets/js/bootstrap.min.js"></script>
+
+<script type="text/javascript"
+        src="https://cdn.datatables.net/buttons/1.2.1/js/dataTables.buttons.min.js"></script>
+
+<script type="text/javascript"
+        src="https://cdn.datatables.net/buttons/1.2.1/js/buttons.flash.min.js"></script>
+<script type="text/javascript"
+        src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+
+<script type="text/javascript"
+        src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+<script type="text/javascript"
+        src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+<script type="text/javascript"
+        src="https://cdn.datatables.net/buttons/1.2.1/js/buttons.html5.min.js"></script>
+<script type="text/javascript"
+        src="https://cdn.datatables.net/buttons/1.2.1/js/buttons.print.min.js"></script>
+
 
 
 <script type="text/javascript">
 
+    function getUserResult(testid) {
+        $.ajax({
+            type: "POST",
+            url: "${pageContext.request.contextPath}/getuserresult",
+            data: {
+                testid: testid
+            },
+            success: {
+                function (codeQ) {
+                }
+            },
+            error: {
+                function (codeQ) {
+                }
+            }
+        }).done(function (element) {
+            $("#ourTest").html(element);
+
+            $(function () {
+                $("#myModal").modal('show');
+            });
+        });
+    }
+
+
     $(document).ready(function () {
 
+        $('#table tfoot th').each( function () {
+            var title = $(this).text();
+            if (title=='Дата начала'||title=='Дата окончания'){
+                $(this).html( '<input type="date"/>' );
+            }else if (isNaN(title))
+            {$(this).html( '<input type="text" placeholder="'+title+'" />' );}
+
+            else $(this).html( '<label/>' );
+        } );
+
         var default_options = {
-            "sScrollY": 400,
-
-            "sScrollX": "100%",
-
+            "scrollX": true,
+//
+            "scrollY": 388,
+//
             "sScrollXInner": "100%",
 
             "bJQueryUI": true,
-
             "sPaginationType": "simple_numbers",
 
             "oLanguage": {
@@ -100,17 +178,35 @@
 
             },
 
-            "bProcessing": true
+            "bProcessing": true,
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel'
+            ],
+            lengthChange: false,
+           "initComplete": function () {
+                this.api().columns().every( function () {
+                    var that = this;
+
+                    $( 'input', this.footer() ).on( 'keyup change', function () {
+                        if ( that.search() !== this.value ) {
+                            that
+                                    .search( this.value )
+                                    .draw();
+                        }
+                    } );
+                } );
+            }
+
 
 
         };
 
         $('#table').dataTable(default_options);
-        $('table[data-provide="data-table"]').dataTable();
-    });
+        //$('table[data-provide="data-table"]').dataTable();
+          });
 </script>
-
-
+<%@ include file="../pages/template/templatefoot.jsp" %>
 </body>
 </html>
 
