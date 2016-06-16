@@ -512,7 +512,7 @@
                     $.confirm({
                         template: 'primary',
                         templateOk: 'primary',
-                        message: 'Записать в базу текущий вопрос?',
+                        message: 'Записать в базу текущий тест?',
                         onOk: function () {
                             if ($('#title').val() == "") {
                                 $.confirm({
@@ -600,6 +600,7 @@
         $("#code").val('');
         $("#href").val('');
         $("#author").val('');
+        $("#question").html('');
     }
 
     function openinfo() {

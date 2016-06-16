@@ -257,4 +257,19 @@ public class FirstpageController {
         return "profile";
     }
 
+
+    @RequestMapping(value = "/faq", method = RequestMethod.GET)
+    public String openFAQ(Model model) {
+        return "faq";
+    }
+
+    @RequestMapping(value = "/about", method = RequestMethod.GET)
+    public String openAbout(Model model) {
+        return "aboutus";
+    }
+
+    @RequestMapping(value = "/contact", method = RequestMethod.GET)
+    public String openContact(Model model) {
+        return "contact";
+    }
 }

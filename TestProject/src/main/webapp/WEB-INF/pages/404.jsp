@@ -18,7 +18,7 @@
 <body>
 <img src="${pageContext.request.contextPath}/resources/assets/img/404.jpg" border="0" alt="" width="480" style="display: block; margin-left: auto; margin-right: auto; margin-top: 60px;">
 <p>&nbsp;</p>
-<p style="text-align: center;"><a href="/" title="Вернуться на Главную">Вернуться на Главную</a> </p>
+<p style="text-align: center;"><a href="${pageContext.request.contextPath}/" title="Вернуться на Главную">Вернуться на Главную</a> </p>
 </body>
 </html>
 

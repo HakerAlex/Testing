@@ -12,17 +12,17 @@ $(function () {
 function initMap() {
     var mapDiv = document.getElementById('contact-map');
     var map = new google.maps.Map(mapDiv, {
-        center: {lat: 44.540, lng: -78.546},
+        center: {lat: 46.4538905, lng: 30.6852818},
         zoom: 14
     });
 
     var marker = new google.maps.Marker({
-        position: {lat: 44.540, lng: -78.546},
+        position: {lat: 46.453654, lng: 30.6841448},
         map: map
     });
 
     var infowindow = new google.maps.InfoWindow({
-        content: "<strong>Our office</strong><br>3652 Seventh Avenue, Los Angeles, CA"
+        content: "<strong>Наш офис</strong><br>65036, Одесса, Старицкого 20/1 кв.74"
     });
 
     marker.addListener('click', function () {

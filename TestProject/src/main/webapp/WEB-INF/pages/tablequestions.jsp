@@ -481,11 +481,14 @@
             }
         }).done(function (element) {
 
-            pardesc = JSON.parse(element);
+            if (element!="empty") {
 
-            $('#parent').val(pardesc.parent);
-            $('#parentid').val(pardesc.code);
 
+                pardesc = JSON.parse(element);
+
+                $('#parent').val(pardesc.parent);
+                $('#parentid').val(pardesc.code);
+            }
         });
 
 

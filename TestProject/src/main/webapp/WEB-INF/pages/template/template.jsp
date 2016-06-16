@@ -46,9 +46,9 @@
             <li>
                 <a href="#">Общая</a>
                 <ul>
-                    <li><a href="page-about.html">О нас</a></li>
-                    <li><a href="page-contact.html">Контакты</a></li>
-                    <li><a href="page-faq.html">FAQ</a></li>
+                    <li><a href="${pageContext.request.contextPath}/about">О нас</a></li>
+                    <li><a href="${pageContext.request.contextPath}/contact">Контакты</a></li>
+                    <li><a href="${pageContext.request.contextPath}/faq">FAQ</a></li>
                 </ul>
             </li>
         </ul>

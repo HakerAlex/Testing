@@ -248,7 +248,7 @@
                             $.confirm({
                                 template: 'primary',
                                 templateOk: 'primary',
-                                message: 'Вы уверены что хотите пройти тест?',
+                                message: 'Вы уверены, что хотите пройти тест?',
                                 onOk: function() {
                             $('#testnumber').val($('#idkey').val());
                             $('#opentest').submit();
@@ -266,7 +266,7 @@
             $.confirm({
                 template: 'primary',
                 templateOk: 'primary',
-                message: 'Вы уверены что хотите пройти тест?',
+                message: 'Вы уверены, что хотите пройти тест?',
                 onOk: function() {
                     $('#testnumber').val(codetest);
                     $('#opentest').submit();

@@ -29,7 +29,7 @@ public class QuestionController {
     }
 
     @PreAuthorize("hasRole('admin')")
-    @RequestMapping(value = "/writequestion", method = RequestMethod.POST, produces = {"text/html; charset=UTF-8"})
+    @RequestMapping(value = "/writequestion", method = RequestMethod.POST, produces = {"text/plain; charset=UTF-8"})
     @ResponseBody
     public String writeQuestion(@RequestParam("category") String category, @RequestParam("question") String question, @RequestParam("code") String code, @RequestParam("typeq") int typeq) {
 
@@ -86,10 +86,10 @@ public class QuestionController {
             e.printStackTrace();
         }
 
-        QuestionsEntity newOurQuestion = questionRepository.getQuestionByText(ourQuestion.getQuestion());
+//        QuestionsEntity newOurQuestion = questionRepository.getQuestionByText(ourQuestion.getQuestion());
 
         StringBuilder ourAnswer = new StringBuilder(10);
-        ourAnswer.append(newOurQuestion.getId());
+        ourAnswer.append(ourQuestion.getId());
         return ourAnswer.toString();
     }
 
@@ -238,6 +238,21 @@ public class QuestionController {
         AnswersEntity answer=questionRepository.getAnswersByID(idanswer);
         questionRepository.deleteAnswer(answer);
         return createTable(idquestion,context);
+    }
+
+
+    @PreAuthorize("hasRole('admin')")
+    @RequestMapping(value = "/checkquestion", method = RequestMethod.POST, produces = {"text/html; charset=UTF-8"})
+    @ResponseBody
+    public String checkQuestion(@RequestParam("idquestion") int idquestion) throws Exception {
+
+        List<AnswersUserEntity> ourAnswers=questionRepository.getAnswerUserByQuestionID(idquestion);
+
+        if (ourAnswers.size()>0){
+            return "error";
+        }
+
+        return "ok";
     }
 
     @PreAuthorize("hasRole('admin')")

@@ -59,8 +59,16 @@ public class CategoryController {
     @RequestMapping(value = "/getparent", method = RequestMethod.POST, produces = {"text/plain; charset=UTF-8"})
     @ResponseBody
     public String getParent(@RequestParam("category") String namecategory) {
+        if (namecategory.trim().equals("")){
+            return "empty";
+        }
         Integer parentID = categoryRepository.getCategoriesByID(new Integer(namecategory)).getParent();
         CategoriesEntity ourCategory = categoryRepository.getCategoriesByID(parentID);
+
+        if (ourCategory==null)
+        {
+            return "empty";
+        }
 
         StringBuilder json = new StringBuilder(100);
         json.append("{\"code\":\"");

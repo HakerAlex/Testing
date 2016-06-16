@@ -328,15 +328,177 @@
 
 
 <script type="text/javascript">
-    $(document).ready(function () {
+    function clearForNewQuestion() {
+        $("input[name='typequestion']:checked").val(1);
+        CKEDITOR.instances.editorAn.setData('');
+        CKEDITOR.instances.editorCk.setData('');
+        $("#code").val('');
+        $("#answers").html('');
+    }
 
-        function clearForNewQuestion(){
-            $("input[name='typequestion']:checked").val(1);
-            CKEDITOR.instances.editorAn.setData('');
-            CKEDITOR.instances.editorCk.setData('');
-            $("#code").val('');
-            $("#answers").html('');
+
+    function writeAfterCheck(flag) {
+        if (strip(CKEDITOR.instances.editorCk.getData()).trim() != '') {
+
+            $.ajax({
+                type: "POST",
+                url: "${pageContext.request.contextPath}/writequestion",
+                data: {
+                    category: $('#categoryid').val(),
+                    question: CKEDITOR.instances.editorCk.getData(),
+                    code: $('#code').val(),
+                    typeq: $("input[name='typequestion']:checked").val()
+                },
+                dataType: "text",
+                success: {
+                    function (codeQ) {
+                        $('#code').val(codeQ);
+                    },
+                    error: {
+                        function (codeQ) {
+                            $.confirm({
+                                title: 'Внимание',
+                                titleIcon: 'glyphicon glyphicon-warning-sign',
+                                template: 'warning',
+                                templateOk: 'warning',
+                                message: 'Ошибка! Добавления/обновления',
+                                labelOk: 'ОК',
+                                buttonCancel: false,
+                                onOk: function () {
+                                }
+                            });
+
+                        }
+                    }
+
+                }
+            }).done(function (codeQ) {
+
+                if (codeQ == "Не может быть несколько ответов при таком типе вопроса" || codeQ == "Ошибка! Проверьте тип вопроса и кол-во ответов" || codeQ == "Ошибка! Проверьте тип вопроса и кол-во правильных ответов") {
+                    $.confirm({
+                        title: 'Внимание',
+                        titleIcon: 'glyphicon glyphicon-warning-sign',
+                        template: 'warning',
+                        templateOk: 'warning',
+                        message: codeQ,
+                        labelOk: 'ОК',
+                        buttonCancel: false,
+                        onOk: function () {
+                        }
+                    });
+                } else {
+                    if (flag == 1) {
+                        $('#code').val(codeQ);
+                    }
+
+                    $.confirm({
+                        title: 'Информация',
+                        titleIcon: 'glyphicon glyphicon-info-sign',
+                        template: 'info',
+                        templateOk: 'info',
+                        message: 'Добавлен/обновлен вопрос в базу',
+                        labelOk: 'ОК',
+                        buttonCancel: false,
+                        onOk: function () {
+                            if (flag == 1) {
+                                $.ajax({
+                                    type: "POST",
+                                    url: "${pageContext.request.contextPath}/createtree",
+                                    data: {
+                                        code: $('#code').val(),
+                                        context: "${pageContext.request.contextPath}"
+                                    },
+                                    dataType: "text",
+                                    success: {
+                                        function () {
+                                        },
+                                        error: {
+                                            function () {
+                                            }
+                                        }
+
+                                    }
+                                }).done(function (codeQ) {
+                                    if (flag == 1) {
+                                        $("#answers").html(codeQ);
+                                    }
+                                })
+                            } else {
+
+                                clearForNewQuestion();
+                            }
+
+                        }
+                    });
+
+                }
+            });
         }
+        else    $.confirm({
+            title: 'Информация',
+            titleIcon: 'glyphicon glyphicon-info-sign',
+            template: 'info',
+            templateOk: 'info',
+            message: 'Нельзя добавлять пустой вопрос',
+            labelOk: 'ОК',
+            buttonCancel: false,
+            onOk: function () {
+            }
+        });
+    }
+
+
+    function writeQuestionDB(flag) {
+
+        if ($('#code').val().trim() != "") {
+            //проверка
+            $.ajax({
+                type: "POST",
+                url: "${pageContext.request.contextPath}/checkquestion",
+                data: {
+                    idquestion: $('#code').val()
+                },
+                dataType: "text",
+                success: {
+                    function () {
+                    },
+                    error: {
+                        function () {
+                        }
+                    }
+                }
+            }).done(function (element) {
+                if (element == "error") {
+                    $.confirm({
+                        title: 'Внимание',
+                        titleIcon: 'glyphicon glyphicon-warning-sign',
+                        template: 'warning',
+                        templateOk: 'warning',
+                        message: 'Ошибка! Нельзя исправлять вопрос так как есть уже пройденные тесты с этим вопросом',
+                        labelOk: 'ОК',
+                        buttonCancel: false,
+                        onOk: function () {
+                            return;
+                        }
+                    });
+
+                }
+                else {
+
+                    writeAfterCheck(flag);
+
+                }
+            });
+
+
+        } else {
+            writeAfterCheck(flag);
+        }
+
+
+    }
+
+    $(document).ready(function () {
 
 
         $("#addnewquestion").click(function () {
@@ -351,8 +513,7 @@
                         templateOk: 'primary',
                         message: 'Записать в базу текущий вопрос?',
                         onOk: function () {
-                            $("#writequestion").click();
-                            setTimeout(function(){clearForNewQuestion()},2000);
+                            writeQuestionDB(0);
 
                         },
                         onCancel: function () {
@@ -363,7 +524,6 @@
             });
 
         });
-
 
 
         $("#addanswer").click(function () {
@@ -383,280 +543,297 @@
                 )
             }
             else {
-                $('#answerid').val('');
-                $('#answertext').val('');
-                CKEDITOR.instances.editorAn.setData('');
 
-                if ($("input[name='typequestion']:checked").val() < 3) {
-                    $("#myModalRadioChecked").modal('show');
-                }
-                else {
-                    $("#myModalText").modal('show');
-                }
+                //проверка
+                $.ajax({
+                    type: "POST",
+                    url: "${pageContext.request.contextPath}/checkquestion",
+                    data: {
+                        idquestion: $('#code').val()
+                    },
+                    dataType: "text",
+                    success: {
+                        function () {
+                        },
+                        error: {
+                            function () {
+                            }
+                        }
+                    }
+                }).done(function (element) {
+                    if (element == "ok") {
+                        $('#answerid').val('');
+                        $('#answertext').val('');
+                        CKEDITOR.instances.editorAn.setData('');
+
+                        if ($("input[name='typequestion']:checked").val() < 3) {
+                            $("#myModalRadioChecked").modal('show');
+                        }
+                        else {
+                            $("#myModalText").modal('show');
+                        }
+                    }
+                    else {
+                        $.confirm({
+                            title: 'Внимание',
+                            titleIcon: 'glyphicon glyphicon-warning-sign',
+                            template: 'warning',
+                            templateOk: 'warning',
+                            message: 'Ошибка! Нельзя добавить ответ так как есть уже пройденные тесты с этим вопросом',
+                            labelOk: 'ОК',
+                            buttonCancel: false,
+                            onOk: function () {
+                            }
+                        });
+                    }
+
+                });
+
+
             }
-        })
+        });
 
 
         $("#writean").click(function () {
-            if ($("input[name='typequestion']:checked").val() == 3) {
-                if ($('#answertext').val().trim() != '') {
-                    $.ajax({
-                        type: "POST",
-                        url: "${pageContext.request.contextPath}/writeanswer",
-                        data: {
-                            answer: $('#answertext').val(),
-                            codequestion: $('#code').val(),
-                            flag: 1,
-                            typeq: $("input[name='typequestion']:checked").val(),
-                            answerid: $('#answerid').val(),
-                            context: "${pageContext.request.contextPath}"
-                        },
-                        dataType: "text",
-                        success: {
-                            function (codeQ) {
-                            },
-                            error: {
-                                function (codeQ) {
+
+            //проверка
+            $.ajax({
+                type: "POST",
+                url: "${pageContext.request.contextPath}/checkquestion",
+                data: {
+                    idquestion: $('#code').val()
+                },
+                dataType: "text",
+                success: {
+                    function () {
+                    },
+                    error: {
+                        function () {
+                        }
+                    }
+                }
+            }).done(function (element) {
+                if (element == "ok") {
+
+
+                    if ($("input[name='typequestion']:checked").val() == 3) {
+                        if ($('#answertext').val().trim() != '') {
+                            $.ajax({
+                                type: "POST",
+                                url: "${pageContext.request.contextPath}/writeanswer",
+                                data: {
+                                    answer: $('#answertext').val(),
+                                    codequestion: $('#code').val(),
+                                    flag: 1,
+                                    typeq: $("input[name='typequestion']:checked").val(),
+                                    answerid: $('#answerid').val(),
+                                    context: "${pageContext.request.contextPath}"
+                                },
+                                dataType: "text",
+                                success: {
+                                    function (codeQ) {
+                                    },
+                                    error: {
+                                        function (codeQ) {
+                                            $.confirm({
+                                                title: 'Внимание',
+                                                titleIcon: 'glyphicon glyphicon-warning-sign',
+                                                template: 'warning',
+                                                templateOk: 'warning',
+                                                message: 'Ошибка! Добавления/обновления ответа',
+                                                labelOk: 'ОК',
+                                                buttonCancel: false,
+                                                onOk: function () {
+                                                }
+                                            });
+
+                                        }
+                                    }
+                                }
+                            }).done(function (codeQ) {
+                                if (codeQ == "Не может быть несколько ответов при таком типе вопроса" || codeQ == "Ошибка! Проверьте тип вопроса и кол-во ответов" || codeQ == "Ошибка! Проверьте тип вопроса и кол-во правильных ответов") {
                                     $.confirm({
                                         title: 'Внимание',
                                         titleIcon: 'glyphicon glyphicon-warning-sign',
                                         template: 'warning',
                                         templateOk: 'warning',
-                                        message: 'Ошибка! Добавления/обновления ответа',
+                                        message: codeQ,
                                         labelOk: 'ОК',
                                         buttonCancel: false,
                                         onOk: function () {
                                         }
                                     });
-
-                                }
-                            }
-                        }
-                    }).done(function (codeQ) {
-                        if (codeQ == "Не может быть несколько ответов при таком типе вопроса" || codeQ == "Ошибка! Проверьте тип вопроса и кол-во ответов" || codeQ == "Ошибка! Проверьте тип вопроса и кол-во правильных ответов") {
-                            $.confirm({
-                                title: 'Внимание',
-                                titleIcon: 'glyphicon glyphicon-warning-sign',
-                                template: 'warning',
-                                templateOk: 'warning',
-                                message: codeQ,
-                                labelOk: 'ОК',
-                                buttonCancel: false,
-                                onOk: function () {
+                                } else {
+                                    $("#answers").html(codeQ);
+                                    $.confirm({
+                                        title: 'Информация',
+                                        titleIcon: 'glyphicon glyphicon-info-sign',
+                                        template: 'info',
+                                        templateOk: 'info',
+                                        message: 'Добавлен/обновлен ответ в базу',
+                                        labelOk: 'ОК',
+                                        buttonCancel: false,
+                                        onOk: function () {
+                                        }
+                                    });
                                 }
                             });
-                        } else {
-                            $("#answers").html(codeQ);
+                        }
+                        else {
                             $.confirm({
                                 title: 'Информация',
                                 titleIcon: 'glyphicon glyphicon-info-sign',
                                 template: 'info',
                                 templateOk: 'info',
-                                message: 'Добавлен/обновлен ответ в базу',
+                                message: 'Нельзя добавлять пустой ответ',
                                 labelOk: 'ОК',
                                 buttonCancel: false,
                                 onOk: function () {
                                 }
                             });
                         }
-                    });
+                    }
+
+
                 }
                 else {
                     $.confirm({
-                        title: 'Информация',
-                        titleIcon: 'glyphicon glyphicon-info-sign',
-                        template: 'info',
-                        templateOk: 'info',
-                        message: 'Нельзя добавлять пустой ответ',
+                        title: 'Внимание',
+                        titleIcon: 'glyphicon glyphicon-warning-sign',
+                        template: 'warning',
+                        templateOk: 'warning',
+                        message: 'Ошибка! Нельзя добавить ответ так как есть уже пройденные тесты с этим вопросом',
                         labelOk: 'ОК',
                         buttonCancel: false,
                         onOk: function () {
                         }
                     });
                 }
-            }
+
+            });
+
+
         });
 
 
         $("#writeanswer").click(function () {
-            if ($("input[name='typequestion']:checked").val() < 3) {
-                if (strip(CKEDITOR.instances.editorAn.getData()).trim() != '') {
 
-                    $.ajax({
-                        type: "POST",
-                        url: "${pageContext.request.contextPath}/writeanswer",
-                        data: {
-                            answer: CKEDITOR.instances.editorAn.getData(),
-                            codequestion: $('#code').val(),
-                            flag: $("input[name='typeanswer']:checked").val(),
-                            typeq: $("input[name='typequestion']:checked").val(),
-                            answerid: $('#answerid').val(),
-                            context: "${pageContext.request.contextPath}"
-                        },
-                        dataType: "text",
-                        success: {
-                            function (codeQ) {
-                            },
-                            error: {
-                                function (codeQ) {
+            //проверка
+            $.ajax({
+                type: "POST",
+                url: "${pageContext.request.contextPath}/checkquestion",
+                data: {
+                    idquestion: $('#code').val()
+                },
+                dataType: "text",
+                success: {
+                    function () {
+                    },
+                    error: {
+                        function () {
+                        }
+                    }
+                }
+            }).done(function (element) {
+                if (element == "ok") {
+
+                    if ($("input[name='typequestion']:checked").val() < 3) {
+                        if (strip(CKEDITOR.instances.editorAn.getData()).trim() != '') {
+
+                            $.ajax({
+                                type: "POST",
+                                url: "${pageContext.request.contextPath}/writeanswer",
+                                data: {
+                                    answer: CKEDITOR.instances.editorAn.getData(),
+                                    codequestion: $('#code').val(),
+                                    flag: $("input[name='typeanswer']:checked").val(),
+                                    typeq: $("input[name='typequestion']:checked").val(),
+                                    answerid: $('#answerid').val(),
+                                    context: "${pageContext.request.contextPath}"
+                                },
+                                dataType: "text",
+                                success: {
+                                    function (codeQ) {
+                                    },
+                                    error: {
+                                        function (codeQ) {
+                                            $.confirm({
+                                                title: 'Внимание',
+                                                titleIcon: 'glyphicon glyphicon-warning-sign',
+                                                template: 'warning',
+                                                templateOk: 'warning',
+                                                message: 'Ошибка! Добавления/обновления ответа',
+                                                labelOk: 'ОК',
+                                                buttonCancel: false,
+                                                onOk: function () {
+                                                }
+                                            });
+
+                                        }
+                                    }
+                                }
+                            }).done(function (codeQ) {
+                                if (codeQ == "Не может быть несколько ответов при таком типе вопроса" || codeQ == "Ошибка! Проверьте тип вопроса и кол-во ответов" || codeQ == "Ошибка! Проверьте тип вопроса и кол-во правильных ответов") {
                                     $.confirm({
                                         title: 'Внимание',
                                         titleIcon: 'glyphicon glyphicon-warning-sign',
                                         template: 'warning',
                                         templateOk: 'warning',
-                                        message: 'Ошибка! Добавления/обновления ответа',
+                                        message: codeQ,
                                         labelOk: 'ОК',
                                         buttonCancel: false,
                                         onOk: function () {
                                         }
                                     });
-
-                                }
-                            }
-                        }
-                    }).done(function (codeQ) {
-                        if (codeQ == "Не может быть несколько ответов при таком типе вопроса" || codeQ == "Ошибка! Проверьте тип вопроса и кол-во ответов" || codeQ == "Ошибка! Проверьте тип вопроса и кол-во правильных ответов") {
-                            $.confirm({
-                                title: 'Внимание',
-                                titleIcon: 'glyphicon glyphicon-warning-sign',
-                                template: 'warning',
-                                templateOk: 'warning',
-                                message: codeQ,
-                                labelOk: 'ОК',
-                                buttonCancel: false,
-                                onOk: function () {
-                                }
-                            });
-                        } else {
-                            $("#answers").html(codeQ);
-                            $.confirm({
-                                title: 'Информация',
-                                titleIcon: 'glyphicon glyphicon-info-sign',
-                                template: 'info',
-                                templateOk: 'info',
-                                message: 'Добавлен/обновлен ответ в базу',
-                                labelOk: 'ОК',
-                                buttonCancel: false,
-                                onOk: function () {
+                                } else {
+                                    $("#answers").html(codeQ);
+                                    $.confirm({
+                                        title: 'Информация',
+                                        titleIcon: 'glyphicon glyphicon-info-sign',
+                                        template: 'info',
+                                        templateOk: 'info',
+                                        message: 'Добавлен/обновлен ответ в базу',
+                                        labelOk: 'ОК',
+                                        buttonCancel: false,
+                                        onOk: function () {
+                                        }
+                                    });
                                 }
                             });
                         }
-                    });
-                }
-                else    $.confirm({
-                    title: 'Информация',
-                    titleIcon: 'glyphicon glyphicon-info-sign',
-                    template: 'info',
-                    templateOk: 'info',
-                    message: 'Нельзя добавлять пустой ответ',
-                    labelOk: 'ОК',
-                    buttonCancel: false,
-                    onOk: function () {
-                    }
-                });
-            }
-        });
-
-
-        $("#writequestion").click(function () {
-
-
-            if (strip(CKEDITOR.instances.editorCk.getData()).trim() != '') {
-
-                $.ajax({
-                    type: "POST",
-                    url: "${pageContext.request.contextPath}/writequestion",
-                    data: {
-                        category: $('#categoryid').val(),
-                        question: CKEDITOR.instances.editorCk.getData(),
-                        code: $('#code').val(),
-                        typeq: $("input[name='typequestion']:checked").val()
-                    },
-                    dataType: "text",
-                    success: {
-                        function (codeQ) {
-                            $('#code').val(codeQ);
-                        },
-                        error: {
-                            function (codeQ) {
-                                $.confirm({
-                                    title: 'Внимание',
-                                    titleIcon: 'glyphicon glyphicon-warning-sign',
-                                    template: 'warning',
-                                    templateOk: 'warning',
-                                    message: 'Ошибка! Добавления/обновления',
-                                    labelOk: 'ОК',
-                                    buttonCancel: false,
-                                    onOk: function () {
-                                    }
-                                });
-
-                            }
-                        }
-
-                    }
-                }).done(function (codeQ) {
-
-                    if (codeQ == "Не может быть несколько ответов при таком типе вопроса" || codeQ == "Ошибка! Проверьте тип вопроса и кол-во ответов" || codeQ == "Ошибка! Проверьте тип вопроса и кол-во правильных ответов") {
-                        $.confirm({
-                            title: 'Внимание',
-                            titleIcon: 'glyphicon glyphicon-warning-sign',
-                            template: 'warning',
-                            templateOk: 'warning',
-                            message: codeQ,
-                            labelOk: 'ОК',
-                            buttonCancel: false,
-                            onOk: function () {
-                            }
-                        });
-                    } else {
-                        $('#code').val(codeQ);
-                        $.confirm({
+                        else    $.confirm({
                             title: 'Информация',
                             titleIcon: 'glyphicon glyphicon-info-sign',
                             template: 'info',
                             templateOk: 'info',
-                            message: 'Добавлен/обновлен вопрос в базу',
+                            message: 'Нельзя добавлять пустой ответ',
                             labelOk: 'ОК',
                             buttonCancel: false,
                             onOk: function () {
-                                $.ajax({
-                                    type: "POST",
-                                    url: "${pageContext.request.contextPath}/createtree",
-                                    data: {
-                                        code: $('#code').val(),
-                                        context: "${pageContext.request.contextPath}"
-                                    },
-                                    dataType: "text",
-                                    success: {
-                                        function () {
-                                        },
-                                        error: {
-                                            function () {
-                                            }
-                                        }
-
-                                    }
-                                }).done(function (codeQ) {
-                                    $("#answers").html(codeQ);
-                                })
                             }
                         });
-
                     }
-                });
-            }
-            else    $.confirm({
-                title: 'Информация',
-                titleIcon: 'glyphicon glyphicon-info-sign',
-                template: 'info',
-                templateOk: 'info',
-                message: 'Нельзя добавлять пустой вопрос',
-                labelOk: 'ОК',
-                buttonCancel: false,
-                onOk: function () {
+                }
+                else {
+                    $.confirm({
+                        title: 'Внимание',
+                        titleIcon: 'glyphicon glyphicon-warning-sign',
+                        template: 'warning',
+                        templateOk: 'warning',
+                        message: 'Ошибка! Нельзя исправить ответ так как есть уже пройденные тесты с этим вопросом',
+                        labelOk: 'ОК',
+                        buttonCancel: false,
+                        onOk: function () {
+                        }
+                    });
                 }
             });
+
+        });
+
+
+        $("#writequestion").click(function () {
+            writeQuestionDB(1);
         });
 
 
@@ -669,7 +846,7 @@
             oFReader.onload = function (oFREvent) {
                 $('#addpicture').siblings('span').html('Добавить картинку').attr('title', 'Добавить картинку').show();
                 document.getElementById('modalpicture').reset();
-                CKEDITOR.instances.editorAn.setData(CKEDITOR.instances.editorAn.getData()+' <img src="'+oFREvent.target.result+'" />');
+                CKEDITOR.instances.editorAn.setData(CKEDITOR.instances.editorAn.getData() + ' <img src="' + oFREvent.target.result + '" />');
             };
 
         });
@@ -684,7 +861,7 @@
             oFReader.onload = function (oFREvent) {
                 $('#addpic').siblings('span').html('Добавить картинку').attr('title', 'Добавить картинку').show();
                 document.getElementById('formpicture').reset();
-                CKEDITOR.instances.editorCk.setData(CKEDITOR.instances.editorCk.getData()+' <img src="'+oFREvent.target.result+'" />');
+                CKEDITOR.instances.editorCk.setData(CKEDITOR.instances.editorCk.getData() + ' <img src="' + oFREvent.target.result + '" />');
             };
 
         });
@@ -702,17 +879,126 @@
     }
 
     function fundelanswer(idanswer, idquestion) {
-        $.confirm({
-            template: 'primary',
-            templateOk: 'primary',
-            message: 'Вы уверены что хотите удалить ответ?',
-            onOk: function () {
+
+        //проверка
+        $.ajax({
+            type: "POST",
+            url: "${pageContext.request.contextPath}/checkquestion",
+            data: {
+                idquestion: $('#code').val()
+            },
+            dataType: "text",
+            success: {
+                function () {
+                },
+                error: {
+                    function () {
+                    }
+                }
+            }
+        }).done(function (element) {
+            if (element == "ok") {
+                $.confirm({
+                    template: 'primary',
+                    templateOk: 'primary',
+                    message: 'Вы уверены что хотите удалить ответ?',
+                    onOk: function () {
+                        $.ajax({
+                            type: "POST",
+                            url: "${pageContext.request.contextPath}/delanswer",
+                            data: {
+                                idquestion: idquestion,
+                                context: "${pageContext.request.contextPath}",
+                                idanswer: idanswer
+                            },
+                            dataType: "text",
+                            success: {
+                                function () {
+                                },
+                                error: {
+                                    function () {
+                                    }
+                                }
+                            }
+                        }).done(function (element) {
+
+                            if (element == 'error') {
+
+                                $.confirm({
+                                    title: 'Внимание',
+                                    titleIcon: 'glyphicon glyphicon-warning-sign',
+                                    template: 'warning',
+                                    templateOk: 'warning',
+                                    message: 'Нельзя удалить ответ есть пройденные тесты с этим вопросом!',
+                                    labelOk: 'ОК',
+                                    buttonCancel: false,
+                                    onOk: function () {
+                                    }
+                                });
+
+                            }
+                            else {
+                                $.confirm({
+                                    title: 'Информация',
+                                    titleIcon: 'glyphicon glyphicon-info-sign',
+                                    template: 'info',
+                                    templateOk: 'info',
+                                    message: 'Ответ удален.',
+                                    labelOk: 'ОК',
+                                    buttonCancel: false,
+                                    onOk: function () {
+                                        $("#answers").html(element);
+                                    }
+                                });
+
+                            }
+                        });
+                    },
+                    onCancel: function () {
+                    }
+                });
+            }else{
+                $.confirm({
+                    title: 'Внимание',
+                    titleIcon: 'glyphicon glyphicon-warning-sign',
+                    template: 'warning',
+                    templateOk: 'warning',
+                    message: 'Ошибка! Нельзя удалить ответ так как есть уже пройденные тесты с этим вопросом',
+                    labelOk: 'ОК',
+                    buttonCancel: false,
+                    onOk: function () {
+                    }
+                });
+            }
+        })
+    }
+
+    function funeditanswer(idanswer) {
+        //проверка
+        $.ajax({
+            type: "POST",
+            url: "${pageContext.request.contextPath}/checkquestion",
+            data: {
+                idquestion: $('#code').val()
+            },
+            dataType: "text",
+            success: {
+                function () {
+                },
+                error: {
+                    function () {
+                    }
+                }
+            }
+        }).done(function (element) {
+            if (element == "ok") {
+
+
+                $('#answerid').val(idanswer);
                 $.ajax({
                     type: "POST",
-                    url: "${pageContext.request.contextPath}/delanswer",
+                    url: "${pageContext.request.contextPath}/editanswer",
                     data: {
-                        idquestion: idquestion,
-                        context: "${pageContext.request.contextPath}",
                         idanswer: idanswer
                     },
                     dataType: "text",
@@ -726,73 +1012,31 @@
                     }
                 }).done(function (element) {
 
-                    if (element == 'error') {
+                    if ($("input[name='typequestion']:checked").val() < 3) {
 
-                        $.confirm({
-                            title: 'Внимание',
-                            titleIcon: 'glyphicon glyphicon-warning-sign',
-                            template: 'warning',
-                            templateOk: 'warning',
-                            message: 'Нельзя удалить ответ есть пройденные тесты с этим вопросом!',
-                            labelOk: 'ОК',
-                            buttonCancel: false,
-                            onOk: function () {
-                            }
-                        });
+                        CKEDITOR.instances.editorAn.setData(element);
 
+                        $("#myModalRadioChecked").modal('show');
                     }
                     else {
-                        $.confirm({
-                            title: 'Информация',
-                            titleIcon: 'glyphicon glyphicon-info-sign',
-                            template: 'info',
-                            templateOk: 'info',
-                            message: 'Ответ удален.',
-                            labelOk: 'ОК',
-                            buttonCancel: false,
-                            onOk: function () {
-                                $("#answers").html(element);
-                            }
-                        });
+                        $('#answertext').val(element);
+                        $("#myModalText").modal('show');
+                    }
 
+                })
+            } else {
+                $.confirm({
+                    title: 'Внимание',
+                    titleIcon: 'glyphicon glyphicon-warning-sign',
+                    template: 'warning',
+                    templateOk: 'warning',
+                    message: 'Ошибка! Нельзя исправить ответ так как есть уже пройденные тесты с этим вопросом',
+                    labelOk: 'ОК',
+                    buttonCancel: false,
+                    onOk: function () {
                     }
                 });
-            },
-            onCancel: function () {
             }
-        });
-    }
-
-    function funeditanswer(idanswer) {
-        $('#answerid').val(idanswer);
-        $.ajax({
-            type: "POST",
-            url: "${pageContext.request.contextPath}/editanswer",
-            data: {
-                idanswer: idanswer
-            },
-            dataType: "text",
-            success: {
-                function () {
-                },
-                error: {
-                    function () {
-                    }
-                }
-            }
-        }).done(function (element) {
-
-            if ($("input[name='typequestion']:checked").val() < 3) {
-
-                CKEDITOR.instances.editorAn.setData(element);
-
-                $("#myModalRadioChecked").modal('show');
-            }
-            else {
-                $('#answertext').val(element);
-                $("#myModalText").modal('show');
-            }
-
         })
     }
 </script>

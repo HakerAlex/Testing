@@ -81,8 +81,8 @@
 		titleIcon: 'glyphicon glyphicon-question-sign',
 		labelOk: 'Да',
 		labelCancel: 'Отмена',
-		templateOk: 'danger',
-		templateCancel: 'default'
+		templateOk: 'primary',
+		templateCancel: 'danger'
 	};
 
 })(jQuery);

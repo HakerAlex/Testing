@@ -154,7 +154,7 @@ public class UserController {
 
     }
 
-    @PreAuthorize("hasRole('admin')")
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/getuserresult", method = RequestMethod.POST, produces = {"text/html; charset=UTF-8"})
     @ResponseBody
     public String getUserResult(@RequestParam("testid") int testid){
@@ -195,6 +195,8 @@ public class UserController {
         json.append(ourUser.getPhone());
         json.append("\",\"email\":\"");
         json.append(ourUser.getEmail());
+        json.append("\",\"password\":\"");
+        json.append(ourUser.getPassword());
         json.append("\"}");
         return json.toString();
     }

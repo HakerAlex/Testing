@@ -186,7 +186,7 @@
         var default_options = {
             "scrollX": true,
 
-            "scrollY": 400,
+            "scrollY": 388,
 
             "sScrollXInner": "100%",
 
