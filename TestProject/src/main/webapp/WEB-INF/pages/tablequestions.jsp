@@ -186,7 +186,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary btn-danger" data-dismiss="modal">Отмена</button>
                     <button type="button" class="btn btn-danger" data-dismiss="modal" id="deletecategory">Удалить
                     </button>
                 </div>
@@ -213,7 +213,7 @@
                     <div id="treeforparent" style="color: dodgerblue; text-align:left; margin-right: 20px "></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary btn-danger" data-dismiss="modal">Отмена</button>
                 </div>
             </div><!-- /.modal-content -->
         </div><!-- /.modal-dialog -->

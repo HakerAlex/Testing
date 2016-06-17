@@ -3,10 +3,15 @@ package com.springapp.mvc.controller;
 import com.springapp.mvc.domain.AnswersEntity;
 import com.springapp.mvc.domain.AnswersUserEntity;
 import com.springapp.mvc.domain.QuestionsEntity;
+import com.springapp.mvc.domain.UsersEntity;
 import com.springapp.mvc.repository.QuestionRepository;
+import com.springapp.mvc.repository.UserRepository;
 import com.springapp.mvc.service.CreateTreeFromQuery;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -18,6 +23,9 @@ public class QuestionController {
 
     @Autowired
     private QuestionRepository questionRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired(required = false)
     private CreateTreeFromQuery treeBean;
@@ -244,11 +252,17 @@ public class QuestionController {
     @PreAuthorize("hasRole('admin')")
     @RequestMapping(value = "/checkquestion", method = RequestMethod.POST, produces = {"text/html; charset=UTF-8"})
     @ResponseBody
-    public String checkQuestion(@RequestParam("idquestion") int idquestion) throws Exception {
+    public String checkQuestion(@RequestParam("idquestion") int idquestion, @RequestParam("idkey") String password) throws Exception {
 
         List<AnswersUserEntity> ourAnswers=questionRepository.getAnswerUserByQuestionID(idquestion);
 
         if (ourAnswers.size()>0){
+            User user = (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            UsersEntity ourUser = userRepository.findUserByEmail(user.getUsername());
+            if (ourUser.getPassword().equals(DigestUtils.sha256Hex(password)) ) //god regime
+            {
+                return "ok";
+            }
             return "error";
         }
 

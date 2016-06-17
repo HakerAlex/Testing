@@ -134,12 +134,13 @@
                             <span class="input-group-addon"><i class="ti-key"></i></span>
                             <input type="text" id="idkey" value="" class="form-control" name="idkey"
                                    placeholder="Значение">
+
                         </div>
 
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary" data-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary btn-danger" data-dismiss="modal">Отмена</button>
                     <button type="button" class="btn btn-success" data-dismiss="modal" id="opentestbykey">Открыть
                     </button>
                 </div>

@@ -38,6 +38,7 @@
         <div class="col-xs-6">
             <h3 class="text-center" style="color: white">Вопрос</h3>
             <button type="button" class="btn btn-primary btn-success" id="addnewquestion">Создать новый вопрос</button>
+            <button type="button" class="btn btn-primary btn-black" id="turnongod">Режим "Бога"</button>
             <hr class="hr-xs" style="height: 5px; margin-bottom: 5px; margin-top: 5px">
             <div class="input-group">
                 <span class="input-group-addon"><i class="ti-folder"></i></span>
@@ -234,6 +235,32 @@
         </div><!-- /.modal-dialog -->
     </div><!-- /.modal -->
 
+        <div class="modal fade" id="keyModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Введите пароль для включения режима "БОГА"</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="ti-key"></i></span>
+                                <input type="password" id="idgod" value="" class="form-control" name="idgod"
+                                       placeholder="Значение">
+                                <input type="hidden" id="passwordgod" value="">
+                            </div>
+
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary btn-danger" data-dismiss="modal">Отмена</button>
+                        <button type="button" class="btn btn-success" data-dismiss="modal" id="opengodregime">Включить
+                        </button>
+                    </div>
+                </div><!-- /.modal-content -->
+            </div><!-- /.modal-dialog -->
+        </div><!-- /.modal -->
 </main>
 
 <!-- END Main container -->
@@ -456,7 +483,8 @@
                 type: "POST",
                 url: "${pageContext.request.contextPath}/checkquestion",
                 data: {
-                    idquestion: $('#code').val()
+                    idquestion: $('#code').val(),
+                    idkey: $('#passwordgod').val()
                 },
                 dataType: "text",
                 success: {
@@ -499,7 +527,15 @@
     }
 
     $(document).ready(function () {
+        $("#turnongod").click(function () {
+                $("#keyModal").modal('show');
 
+        });
+
+        $("#opengodregime").click(function () {
+            $("#passwordgod").val($("#idgod").val());
+
+        });
 
         $("#addnewquestion").click(function () {
 
@@ -549,7 +585,8 @@
                     type: "POST",
                     url: "${pageContext.request.contextPath}/checkquestion",
                     data: {
-                        idquestion: $('#code').val()
+                        idquestion: $('#code').val(),
+                        idkey: $('#passwordgod').val()
                     },
                     dataType: "text",
                     success: {
@@ -601,7 +638,8 @@
                 type: "POST",
                 url: "${pageContext.request.contextPath}/checkquestion",
                 data: {
-                    idquestion: $('#code').val()
+                    idquestion: $('#code').val(),
+                    idkey: $('#passwordgod').val()
                 },
                 dataType: "text",
                 success: {
@@ -723,7 +761,8 @@
                 type: "POST",
                 url: "${pageContext.request.contextPath}/checkquestion",
                 data: {
-                    idquestion: $('#code').val()
+                    idquestion: $('#code').val(),
+                    idkey: $('#passwordgod').val()
                 },
                 dataType: "text",
                 success: {
@@ -885,7 +924,8 @@
             type: "POST",
             url: "${pageContext.request.contextPath}/checkquestion",
             data: {
-                idquestion: $('#code').val()
+                idquestion: $('#code').val(),
+                idkey: $('#passwordgod').val()
             },
             dataType: "text",
             success: {
@@ -979,7 +1019,8 @@
             type: "POST",
             url: "${pageContext.request.contextPath}/checkquestion",
             data: {
-                idquestion: $('#code').val()
+                idquestion: $('#code').val(),
+                idkey: $('#passwordgod').val()
             },
             dataType: "text",
             success: {
