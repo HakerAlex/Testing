@@ -34,6 +34,19 @@ public class RegisterValidator implements Validator {
             errors.rejectValue("phone", "phone", "Телефон не валидный");
         }
 
+        p = Pattern.compile("^[A-Za-zА-Яа-я]{4,16}$");
+        m = p.matcher(signupForm.getName());
+        if (!m.matches()) {
+            errors.rejectValue("name", "name", "Имя не валидно");
+        }
+
+        p = Pattern.compile("^[A-Za-zА-Яа-я]{4,16}$");
+        m = p.matcher(signupForm.getSurname());
+        if (!m.matches()) {
+            errors.rejectValue("surname", "surname", "Фамилия не валидна");
+        }
+
+
         if (!signupForm.getPassword().equals(signupForm.getConfirmpassword())) {
             errors.rejectValue("password", "password", "Пароли не совпадают");
         }
